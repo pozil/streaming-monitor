@@ -1,0 +1,99 @@
+<aura:component access="global" implements="flexipage:availableForAllPageTypes" controller="SampleEmpApiController">
+    <lightning:empApi aura:id="empApi"/>
+    <c:ServerActionService aura:id="server"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/>
+
+    <aura:attribute access="private" name="receivedEvents" type="List" default="[]"/>
+    <aura:attribute access="private" name="subscriptions" type="List" default="[]"/>
+
+    <aura:attribute access="private" name="subEventType" type="String" default=""/>
+    <aura:attribute access="private" name="subEventName" type="String" default=""/>
+    <aura:attribute access="private" name="subEventChannel" type="String" default=""/>
+
+    <aura:attribute access="private" name="pubEventType" type="String" default=""/>
+    <aura:attribute access="private" name="pubEventChannel" type="String" default=""/>
+    <aura:attribute access="private" name="pubEventName" type="String" default=""/>
+    <aura:attribute access="private" name="pubEventPayload" type="String" default=""/>
+
+    <lightning:layout pullToBoundary="small">
+        <lightning:layoutItem padding="around-small" size="3">
+
+            <!-- Subscribe to event -->
+            <lightning:card title="Subscribe to event">
+                <div class="slds-p-horizontal_small">
+                    <lightning:combobox name="subEventType" aura:id="subEventType" label="Event type" value="{!v.subEventType}" placeholder="Select type" required="true" onchange="{!c.onSubEventChange}"/>
+                    <lightning:input name="subEventName" label="Event name" value="{!v.subEventName}" required="true" onchange="{!c.onSubEventChange}"/>
+                    <lightning:input name="subChannel" label="Streaming channel" value="{!v.subEventChannel}" disabled="true"/>
+                    <div class="slds-align_absolute-center slds-m-top_medium">
+                        <lightning:button variant="brand" label="Subscribe" onclick="{!c.onSubscribeRequest}" disabled="{!or(empty(v.subEventType), empty(v.subEventName))}"/>
+                    </div>
+                </div>
+            </lightning:card>
+
+            <!-- Active subscriptions -->
+            <lightning:card title="Active subscriptions">
+                <aura:set attribute="actions">
+                    <lightning:badge label="{!v.subscriptions.length}"/>
+                </aura:set>
+                <div class="slds-p-horizontal_small">
+                    <aura:iteration items="{!v.subscriptions}" var="subscription">
+                        <div class="slds-grid slds-p-top_small">
+                            <div class="slds-has-flexi-truncate">
+                                <div class="slds-truncate">{!subscription.channel}</div>
+                            </div>
+                            <div class="slds-no-flex">
+                                <lightning:buttonIcon iconName="utility:close" variant="bare" alternativeText="Unsubscribe" onclick="{!c.onUnsubscribeRequest}" name="{!subscription.channel}"/>
+                            </div>
+                        </div>
+                    </aura:iteration>
+                </div>
+            </lightning:card>
+        </lightning:layoutItem>
+
+        <!-- Events received -->
+        <lightning:layoutItem padding="around-small" size="6">
+            <lightning:card title="Events received">
+                <aura:set attribute="actions">
+                    <lightning:badge label="{!v.receivedEvents.length}"/>
+                    <lightning:buttonIcon iconName="utility:delete" variant="bare" alternativeText="Clear received events" class="slds-m-left_x-small" onclick="{!c.clearReceivedEvents}"/>
+                </aura:set>
+                <div class="slds-p-horizontal_small">
+                    <aura:iteration items="{!v.receivedEvents}" var="event">
+                        <div>{!event}</div>
+                    </aura:iteration>
+                </div>
+            </lightning:card>
+        </lightning:layoutItem>
+        
+        <!-- Publish event -->
+        <lightning:layoutItem padding="around-small" size="3">
+             <lightning:card title="Publish event">
+                <div class="slds-p-horizontal_small">
+                    <lightning:combobox name="pubEventType" aura:id="pubEventType" label="Event type" value="{!v.pubEventType}" placeholder="Select type" required="true" onchange="{!c.onPubEventChange}"/>
+                    
+                    <div class="{!or(v.pubEventType == 'genericEvent', v.pubEventType == 'platformEvent') ? '': 'slds-hide'}">
+                        <lightning:input name="pubEventName" label="Event name" value="{!v.pubEventName}" required="true" onchange="{!c.onPubEventChange}"/>
+                        <lightning:input name="pubChannel" label="Streaming channel" value="{!v.pubEventChannel}" disabled="true"/>
+                        <lightning:textarea name="pubEventPayload" label="Event payload" value="{!v.pubEventPayload}" required="true"/>
+                        <div class="slds-align_absolute-center slds-m-top_medium">
+                            <lightning:button variant="brand" label="Publish" onclick="{!c.onPublishRequest}" disabled="{!or(empty(v.pubEventType), empty(v.pubEventName))}"/>
+                        </div>
+                    </div>
+
+                    <div class="{!or(v.pubEventType == 'pushTopicEvent', v.pubEventType == 'cdcEvent') ? 'slds-media slds-media_center slds-m-vertical_small': 'slds-hide'}">
+                        <div class="slds-media__figure">
+                            <lightning:icon iconName="utility:info" size="normal" alternativeText="Info icon"/>
+                        </div>
+                        <div class="slds-media__body">
+                            <p>This type of event can only be published via data change.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </lightning:card>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+</aura:component>	

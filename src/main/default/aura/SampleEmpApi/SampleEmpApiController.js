@@ -2,51 +2,68 @@
     onInit : function(component, event, helper) {
         // Init UI
         const eventTypes = [
-            {label: 'PushTopic event', value: 'pushTopicEvent'},
-            {label: 'Generic event', value: 'genericEvent'},    
-            {label: 'Platform event', value: 'platformEvent'},
-            {label: 'CDC event', value: 'cdcEvent'}
+            {label: 'PushTopic event', value: 'PushTopicEvent'},
+            {label: 'Generic event', value: 'GenericEvent'},    
+            {label: 'Platform event', value: 'PlatformEvent'},
+            {label: 'CDC event', value: 'ChangeDataCaptureEvent'}
         ];
         component.find('subEventType').set('v.options', eventTypes);
         component.find('pubEventType').set('v.options', eventTypes);
-        component.set('v.eventPayload', '{"Message__c": "test"}');
-
+        component.find('eventTable').set('v.columns', [
+            {label: 'Time', fieldName: 'time', type: 'text', sortable: true, initialWidth: 180},
+            {label: 'Channel', fieldName: 'channel', type: 'text', sortable: true, initialWidth: 200},
+            {label: 'Replay Id', fieldName: 'replayId', type: 'number', sortable: true, initialWidth: 100},
+            {label: 'Payload', fieldName: 'payload', type: 'text'},
+            {label: ' ', type: 'button-icon', initialWidth: 50, typeAttributes: { iconName: 'utility:zoomin', name: 'view', title: 'Click to View Details'}},
+        ]);
+        helper.initReplayOptions(component, 'subAllReplay');
+        helper.initReplayOptions(component, 'subReplay');
+        
         // Init EMP API
         const empApi = component.find('empApi');
         empApi.isEmpEnabled().then(isEnabled => {
-          if (!isEnabled) {
-            console.warn('EMP API is not enabled is this environment. Demo will not work.');
-          }
+            if (!isEnabled) {
+                console.warn('EMP API is not enabled is this environment. Demo will not work.');
+            }
         });
         empApi.setDebugFlag(true);
         empApi.onError($A.getCallback(error => {
             console.error('An EMP API error occured: ', error);
             helper.notify(component, 'error', 'An EMP API error occured');
         }));
+
+        // Load all channel events
+        const server = component.find('server');
+        server.callServer(component.get('c.getAllEventChannels'), {}, false, $A.getCallback(channels => {
+            component.set('v.channels', channels);
+        }));
+    },
+
+    onSubscribeAllRequest : function(component, event, helper) {
+        const empApi = component.find('empApi');
+        const channelDirectory = component.get('v.channels');
+        const replayId = component.find('subAllReplay').get('v.value');
+        
+        // Assemble flat list of all streaming event channels
+        let prefix = helper.getChannelPrefix('PushTopicEvent');
+        let allChannels = channelDirectory.PushTopicEvent.map(channelInfo => (prefix + channelInfo.value));
+        prefix = helper.getChannelPrefix('GenericEvent');
+        allChannels = allChannels.concat(channelDirectory.GenericEvent.map(channelInfo => (prefix + channelInfo.value)));
+        prefix = helper.getChannelPrefix('PlatformEvent');
+        allChannels = allChannels.concat(channelDirectory.PlatformEvent.map(channelInfo => (prefix + channelInfo.value)));
+        allChannels.push('/data/ChangeEvents');
+        
+        // Subscribe to all channels
+        console.log('Subscribing to all streaming events: ', allChannels);
+        allChannels.forEach(channel => {
+            helper.subscribe(component, channel, replayId);
+        });
     },
 
     onSubscribeRequest : function(component, event, helper) {
-        const empApi = component.find('empApi');
-        const channel = component.get('v.subEventChannel');
-        const replayId = -2;
-        empApi.subscribe(channel, replayId, $A.getCallback(eventReceived => {
-            // Log and notify about event
-            console.log('Received event ', JSON.stringify(eventReceived));
-            helper.notify(component, 'success', 'Received event '+ eventReceived.channel);
-            // Save event
-            const receivedEvents = component.get('v.receivedEvents');
-            receivedEvents.push(JSON.stringify(eventReceived));
-            component.set('v.receivedEvents', receivedEvents);
-        }))
-        .then(newSubscription => {
-            // Log and notify about subscription
-            helper.notify(component, 'success', 'Subscribed to channel ' + newSubscription.channel);
-            // Save subscription
-            const subscriptions = component.get('v.subscriptions');
-            subscriptions.push(newSubscription);
-            component.set('v.subscriptions', subscriptions);
-        });
-        // Clear form
+        const channel = component.find('subChannel').get('v.value');
+        const replayId = component.find('subReplay').get('v.value');
+        helper.subscribe(component, channel, replayId);
         component.set('v.subEventName', '');
     },
 
@@ -62,12 +79,10 @@
             return;
         }
         // Unsubscribe
-        empApi.unsubscribe(thisSubscription[0], $A.getCallback(message => {
+        empApi.unsubscribe(thisSubscription[0], $A.getCallback(unsubscribe => {
             console.log('Unsubscribe callback ', typeof unsubscribe, JSON.stringify(unsubscribe));
-        })).then(unsubscribe => {
-            console.log('Unsubscribe promise', typeof unsubscribe, JSON.stringify(unsubscribe));
-            helper.notify(component, 'success', 'Unsuscribed from: ' + unsubscribe.channel);
-        });
+            helper.notify(component, 'success', 'Unsuscribed from: ' + unsubscribe.subscription);
+        }));
         // Update UI
         const updatedSubscriptions = subscriptions.filter(sub => sub.channel !== channel);
         component.set('v.subscriptions', updatedSubscriptions);
@@ -77,40 +92,39 @@
         const server = component.find('server');
         const eventType = component.get('v.pubEventType');
         const eventName = component.get('v.pubEventName');
-        const eventPayload = component.get('v.pubEventPayload');
+        const eventPayload = component.find('pubEventPayload').get('v.value');
 
-        let serverActionName = null;
-        switch (eventType) {
-            case 'platformEvent':
-                serverActionName = 'publishPlatformEvent';
-            break;
-            case 'genericEvent':
-                serverActionName = 'publishGenericEvent';
-            break;
-            default:
-                console.warn('Cannot publish: unsupported event type: '+ eventType);
-                return;
-            break;
-        }
-        const serverAction = component.get('c.'+ serverActionName);
+        const serverAction = component.get('c.publish'+ eventType);
         const actionParams = { eventName, eventPayload };
         server.callServer(serverAction, actionParams, false, () => {
-            console.log('Published platform event '+ eventName +' with payload: ', JSON.stringify(message));
+            console.log('Published event '+ eventName +' with payload: ', eventPayload);
         });
     },
 
-    onSubEventChange : function(component, event, helper) {
-        const eventType = component.get('v.subEventType');
-        const eventName = component.get('v.subEventName');
-        let channelPrefix = helper.getChannelPrefix(eventType);
-        component.set('v.subEventChannel', channelPrefix + eventName);
+    handleEventTableRowAction: function (component, event, helper) {
+        const action = event.getParam('action');
+        const row = event.getParam('row');
+        switch (action.name) {
+            case 'view':
+                helper.showEventDetails(component, row);
+            break;
+        }
     },
 
-    onPubEventChange : function(component, event, helper) {
-        const eventType = component.get('v.pubEventType');
-        const eventName = component.get('v.pubEventName');
-        let channelPrefix = helper.getChannelPrefix(eventType);
-        component.set('v.pubEventChannel', channelPrefix + eventName);
+    onChangeSubEventType : function(component, event, helper) {
+        helper.loadEvents(component, 'sub');
+    },
+
+    onChangeSubEventName : function(component, event, helper) {
+        helper.updateChannel(component, 'sub');
+    },
+
+    onChangePubEventType : function(component, event, helper) {
+        helper.loadEvents(component, 'pub');
+    },
+
+    onChangePubEventName : function(component, event, helper) {
+        helper.updateChannel(component, 'pub');
     },
 
     clearReceivedEvents : function(component, event, helper) {

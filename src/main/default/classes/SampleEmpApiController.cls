@@ -30,8 +30,8 @@ public abstract class SampleEmpApiController {
     @AuraEnabled
     public static void publishGenericEvent(String eventName, String eventPayload) {
         // Load event type
-        eventName = '/u/'+ eventName;
-        List<StreamingChannel> channels = [SELECT Id FROM StreamingChannel WHERE Name = :eventName LIMIT 1];
+        String channel = '/u/'+ eventName;
+        List<StreamingChannel> channels = [SELECT Id FROM StreamingChannel WHERE Name = :channel LIMIT 1];
         if (channels.size() != 1) {
             throw new AuraHandledException('Unknown generic event type: '+ eventName);
         }
@@ -39,7 +39,69 @@ public abstract class SampleEmpApiController {
         System.enqueueJob(new QueueableGenericEventPost(channels[0].Id, eventPayload));
     }
 
-    public class QueueableGenericEventPost implements Queueable, Database.AllowsCallouts {
+    @AuraEnabled
+    public static Map<String, List<ComboBoxItem>> getAllEventChannels() {
+        Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
+        channels.put('PushTopicEvent', getPushTopicEventChannels());
+        channels.put('GenericEvent', getGenericEventChannels());
+        channels.put('PlatformEvent', getPlatformEventChannels());
+        channels.put('ChangeDataCaptureEvent', getChangeDataCaptureEventChannels());
+        return channels;
+    }
+
+    public static List<ComboBoxItem> getPushTopicEventChannels() {
+        List<PushTopic> topics = [SELECT Name FROM PushTopic ORDER BY Name];
+        List<ComboBoxItem> items = new List<ComboBoxItem>();
+        for (PushTopic topic : topics) {
+            items.add(new ComboBoxItem(topic.Name, topic.Name));
+        }
+        return items;
+    }
+
+    public static List<ComboBoxItem> getGenericEventChannels() {
+        List<StreamingChannel> channels = [SELECT Name FROM StreamingChannel ORDER BY Name];
+        List<ComboBoxItem> items = new List<ComboBoxItem>();
+        for (StreamingChannel channel : channels) {
+            String name = channel.Name.substring(3);
+            items.add(new ComboBoxItem(name, name));
+        }
+        return items;
+    }
+
+    public static List<ComboBoxItem> getChangeDataCaptureEventChannels() {
+        List<EntityDefinition> entities = [SELECT Label, QualifiedApiName FROM EntityDefinition WHERE QualifiedApiName LIKE '%ChangeEvent' ORDER BY Label];
+        List<ComboBoxItem> items = new List<ComboBoxItem>();
+        for (EntityDefinition entity : entities) {
+            items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
+        }
+        return items;
+    }
+
+    public static List<ComboBoxItem> getPlatformEventChannels() {
+        List<EntityDefinition> entities = [SELECT Label, QualifiedApiName FROM EntityDefinition WHERE IsCustomizable=true AND QualifiedApiName LIKE '%e' ORDER BY Label ASC];
+        List<ComboBoxItem> items = new List<ComboBoxItem>();
+        for (EntityDefinition entity : entities) {
+            if (entity.QualifiedApiName.endsWith('__e')) {
+                items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
+            }
+        }
+        return items;
+    }
+
+    public class ComboBoxItem {
+        @AuraEnabled
+        public String label;
+        
+        @AuraEnabled
+        public String value;
+
+        public ComboBoxItem(String label, String value) {
+            this.label = label;
+            this.value = value;
+        }
+    }
+
+    private class QueueableGenericEventPost implements Queueable, Database.AllowsCallouts {
         private String channelId;
         private String payload;
 

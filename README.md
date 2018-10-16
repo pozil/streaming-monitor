@@ -4,10 +4,10 @@ This Lightning App allows to monitor streaming events: PushTopic events, generic
 
 Features:
 - Subscribe to all streaming events (event types are automatically discovered)
-- Subscribe to and usubscribe from specific streaming events with a user-friendly UI
+- Subscribe to and unsubscribe from specific streaming events with a user-friendly UI
 - Publish an event (Generic events and platform events)
 - Register an event source (instructions and shortcuts)
-- Analyse past event content with flexible replay options
+- Analyze past event content with flexible replay options
 
 The app leverages the [lighnting:empApi](https://developer.salesforce.com/docs/component-library/bundle/lightning:empApi/documentation) service component for streaming event subscriptions.
 

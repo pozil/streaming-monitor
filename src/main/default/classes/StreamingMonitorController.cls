@@ -1,4 +1,4 @@
-public abstract class SampleEmpApiController {
+public abstract class StreamingMonitorController {
     @AuraEnabled
     public static void publishPlatformEvent(String eventName, String eventPayload) {
         // Load event type

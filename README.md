@@ -1,8 +1,25 @@
-# Streaming Playground
+# Streaming Monitor
 
-This Lightning page demonstrates the use of the [lighnting:empApi](https://developer.salesforce.com/docs/component-library/bundle/lightning:empApi/documentation) service component and pub/sub interactions with all streaming events (PushTopic events, generic events, platform events and CDC events).
+This Lightning App allows to monitor streaming events: PushTopic events, generic events, platform events and CDC events.
+
+Features:
+- Subscribe to all streaming events (event types are automatically discovered)
+- Subscribe to and usubscribe from specific streaming events with a user-friendly UI
+- Publish an event (Generic events and platform events)
+- Register an event source (instructions and shortcuts)
+- Analyse past event content with flexible replay options
+
+The app leverages the [lighnting:empApi](https://developer.salesforce.com/docs/component-library/bundle/lightning:empApi/documentation) service component for streaming event subscriptions.
+
+<img src="gfx/event-monitor.png"/>
 
 ## Installation
+
+### Unix
+
+Execute the `install-dev.sh` bash script and open the **Streaming Monitor** tab.
+
+### Other OS
 
 Execute these Salesforce DX commands:
 
@@ -11,19 +28,19 @@ a) create a scratch org with a "streaming" alias:
 sfdx force:org:create -s -f config/project-scratch-def.json -a streaming
 ```
 
-b) add dependency to server action service:
+b) install Server Action Service dependency:
 ```sh
 sfdx force:package:install --package 04t1t000000XfCt -w 10 -u streaming
 ```
 
-c) push sources to scratch org:
+c) push sources to the scratch org:
 ```sh
 sfdx force:source:push -u streaming
 ```
 
-d) assign permission set to default user:
+d) assign permission set to the default user:
 ```sh
-sfdx force:user:permset:assign -n Streaming_Playground -u streaming
+sfdx force:user:permset:assign -n Streaming_Monitor -u streaming
 ```
 
-Add the Streaming Playground tab to an existing or new Lightning app
+Open the **Streaming Monitor** tab.

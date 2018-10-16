@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Permission to access Streaming Monitor App</description>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>Streaming Playground</label>
-    <objectPermissions>
-        <allowCreate>true</allowCreate>
-        <allowDelete>false</allowDelete>
-        <allowEdit>false</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>false</modifyAllRecords>
-        <object>Sample__e</object>
-        <viewAllRecords>false</viewAllRecords>
-    </objectPermissions>
+    <label>Streaming Monitor</label>
     <objectPermissions>
         <allowCreate>true</allowCreate>
         <allowDelete>true</allowDelete>
@@ -21,7 +13,7 @@
         <viewAllRecords>true</viewAllRecords>
     </objectPermissions>
     <tabSettings>
-        <tab>Streaming_Playground</tab>
+        <tab>Streaming_Monitor</tab>
         <visibility>Visible</visibility>
     </tabSettings>
 </PermissionSet>

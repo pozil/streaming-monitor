@@ -5,7 +5,7 @@ ORG_ALIAS="streaming"
 SERVER_ACTION_SERVICE_PACKAGE_ID="04t1t000000XfCt" # v1.6
 
 echo ""
-echo "Installing empApi playground:"
+echo "Installing Streaming Monitor:"
 echo "- Org alias:      $ORG_ALIAS"
 echo ""
 
@@ -20,7 +20,7 @@ echo "Pushing source..." && \
 sfdx force:source:push -u $ORG_ALIAS && \
 echo "" && \
 echo "Assigning permission sets..." && \
-sfdx force:user:permset:assign -n Streaming_Playground -u $ORG_ALIAS
+sfdx force:user:permset:assign -n Streaming_Monitor -u $ORG_ALIAS
 EXIT_CODE="$?"
 
 # Check exit code

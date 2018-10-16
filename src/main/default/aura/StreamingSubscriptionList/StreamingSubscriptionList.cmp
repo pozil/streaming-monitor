@@ -1,0 +1,24 @@
+<aura:component access="global" implements="flexipage:availableForAllPageTypes">
+    <aura:attribute access="private" name="subscriptions" type="List" default="[]"/>
+
+    <aura:handler event="c:StreamingMonitorEvent" action="{!c.onMonitorEvent}"/>
+    <aura:registerEvent name="monitorEvent" type="c:StreamingMonitorEvent"/>
+
+    <lightning:card title="Active subscriptions">
+        <aura:set attribute="actions">
+            <lightning:badge label="{!v.subscriptions.length}"/>
+        </aura:set>
+        <div class="slds-p-horizontal_small">
+            <aura:iteration items="{!v.subscriptions}" var="subscription">
+                <div class="slds-grid slds-p-vertical_x-small subscription">
+                    <div class="slds-has-flexi-truncate">
+                        <div class="slds-truncate">{!subscription.channel}</div>
+                    </div>
+                    <div class="slds-no-flex">
+                        <lightning:buttonIcon iconName="utility:close" variant="bare" alternativeText="Unsubscribe" onclick="{!c.onUnsubscribe}" name="{!subscription.channel}"/>
+                    </div>
+                </div>
+            </aura:iteration>
+        </div>
+    </lightning:card>
+</aura:component>	

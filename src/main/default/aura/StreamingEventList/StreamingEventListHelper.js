@@ -8,25 +8,18 @@
             // Save event
             this.saveEvent(component, eventReceived);
         }))
-        .then(newSubscription => {
+        .then(subscription => {
             // Log and notify about subscription
-            this.notify(component, 'success', 'Subscribed to channel ' + newSubscription.channel);
-            // Save and sort subscriptions
-            const subscriptions = component.get('v.subscriptions');
-            subscriptions.push(newSubscription);
-            subscriptions.sort((a, b) => {
-                const channelA = a.channel.toUpperCase();
-                const channelB = b.channel.toUpperCase();
-                if (channelA < channelB) {
-                    return -1;
-                }
-                if (channelA > channelB) {
-                    return 1;
-                }
-                return 0;
-            });
-            component.set('v.subscriptions', subscriptions);
+            this.notify(component, 'success', 'Subscribed to channel ' + subscription.channel);
+            this.fireMonitorEvent('subscribeConfirm', subscription);
         });
+    },
+
+    unsubscribe : function(component, subscription) {
+        const empApi = component.find('empApi');
+        empApi.unsubscribe(subscription, $A.getCallback(unsubscribe => {
+            this.notify(component, 'success', 'Unsuscribed from: ' + unsubscribe.subscription);
+        }));
     },
 
     saveEvent : function(component, evt) {
@@ -68,27 +61,6 @@
         component.set('v.receivedEvents', receivedEvents);
     },
 
-    updateChannel : function(component, pubSubPrefix) {
-        const eventType = component.get('v.'+ pubSubPrefix +'EventType');
-        const eventName = component.get('v.'+ pubSubPrefix +'EventName');
-        const channelPrefix = this.getChannelPrefix(eventType);
-        const channelComp = component.find(pubSubPrefix +'Channel');
-        if (eventName === '') {
-            channelComp.set('v.value', channelPrefix);
-        } else {
-            channelComp.set('v.value', channelPrefix + eventName);
-        }
-    },
-
-    loadEvents : function(component, pubSubPrefix) {
-        component.set('v.'+ pubSubPrefix +'EventName', '');
-        this.updateChannel(component, pubSubPrefix);
-        
-        const eventType = component.get('v.'+ pubSubPrefix +'EventType');
-        const channelDirectory = component.get('v.channels');
-        component.find(pubSubPrefix +'EventName').set('v.options', channelDirectory[eventType]);
-    },
-
     showEventDetails : function(component, eventData) {
         $A.createComponent('c:StreamingEventModal', { eventData }, (content, status, errorMessage) => {
             if (status === 'SUCCESS') {
@@ -104,32 +76,16 @@
         });
     },
 
-    getChannelPrefix : function(eventType) {
-        switch (eventType) {
-            case 'PushTopicEvent':
-                return '/topic/';
-            case 'GenericEvent':
-                return '/u/';
-            case 'PlatformEvent':
-                return '/event/';
-            case 'ChangeDataCaptureEvent':
-                return '/data/';
-        }
-    },
-
     notify : function(component, type, message) {
         component.find('notifLib').showToast({
             variant: type,
             title: message
         });
     },
-
-    initReplayOptions : function(component, componentId) {
-        const combobox = component.find(componentId);
-        combobox.set('v.options', [
-            {label: 'No replay', value: '-1'},
-            {label: 'Replay past events', value: '-2'}
-        ]);
-        combobox.set('v.value', '-1');
+    
+    fireMonitorEvent : function(action, params) {
+        const monitorEvent = $A.get('e.c:StreamingMonitorEvent');
+        monitorEvent.setParams({ action, params });
+        monitorEvent.fire();
     }
 })

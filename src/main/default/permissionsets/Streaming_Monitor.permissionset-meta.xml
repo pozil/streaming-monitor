@@ -3,15 +3,6 @@
     <description>Permission to access Streaming Monitor App</description>
     <hasActivationRequired>false</hasActivationRequired>
     <label>Streaming Monitor</label>
-    <objectPermissions>
-        <allowCreate>true</allowCreate>
-        <allowDelete>true</allowDelete>
-        <allowEdit>true</allowEdit>
-        <allowRead>true</allowRead>
-        <modifyAllRecords>true</modifyAllRecords>
-        <object>StreamingChannel</object>
-        <viewAllRecords>true</viewAllRecords>
-    </objectPermissions>
     <tabSettings>
         <tab>Streaming_Monitor</tab>
         <visibility>Visible</visibility>

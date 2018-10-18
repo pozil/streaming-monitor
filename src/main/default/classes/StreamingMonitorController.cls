@@ -2,10 +2,8 @@ public abstract class StreamingMonitorController {
     @AuraEnabled
     public static void publishPlatformEvent(String eventName, String eventPayload) {
         // Load event type
-        Type platformEventType;
-        try {
-            platformEventType = Type.forName(eventName);
-        } catch (Exception e) {
+        Type platformEventType = Type.forName(null, eventName);
+        if (platformEventType == null) {
             throw new AuraHandledException('Unknown platform event type: '+ eventName);
         }
         // Create event instance
@@ -13,6 +11,8 @@ public abstract class StreamingMonitorController {
         try {
             event = (SObject) JSON.deserialize(eventPayload, platformEventType);
         } catch (Exception e) {
+            System.debug(e);
+            System.debug(e.getCause());
             throw new AuraHandledException('Failed to instantiate '+ eventName +' platform event with provided data: '+ eventPayload);
         }
         // Publish event
@@ -49,7 +49,8 @@ public abstract class StreamingMonitorController {
         return channels;
     }
 
-    public static List<ComboBoxItem> getPushTopicEventChannels() {
+    @TestVisible
+    private static List<ComboBoxItem> getPushTopicEventChannels() {
         List<PushTopic> topics = [SELECT Name FROM PushTopic ORDER BY Name];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (PushTopic topic : topics) {
@@ -58,7 +59,8 @@ public abstract class StreamingMonitorController {
         return items;
     }
 
-    public static List<ComboBoxItem> getGenericEventChannels() {
+    @TestVisible
+    private static List<ComboBoxItem> getGenericEventChannels() {
         List<StreamingChannel> channels = [SELECT Name FROM StreamingChannel ORDER BY Name];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (StreamingChannel channel : channels) {
@@ -68,7 +70,8 @@ public abstract class StreamingMonitorController {
         return items;
     }
 
-    public static List<ComboBoxItem> getChangeDataCaptureEventChannels() {
+    @TestVisible
+    private static List<ComboBoxItem> getChangeDataCaptureEventChannels() {
         List<EntityDefinition> entities = [SELECT Label, QualifiedApiName FROM EntityDefinition WHERE QualifiedApiName LIKE '%ChangeEvent' ORDER BY Label];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (EntityDefinition entity : entities) {
@@ -77,7 +80,8 @@ public abstract class StreamingMonitorController {
         return items;
     }
 
-    public static List<ComboBoxItem> getPlatformEventChannels() {
+    @TestVisible
+    private static List<ComboBoxItem> getPlatformEventChannels() {
         List<EntityDefinition> entities = [SELECT Label, QualifiedApiName FROM EntityDefinition WHERE IsCustomizable=true AND QualifiedApiName LIKE '%e' ORDER BY Label ASC];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (EntityDefinition entity : entities) {
@@ -101,6 +105,7 @@ public abstract class StreamingMonitorController {
         }
     }
 
+    @TestVisible
     private class QueueableGenericEventPost implements Queueable, Database.AllowsCallouts {
         private String channelId;
         private String payload;

@@ -1,4 +1,4 @@
-# Streaming Monitor
+# Streaming Monitor ([AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FYEEWUA5))
 
 This Lightning App allows to monitor streaming events: PushTopic events, generic events, platform events and CDC events.
 
@@ -14,6 +14,8 @@ The app leverages the [lighnting:empApi](https://developer.salesforce.com/docs/c
 <img src="gfx/event-monitor.png"/>
 
 ## Installation
+
+Get the Streaming Monitor from the [AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FYEEWUA5) or install it manually with the following procedure.
 
 ### Unix
 

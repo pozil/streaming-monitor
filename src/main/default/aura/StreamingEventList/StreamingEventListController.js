@@ -17,7 +17,7 @@
         });
         empApi.setDebugFlag(true);
         empApi.onError($A.getCallback(error => {
-            console.error('An EMP API error occured: ', error);
+            console.error('An EMP API error occured: ', JSON.stringify(error));
             helper.notify(component, 'error', 'An EMP API error occured');
         }));
     },

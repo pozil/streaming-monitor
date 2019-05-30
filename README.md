@@ -32,7 +32,7 @@ sfdx force:org:create -s -f config/project-scratch-def.json -a streaming
 
 b) install Server Action Service dependency:
 ```sh
-sfdx force:package:install --package 04t1t0000011vSv -w 10 -u streaming
+sfdx force:package:install --package 04t1t0000038r2q -w 10 -u streaming
 ```
 
 c) push sources to the scratch org:

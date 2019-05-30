@@ -53,7 +53,6 @@
         channels = channels.concat(channelDirectory.GenericEvent.map(channelInfo => (prefix + channelInfo.value)));
         prefix = this.getChannelPrefix('PlatformEvent');
         channels = channels.concat(channelDirectory.PlatformEvent.map(channelInfo => (prefix + channelInfo.value)));
-        channels.push('/data/ChangeEvents');
         return channels;
     },
 

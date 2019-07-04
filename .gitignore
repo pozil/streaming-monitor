@@ -1,3 +1,4 @@
 **/.DS_Store
 .sfdx
 .vscode
+src/main/default/objects/

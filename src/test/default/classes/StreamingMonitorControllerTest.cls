@@ -1,8 +1,18 @@
 @isTest
 public class StreamingMonitorControllerTest {
+    
+    static testMethod void publishStreamingEvent_should_fail_when_eventType_is_unsupported() {
+        try {
+            StreamingMonitorController.publishStreamingEvent(StreamingMonitorController.EVT_PUSH_TOPIC, 'name', '{}');
+            System.assert(false, 'Exception was expected');
+        } catch (Exception e) {
+            System.assert(e instanceof AuraHandledException);
+        }
+    }
+    
     static testMethod void publishPlatformEvent_should_fail_when_eventName_is_unknown_sObject() {
         try {
-            StreamingMonitorController.publishPlatformEvent('unknown', null);
+            StreamingMonitorController.publishPlatformEvent('unknown', '{}');
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
             System.assert(e instanceof AuraHandledException);
@@ -29,7 +39,7 @@ public class StreamingMonitorControllerTest {
 
     static testMethod void publishGenericEvent_should_fail_when_invalid_eventName() {
         try {
-            StreamingMonitorController.publishGenericEvent('unknown', null);
+            StreamingMonitorController.publishGenericEvent('unknown', '{}');
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
             System.assert(e instanceof AuraHandledException);

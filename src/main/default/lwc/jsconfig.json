@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "c/actions": [
+                "actions/actions.js"
+            ],
+            "c/eventList": [
+                "eventList/eventList.js"
+            ],
+            "c/modal": [
+                "modal/modal.js"
+            ],
+            "c/streamingMonitor": [
+                "streamingMonitor/streamingMonitor.js"
+            ],
+            "c/streamingUtility": [
+                "streamingUtility/streamingUtility.js"
+            ],
+            "c/subscriptions": [
+                "subscriptions/subscriptions.js"
+            ]
+        },
+        "experimentalDecorators": true
+    },
+    "include": [
+        "**/*",
+        "../../../../.sfdx/typings/lwc/**/*.d.ts"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "jest"
+        ]
+    }
+}

@@ -1,6 +1,34 @@
 public abstract class StreamingMonitorController {
+
+    public final static String EVT_PUSH_TOPIC = 'PushTopicEvent';
+    public final static String EVT_GENERIC = 'GenericEvent';
+    public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
+    public final static String EVT_CDC = 'ChangeDataCaptureEvent';
+
+
     @AuraEnabled
-    public static void publishPlatformEvent(String eventName, String eventPayload) {
+    public static void publishStreamingEvent(String eventType, String eventName, String eventPayload) {
+        if (eventType == EVT_PLATFORM_EVENT) {
+            publishPlatformEvent(eventName, eventPayload);
+        } else if (eventType == EVT_GENERIC) {
+            publishGenericEvent(eventName, eventPayload);
+        } else {
+            throw new AuraHandledException('Unsupported event type: '+ eventType);
+        }
+    }
+
+    @AuraEnabled
+    public static Map<String, List<ComboBoxItem>> getAllEventChannels() {
+        Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
+        channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
+        channels.put(EVT_GENERIC, getGenericEventChannels());
+        channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
+        channels.put(EVT_CDC, getChangeDataCaptureEventChannels());
+        return channels;
+    }
+
+    @TestVisible
+    private static void publishPlatformEvent(String eventName, String eventPayload) {
         // Load event type
         Type platformEventType = Type.forName(null, eventName);
         if (platformEventType == null) {
@@ -27,8 +55,8 @@ public abstract class StreamingMonitorController {
         }
     }
 
-    @AuraEnabled
-    public static void publishGenericEvent(String eventName, String eventPayload) {
+    @TestVisible
+    private static void publishGenericEvent(String eventName, String eventPayload) {
         // Load event type
         String channel = '/u/'+ eventName;
         List<StreamingChannel> channels = [SELECT Id FROM StreamingChannel WHERE Name = :channel LIMIT 1];
@@ -37,16 +65,6 @@ public abstract class StreamingMonitorController {
         }
         // Posting event in a job in order to be able to call the REST API
         System.enqueueJob(new QueueableGenericEventPost(channels[0].Id, eventPayload));
-    }
-
-    @AuraEnabled
-    public static Map<String, List<ComboBoxItem>> getAllEventChannels() {
-        Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
-        channels.put('PushTopicEvent', getPushTopicEventChannels());
-        channels.put('GenericEvent', getGenericEventChannels());
-        channels.put('PlatformEvent', getPlatformEventChannels());
-        channels.put('ChangeDataCaptureEvent', getChangeDataCaptureEventChannels());
-        return channels;
     }
 
     @TestVisible
@@ -117,7 +135,7 @@ public abstract class StreamingMonitorController {
         
         public void execute(QueueableContext context) {
             String restAPIURL = URL.getSalesforceBaseUrl().toExternalForm()
-                +'/services/data/v44.0/sobjects/StreamingChannel/'+ channelId +'/push';  
+                +'/services/data/v46.0/sobjects/StreamingChannel/'+ channelId +'/push';  
             HttpRequest httpRequest = new HttpRequest();
             httpRequest.setMethod('POST');
             httpRequest.setHeader('Content-Type', 'application/json');

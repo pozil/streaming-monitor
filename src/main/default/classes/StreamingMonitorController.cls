@@ -3,7 +3,8 @@ public abstract class StreamingMonitorController {
     public final static String EVT_PUSH_TOPIC = 'PushTopicEvent';
     public final static String EVT_GENERIC = 'GenericEvent';
     public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
-    public final static String EVT_CDC = 'ChangeDataCaptureEvent';
+    public final static String EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
+    public final static String EVT_CDC_CUSTOM = 'CustomCDC';
 
 
     @AuraEnabled
@@ -23,7 +24,8 @@ public abstract class StreamingMonitorController {
         channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
         channels.put(EVT_GENERIC, getGenericEventChannels());
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
-        channels.put(EVT_CDC, getChangeDataCaptureEventChannels());
+        channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
+        channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
         return channels;
     }
 

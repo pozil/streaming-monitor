@@ -7,6 +7,9 @@ import getAllEventChannels from '@salesforce/apex/StreamingMonitorController.get
 import publishStreamingEvent from '@salesforce/apex/StreamingMonitorController.publishStreamingEvent';
 import { EVENT_TYPES, isCDCChannel, getChannelPrefix, normalizeEvent } from 'c/streamingUtility';
 
+// Time for which CDC subscribe errors are hidden after doing a subscribe all
+const CDC_SUBSCRIBE_ERROR_HIDE_DURATION = 3000;
+
 
 export default class StreamingMonitor extends LightningElement {
     
@@ -41,7 +44,7 @@ export default class StreamingMonitor extends LightningElement {
         console.error('Streaming API error: '+ JSON.stringify(error));
 
         // Handle subscribe errors due to invalid channel (inactive CDC channels)
-        if (error.channel === '/meta/subscribe' && error.error.indexOf('400::The channel specified is not valid') !== -1) {
+        if (error.channel === '/meta/subscribe' && error.error && error.error.indexOf('400::The channel specified is not valid') !== -1) {
             const subChannel = error.subscription;
             const subIndex = this.subscriptions.findIndex(s => s.channel === subChannel);
             if (subIndex !== -1) {
@@ -89,7 +92,7 @@ export default class StreamingMonitor extends LightningElement {
             // Re-enable CDC subscription errors after waiting a bit
             setTimeout(() => {
                 this.ignoreCdcSubscribeErrors = false;
-            }, 2000);
+            }, CDC_SUBSCRIBE_ERROR_HIDE_DURATION);
         });
     }
 

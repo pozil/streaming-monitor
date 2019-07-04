@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { LightningElement, track, api } from 'lwc';
-import { EVENT_TYPES, EVT_PUSH_TOPIC, EVT_GENERIC, EVT_PLATFORM_EVENT, EVT_CDC, getChannelPrefix } from 'c/streamingUtility';
+import { EVENT_TYPES, EVT_PUSH_TOPIC, EVT_GENERIC, EVT_PLATFORM_EVENT, EVT_CDC_STANDARD, EVT_CDC_CUSTOM, getChannelPrefix } from 'c/streamingUtility';
 
 
 export default class Actions extends LightningElement {
@@ -39,7 +39,7 @@ export default class Actions extends LightningElement {
         });
         this.dispatchEvent(subscribeEvent);
         this.subEventName = undefined;
-        this.subChannel = undefined;
+        this.subChannel = '';
     }
 
     handlePublish() {
@@ -60,12 +60,16 @@ export default class Actions extends LightningElement {
     handleSubEventTypeChange(event) {
         this.subEventType = event.detail.value;
         this.subEventName = undefined;
-        this.subChannel = undefined;
+        this.subChannel = (this.subEventType === EVT_CDC_CUSTOM) ?  getChannelPrefix(EVT_CDC_CUSTOM) : '';
     }
 
     handleSubEventNameChange(event) {
         this.subEventName = event.detail.value;
         this.subChannel = getChannelPrefix(this.subEventType) + this.subEventName;
+    }
+
+    handleSubChannelChange(event) {
+        this.subChannel = event.detail.value;
     }
 
     handleSubReplayChange(event) {
@@ -96,6 +100,10 @@ export default class Actions extends LightningElement {
         return this.channels === undefined;
     }
 
+    get subEventTypes() {
+        return EVENT_TYPES;
+    }
+
     get subEventNames() {
         if (!this.subEventType) {
             return [];
@@ -110,6 +118,9 @@ export default class Actions extends LightningElement {
         if (!this.subEventType) {
             return 'Waiting for event type';
         }
+        if (this.subEventType === EVT_CDC_CUSTOM) {
+            return 'Custom CDC events require manual channel input';
+        }
         const eventDefinition = EVENT_TYPES.find(e => e.value === this.subEventType);
         if (!eventDefinition) {
             throw new Error(`Unsupported event type ${this.subEventType}`);
@@ -121,8 +132,17 @@ export default class Actions extends LightningElement {
         return this.subEventType === undefined || this.channels[this.subEventType].length === 0;
     }
 
+    get isSubChannelDisabled() {
+        return this.subEventType !== EVT_CDC_CUSTOM;
+    }
+
     get isSubscribeDisabled() {
-        return this.subEventType === undefined || this.subEventName === undefined;
+        return (this.subEventType === EVT_CDC_CUSTOM && this.subChannel.trim() === '')
+            || (this.subEventType !== EVT_CDC_CUSTOM && this.subEventName === undefined);
+    }
+
+    get pubEventTypes() {
+        return EVENT_TYPES;
     }
 
     get pubEventNames() {
@@ -158,7 +178,7 @@ export default class Actions extends LightningElement {
         return this.pubEventType === EVT_GENERIC || this.pubEventType === EVT_PLATFORM_EVENT;
     }
 
-    get eventTypes() {
+    get regEventTypes() {
         return EVENT_TYPES;
     }
     
@@ -181,7 +201,11 @@ export default class Actions extends LightningElement {
         return this.regEventType === EVT_PLATFORM_EVENT;
     }
 
-    get isCDCReg() {
-        return this.regEventType === EVT_CDC;
+    get isStandardCDCReg() {
+        return this.regEventType === EVT_CDC_STANDARD;
+    }
+
+    get isCustomCDCReg() {
+        return this.regEventType === EVT_CDC_CUSTOM;
     }
 }

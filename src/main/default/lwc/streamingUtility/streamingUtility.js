@@ -1,13 +1,15 @@
 export const EVT_PUSH_TOPIC = 'PushTopicEvent';
 export const EVT_GENERIC = 'GenericEvent';
 export const EVT_PLATFORM_EVENT = 'PlatformEvent';
-export const EVT_CDC = 'ChangeDataCaptureEvent';
+export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
+export const EVT_CDC_CUSTOM = 'CustomCDC';
 
 export const EVENT_TYPES = [
     {label: 'PushTopic event', value: EVT_PUSH_TOPIC, channelPrefix: '/topic/'},
     {label: 'Generic event', value: EVT_GENERIC, channelPrefix: '/u/'},    
     {label: 'Platform event', value: EVT_PLATFORM_EVENT, channelPrefix: '/event/'},
-    {label: 'CDC event', value: EVT_CDC, channelPrefix: '/data/'}
+    {label: 'CDC standard event', value: EVT_CDC_STANDARD, channelPrefix: '/data/'},
+    {label: 'CDC custom event', value: EVT_CDC_CUSTOM, channelPrefix: '/data/'}
 ];
 
 /**
@@ -23,15 +25,13 @@ export function getChannelPrefix(eventType) {
     return eventDefinition.channelPrefix;
 }
 
-const CDC_CHANNEL_REGEX = RegExp('^/data/[a-zA-Z0-9]*ChangeEvent$');
-
 /**
- * Tests whether a channel is for CDC
+ * Tests whether a channel is for CDC (standard and custom channels)
  * @param {string} channel the channel path
  * @returns {boolean} true if channel is CDC else false
  */
 export function isCDCChannel(channel) {
-    return CDC_CHANNEL_REGEX.test(channel);
+    return channel.startsWith('/data/');
 }
 
 /**

@@ -63,8 +63,8 @@
                                 <p class="slds-m-bottom_small">Customize and execute the following code in Apex to register a new PushTopic:</p>
                                 <p class="slds-textarea push-topic-code">
                                     PushTopic pushTopic = new PushTopic();<br/>
-                                    pushTopic.Name = 'InvoiceStatementUpdates';<br/>
-                                    pushTopic.Query = 'SELECT Id, Name, Status__c, Description__c FROM Invoice_Statement__c';<br/>
+                                    pushTopic.Name = 'ClosedCaseUpdates';<br/>
+                                    pushTopic.Query = 'SELECT Id, Subject FROM Case WHERE Status=\'Closed\'';<br/>
                                     pushTopic.ApiVersion = 46.0;<br/>
                                     pushTopic.NotifyForOperationCreate = true;<br/>
                                     pushTopic.NotifyForOperationUpdate = true;<br/>

@@ -70,9 +70,9 @@
                     <div class="{!v.regEventType == 'PushTopicEvent' ? '': 'slds-hide'}">
                         <p class="slds-m-bottom_small">Customize and execute the following code in Apex to register a new PushTopic:</p>
 <textarea disabled="disabled" class="slds-textarea">PushTopic pushTopic = new PushTopic();
-pushTopic.Name = 'InvoiceStatementUpdates';
-pushTopic.Query = 'SELECT Id, Name, Status__c, Description__c FROM Invoice_Statement__c';
-pushTopic.ApiVersion = 44.0;
+pushTopic.Name = 'ClosedCaseUpdates';
+pushTopic.Query = 'SELECT Id, Subject FROM Case WHERE Status=\'Closed\'';
+pushTopic.ApiVersion = 45.0;
 pushTopic.NotifyForOperationCreate = true;
 pushTopic.NotifyForOperationUpdate = true;
 pushTopic.NotifyForOperationUndelete = true;

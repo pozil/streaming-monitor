@@ -24,6 +24,7 @@
     onSubscribeAll : function(component, event, helper) {
         const replayId = component.find('subAllReplay').get('v.value');
         const channels = helper.getAllChannels(component);
+        channels.push('/data/ChangeEvents');
         // Subscribe to all channels
         console.log('Subscribing to all streaming events: ', channels);
         channels.forEach(channel => {

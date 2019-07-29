@@ -2,6 +2,8 @@
 
 This Lightning App allows to monitor streaming events: PushTopic events, generic events, platform events and CDC events.
 
+[Presentation Video](https://youtu.be/T9HT-TTCz2s)
+
 Features:
 - Subscribe to all streaming events (event types are automatically discovered)
 - Subscribe to and unsubscribe from specific streaming events with a user-friendly UI

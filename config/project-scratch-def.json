@@ -1,6 +1,7 @@
 {
     "orgName": "pozil",
     "edition": "Developer",
+    "language": "en_US",
     "settings": {
         "orgPreferenceSettings": {
             "s1DesktopEnabled": true,

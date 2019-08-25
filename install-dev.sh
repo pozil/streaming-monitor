@@ -2,7 +2,6 @@
 
 # Set parameters
 ORG_ALIAS="streaming"
-SERVER_ACTION_SERVICE_PACKAGE_ID="04t1t000000XfCt" # v1.6
 
 echo ""
 echo "Installing Streaming Monitor DEV org ($ORG_ALIAS)"
@@ -14,11 +13,7 @@ sfdx force:org:delete -p -u $ORG_ALIAS &> /dev/null
 echo ""
 
 echo "Creating scratch org..." && \
-sfdx force:org:create -s -f config/project-scratch-def.json -a $ORG_ALIAS -d 30 && \
-echo "" && \
-
-echo "Installing server action service dependency..." && \
-sfdx force:package:install --package $SERVER_ACTION_SERVICE_PACKAGE_ID -w 10 -u $ORG_ALIAS && \
+sfdx force:org:create -s -f config/project-scratch-def.json -d 30 -a $ORG_ALIAS && \
 echo "" && \
 
 echo "Pushing source..." && \

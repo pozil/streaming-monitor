@@ -1,4 +1,12 @@
-**/.DS_Store
+# Dev tools
 .sfdx
 .vscode
-src/main/default/objects/
+
+# Sample objects
+**/objects/
+
+# LWC VSCode autocomplete
+jsconfig.json
+
+# Mac files
+**/.DS_Store

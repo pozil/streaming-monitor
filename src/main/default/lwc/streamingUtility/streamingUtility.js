@@ -3,13 +3,15 @@ export const EVT_GENERIC = 'GenericEvent';
 export const EVT_PLATFORM_EVENT = 'PlatformEvent';
 export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
 export const EVT_CDC_CUSTOM = 'CustomCDC';
+export const EVT_MONITORING = 'MonitoringEvent';
 
 export const EVENT_TYPES = [
     {label: 'PushTopic event', value: EVT_PUSH_TOPIC, channelPrefix: '/topic/'},
     {label: 'Generic event', value: EVT_GENERIC, channelPrefix: '/u/'},    
     {label: 'Platform event', value: EVT_PLATFORM_EVENT, channelPrefix: '/event/'},
     {label: 'CDC standard event', value: EVT_CDC_STANDARD, channelPrefix: '/data/'},
-    {label: 'CDC custom event', value: EVT_CDC_CUSTOM, channelPrefix: '/data/'}
+    {label: 'CDC custom event', value: EVT_CDC_CUSTOM, channelPrefix: '/data/'},
+    {label: 'Monitoring events', value: EVT_MONITORING, channelPrefix: '/event/'}
 ];
 
 /**

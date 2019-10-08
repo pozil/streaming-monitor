@@ -9,7 +9,7 @@
                 <!-- Subscribe to ALL event -->
                 <lightning-accordion-section name="subscribeAll" label="Subscribe to all channels">
                     <p>Subscribe to all streaming channels&nbsp;
-                        <lightning-helptext content="Custom Change Data Capture (CDC) &quot;group channels&quot; cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform Events and Standard CDC (standard and custom objects)."></lightning-helptext>
+                        <lightning-helptext content="Custom Change Data Capture (CDC) &quot;group channels&quot; cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform Events, Standard CDC (standard and custom objects) and Monitoring Events."></lightning-helptext>
                     </p>
                     <lightning-combobox label="Replay option" value={subAllReplay} onchange={handleSubAllReplayChange} options={replayOptions}></lightning-combobox>
                     <div class="slds-align_absolute-center slds-m-top_medium">
@@ -26,6 +26,18 @@
                     <div class="slds-align_absolute-center slds-m-top_medium">
                         <lightning-button variant="brand" label="Subscribe" onclick={handleSubscribe} disabled={isSubscribeDisabled}></lightning-button>
                     </div>
+                    <!-- CDC enablement warning -->
+                    <template if:true={isCDCSub}>
+                        <c-notice>
+                            <p slot="message">CDC events must be enabled in <a href="/lightning/setup/CdcObjectEnablement/home">Setup</a> in order to receive them.</p>
+                        </c-notice>
+                    </template>
+                    <!-- Event monitoring enablement warning -->
+                    <template if:true={isEventMonitoringSub}>
+                        <c-notice>
+                            <p slot="message">Streaming must be enabled in <a href="/lightning/setup/EventManager/home">Event Manager</a> in order to receive Monitoring Events.</p>
+                        </c-notice>
+                    </template>
                 </lightning-accordion-section>
                 
                 <!-- Publish an event -->
@@ -43,14 +55,9 @@
                         </template>
                         <!-- Manual publish not allowed -->
                         <template if:false={isManualPublishedAllowed}>
-                            <div class="slds-media slds-media_center slds-m-vertical_small">
-                                <div class="slds-media__figure">
-                                    <lightning-icon icon-name="utility:info" size="small" alternative-text="Info icon"></lightning-icon>
-                                </div>
-                                <div class="slds-media__body">
-                                    <p>This type of event can only be published via record updates.</p>
-                                </div>
-                            </div>
+                            <c-notice>
+                                <p slot="message">This type of event can only be published via record updates.</p>
+                            </c-notice>
                         </template>
                     </template>
                 </lightning-accordion-section>

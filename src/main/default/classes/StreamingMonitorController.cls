@@ -5,6 +5,7 @@ public abstract class StreamingMonitorController {
     public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
     public final static String EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
     public final static String EVT_CDC_CUSTOM = 'CustomCDC';
+    public final static String EVT_MONITORING = 'MonitoringEvent';
 
 
     @AuraEnabled
@@ -26,6 +27,7 @@ public abstract class StreamingMonitorController {
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
         channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
         channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
+        channels.put(EVT_MONITORING, getEventMonitoringChannels());
         return channels;
     }
 
@@ -108,6 +110,16 @@ public abstract class StreamingMonitorController {
             if (entity.QualifiedApiName.endsWith('__e')) {
                 items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
             }
+        }
+        return items;
+    }
+
+    @TestVisible
+    private static List<ComboBoxItem> getEventMonitoringChannels() {
+        List<EntityDefinition> entities = [SELECT Label, QualifiedApiName FROM EntityDefinition WHERE QualifiedApiName LIKE '%EventStream' ORDER BY Label ASC];
+        List<ComboBoxItem> items = new List<ComboBoxItem>();
+        for (EntityDefinition entity : entities) {
+            items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
         }
         return items;
     }

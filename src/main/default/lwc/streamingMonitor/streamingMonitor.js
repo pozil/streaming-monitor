@@ -31,7 +31,11 @@ export default class StreamingMonitor extends LightningElement {
             throw new Error('Failed to retrieve streaming channels');
         });
     }
-    
+
+    disconnectedCallback() {
+        this.handleUnsubscribeAll();
+    }
+
     notify(variant, title, message) {
         this.dispatchEvent(
             new ShowToastEvent({ title, message, variant })

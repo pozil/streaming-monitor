@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { LightningElement, track, api } from 'lwc';
-import { EVENT_TYPES, EVT_PUSH_TOPIC, EVT_GENERIC, EVT_PLATFORM_EVENT, EVT_CDC_STANDARD, EVT_CDC_CUSTOM, getChannelPrefix } from 'c/streamingUtility';
+import { EVENT_TYPES, EVT_PUSH_TOPIC, EVT_GENERIC, EVT_PLATFORM_EVENT, EVT_CDC_STANDARD, EVT_CDC_CUSTOM, EVT_MONITORING, getChannelPrefix} from 'c/streamingUtility';
 
 
 export default class Actions extends LightningElement {
@@ -207,5 +207,13 @@ export default class Actions extends LightningElement {
 
     get isCustomCDCReg() {
         return this.regEventType === EVT_CDC_CUSTOM;
+    }
+
+    get isCDCSub() {
+        return this.subEventType === EVT_CDC_STANDARD || this.subEventType === EVT_CDC_CUSTOM;
+    }
+
+    get isEventMonitoringSub() {
+        return this.subEventType === EVT_MONITORING;
     }
 }

@@ -21,7 +21,13 @@ sfdx force:source:push -u $ORG_ALIAS && \
 echo "" && \
 
 echo "Assigning permission sets..." && \
-sfdx force:user:permset:assign -n Streaming_Monitor -u $ORG_ALIAS
+sfdx force:user:permset:assign -n Streaming_Monitor -u $ORG_ALIAS && \
+echo "" && \
+
+echo "Opening org..." && \
+sfdx force:org:open -p lightning/n/smon__Streaming_Monitor -u $ORG_ALIAS && \
+echo ""
+
 EXIT_CODE="$?"
 echo ""
 

@@ -4,6 +4,8 @@
 
 This Lightning App allows to monitor streaming events: PushTopic events, generic events, platform events, CDC events and monitoring events.
 
+[Presentation Video](https://youtu.be/T9HT-TTCz2s)
+
 Features:
 
 -   Subscribe to all streaming events (event types are automatically discovered)
@@ -37,7 +39,7 @@ sfdx force:org:create -s -f config/project-scratch-def.json -a streaming
 b) install Server Action Service dependency:
 
 ```sh
-sfdx force:package:install --package 04t1t000000XfCt -w 10 -u streaming
+sfdx force:package:install --package 04t1t0000038r2q -w 10 -u streaming
 ```
 
 c) push sources to the scratch org:

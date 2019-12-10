@@ -1,12 +1,13 @@
 # Dev tools
 .sfdx
 .vscode
+.localdevserver
+node_modules
+jsconfig.json
 
 # Sample objects
 **/objects/
 
-# LWC VSCode autocomplete
-jsconfig.json
-
 # Mac files
 **/.DS_Store
+**/__MACOSX

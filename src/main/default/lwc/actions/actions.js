@@ -1,14 +1,21 @@
 /* eslint-disable no-console */
 import { LightningElement, track, api } from 'lwc';
-import { EVENT_TYPES, EVT_PUSH_TOPIC, EVT_GENERIC, EVT_PLATFORM_EVENT, EVT_CDC_STANDARD, EVT_CDC_CUSTOM, EVT_MONITORING, getChannelPrefix} from 'c/streamingUtility';
-
+import {
+    EVENT_TYPES,
+    EVT_PUSH_TOPIC,
+    EVT_GENERIC,
+    EVT_PLATFORM_EVENT,
+    EVT_CDC_STANDARD,
+    EVT_CDC_CUSTOM,
+    EVT_MONITORING,
+    getChannelPrefix
+} from 'c/streamingUtility';
 
 export default class Actions extends LightningElement {
-    
     @api channels;
 
     @track subAllReplay = '-1';
-    
+
     @track subEventType;
     @track subEventName;
     @track subChannel;
@@ -18,7 +25,7 @@ export default class Actions extends LightningElement {
     @track pubEventName;
     @track pubChannel;
     @track pubPayload;
-    
+
     @track regEventType;
 
     handleSubscribeAll() {
@@ -60,12 +67,16 @@ export default class Actions extends LightningElement {
     handleSubEventTypeChange(event) {
         this.subEventType = event.detail.value;
         this.subEventName = undefined;
-        this.subChannel = (this.subEventType === EVT_CDC_CUSTOM) ?  getChannelPrefix(EVT_CDC_CUSTOM) : '';
+        this.subChannel =
+            this.subEventType === EVT_CDC_CUSTOM
+                ? getChannelPrefix(EVT_CDC_CUSTOM)
+                : '';
     }
 
     handleSubEventNameChange(event) {
         this.subEventName = event.detail.value;
-        this.subChannel = getChannelPrefix(this.subEventType) + this.subEventName;
+        this.subChannel =
+            getChannelPrefix(this.subEventType) + this.subEventName;
     }
 
     handleSubChannelChange(event) {
@@ -85,7 +96,8 @@ export default class Actions extends LightningElement {
 
     handlePubEventNameChange(event) {
         this.pubEventName = event.detail.value;
-        this.pubChannel = getChannelPrefix(this.pubEventType) + this.pubEventName;
+        this.pubChannel =
+            getChannelPrefix(this.pubEventType) + this.pubEventName;
     }
 
     handlePubPayloadChange(event) {
@@ -121,7 +133,9 @@ export default class Actions extends LightningElement {
         if (this.subEventType === EVT_CDC_CUSTOM) {
             return 'Custom CDC events require manual channel input';
         }
-        const eventDefinition = EVENT_TYPES.find(e => e.value === this.subEventType);
+        const eventDefinition = EVENT_TYPES.find(
+            e => e.value === this.subEventType
+        );
         if (!eventDefinition) {
             throw new Error(`Unsupported event type ${this.subEventType}`);
         }
@@ -129,7 +143,10 @@ export default class Actions extends LightningElement {
     }
 
     get isSubEventNameDisabled() {
-        return this.subEventType === undefined || this.channels[this.subEventType].length === 0;
+        return (
+            this.subEventType === undefined ||
+            this.channels[this.subEventType].length === 0
+        );
     }
 
     get isSubChannelDisabled() {
@@ -137,8 +154,12 @@ export default class Actions extends LightningElement {
     }
 
     get isSubscribeDisabled() {
-        return (this.subEventType === EVT_CDC_CUSTOM && this.subChannel.trim() === '')
-            || (this.subEventType !== EVT_CDC_CUSTOM && this.subEventName === undefined);
+        return (
+            (this.subEventType === EVT_CDC_CUSTOM &&
+                this.subChannel.trim() === '') ||
+            (this.subEventType !== EVT_CDC_CUSTOM &&
+                this.subEventName === undefined)
+        );
     }
 
     get pubEventTypes() {
@@ -159,7 +180,9 @@ export default class Actions extends LightningElement {
         if (!this.pubEventType) {
             return 'Waiting for event type';
         }
-        const eventDefinition = EVENT_TYPES.find(e => e.value === this.pubEventType);
+        const eventDefinition = EVENT_TYPES.find(
+            e => e.value === this.pubEventType
+        );
         if (!eventDefinition) {
             throw new Error(`Unsupported event type ${this.pubEventType}`);
         }
@@ -167,25 +190,33 @@ export default class Actions extends LightningElement {
     }
 
     get isPubEventNameDisabled() {
-        return this.pubEventType === undefined || this.channels[this.pubEventType].length === 0;
+        return (
+            this.pubEventType === undefined ||
+            this.channels[this.pubEventType].length === 0
+        );
     }
 
     get isPublishDisabled() {
-        return this.pubEventType === undefined || this.pubEventName === undefined;
+        return (
+            this.pubEventType === undefined || this.pubEventName === undefined
+        );
     }
 
     get isManualPublishedAllowed() {
-        return this.pubEventType === EVT_GENERIC || this.pubEventType === EVT_PLATFORM_EVENT;
+        return (
+            this.pubEventType === EVT_GENERIC ||
+            this.pubEventType === EVT_PLATFORM_EVENT
+        );
     }
 
     get regEventTypes() {
         return EVENT_TYPES;
     }
-    
+
     get replayOptions() {
         return [
-            {label: 'No replay', value: '-1'},
-            {label: 'Replay past events', value: '-2'}
+            { label: 'No replay', value: '-1' },
+            { label: 'Replay past events', value: '-2' }
         ];
     }
 
@@ -210,7 +241,10 @@ export default class Actions extends LightningElement {
     }
 
     get isCDCSub() {
-        return this.subEventType === EVT_CDC_STANDARD || this.subEventType === EVT_CDC_CUSTOM;
+        return (
+            this.subEventType === EVT_CDC_STANDARD ||
+            this.subEventType === EVT_CDC_CUSTOM
+        );
     }
 
     get isEventMonitoringSub() {

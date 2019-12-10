@@ -1,28 +1,54 @@
 <template>
-    <section role="dialog" tabindex="-1" aria-labelledby="modalTitle" aria-modal="true" aria-describedby="modalContent" class={modalClass}>
+    <section
+        role="dialog"
+        tabindex="-1"
+        aria-labelledby="modalTitle"
+        aria-modal="true"
+        aria-describedby="modalContent"
+        class={modalClass}
+    >
         <div class="slds-modal__container">
-
             <!-- Header -->
             <header class={headerClass}>
                 <template if:false={hideCloseIcon}>
-                    <lightning-button-icon onclick={handleCloseModal} icon-name="utility:close" alternative-text="Close" class="slds-modal__close" variant="bare-inverse" size="large"></lightning-button-icon>
+                    <lightning-button-icon
+                        onclick={handleCloseModal}
+                        icon-name="utility:close"
+                        alternative-text="Close"
+                        class="slds-modal__close"
+                        variant="bare-inverse"
+                        size="large"
+                    ></lightning-button-icon>
                 </template>
-                <h2 class="slds-text-heading--medium slds-hyphenate" id="modalTitle">{title}</h2>
+                <h2
+                    class="slds-text-heading--medium slds-hyphenate"
+                    id="modalTitle"
+                >
+                    {title}
+                </h2>
                 <p class="slds-m-top--x-small slds-hide">
-                    <slot name="tagline" onslotchange={handleSlotTaglineChange}></slot>
+                    <slot
+                        name="tagline"
+                        onslotchange={handleSlotTaglineChange}
+                    ></slot>
                 </p>
             </header>
 
             <!-- Body -->
-            <div class="slds-modal__content slds-p-around--medium" id="modalContent">
+            <div
+                class="slds-modal__content slds-p-around--medium"
+                id="modalContent"
+            >
                 <slot></slot>
             </div>
 
             <!-- Footer -->
             <footer class={footerClass}>
-                <slot name="footer" onslotchange={handleSlotFooterChange}></slot>
+                <slot
+                    name="footer"
+                    onslotchange={handleSlotFooterChange}
+                ></slot>
             </footer>
-
         </div>
     </section>
 

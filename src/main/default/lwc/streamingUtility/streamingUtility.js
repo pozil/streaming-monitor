@@ -6,12 +6,32 @@ export const EVT_CDC_CUSTOM = 'CustomCDC';
 export const EVT_MONITORING = 'MonitoringEvent';
 
 export const EVENT_TYPES = [
-    {label: 'PushTopic event', value: EVT_PUSH_TOPIC, channelPrefix: '/topic/'},
-    {label: 'Generic event', value: EVT_GENERIC, channelPrefix: '/u/'},    
-    {label: 'Platform event', value: EVT_PLATFORM_EVENT, channelPrefix: '/event/'},
-    {label: 'CDC standard event', value: EVT_CDC_STANDARD, channelPrefix: '/data/'},
-    {label: 'CDC custom event', value: EVT_CDC_CUSTOM, channelPrefix: '/data/'},
-    {label: 'Monitoring events', value: EVT_MONITORING, channelPrefix: '/event/'}
+    {
+        label: 'PushTopic event',
+        value: EVT_PUSH_TOPIC,
+        channelPrefix: '/topic/'
+    },
+    { label: 'Generic event', value: EVT_GENERIC, channelPrefix: '/u/' },
+    {
+        label: 'Platform event',
+        value: EVT_PLATFORM_EVENT,
+        channelPrefix: '/event/'
+    },
+    {
+        label: 'CDC standard event',
+        value: EVT_CDC_STANDARD,
+        channelPrefix: '/data/'
+    },
+    {
+        label: 'CDC custom event',
+        value: EVT_CDC_CUSTOM,
+        channelPrefix: '/data/'
+    },
+    {
+        label: 'Monitoring events',
+        value: EVT_MONITORING,
+        channelPrefix: '/event/'
+    }
 ];
 
 /**
@@ -44,7 +64,8 @@ export function isCDCChannel(channel) {
 export function normalizeEvent(event) {
     // Build id for datatable
     let id = '';
-    if (event.data.schema) { // Generic event does not support schema Id
+    if (event.data.schema) {
+        // Generic event does not support schema Id
         id = event.data.schema;
     } else {
         id = event.channel;
@@ -52,22 +73,26 @@ export function normalizeEvent(event) {
     id += event.data.event.replayId;
     // Extract time from event
     let time = null;
-    if (event.data.event.createdDate) { // Generic event and PushTopic
+    if (event.data.event.createdDate) {
+        // Generic event and PushTopic
         time = new Date(event.data.event.createdDate);
-    } else if (event.data.payload.ChangeEventHeader) { // CDC
+    } else if (event.data.payload.ChangeEventHeader) {
+        // CDC
         time = new Date(event.data.payload.ChangeEventHeader.commitTimestamp);
-    } else if (event.data.payload.CreatedDate) { // Platform Event
+    } else if (event.data.payload.CreatedDate) {
+        // Platform Event
         time = new Date(event.data.payload.CreatedDate);
     }
     if (time) {
-        time = time.toISOString().replace(/z|t/gi,' ');
-        time = time.substr(0, time.length -5);
+        time = time.toISOString().replace(/z|t/gi, ' ');
+        time = time.substr(0, time.length - 5);
     }
     // Assemble payload
     let payload = null;
     if (event.data.payload) {
         payload = event.data.payload;
-    } else if (event.data.sobject) { // PushTopic
+    } else if (event.data.sobject) {
+        // PushTopic
         payload = event.data.sobject;
     }
     // Assemble normalized event data
@@ -76,7 +101,7 @@ export function normalizeEvent(event) {
         time,
         channel: event.channel,
         replayId: event.data.event.replayId,
-        payload: JSON.stringify(payload),
+        payload: JSON.stringify(payload)
     };
     return eventData;
 }

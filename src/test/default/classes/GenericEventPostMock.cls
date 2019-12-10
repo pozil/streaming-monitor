@@ -1,6 +1,5 @@
 @isTest
 global class GenericEventPostMock implements HttpCalloutMock {
-   
     private Integer statusCode;
 
     global GenericEventPostMock(Integer statusCode) {

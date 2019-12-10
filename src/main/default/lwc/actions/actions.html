@@ -1,98 +1,232 @@
 <template>
     <lightning-card title="Actions">
         <template if:true={isLoading}>
-            <lightning-spinner alternative-text="Loading channels" variant="brand"></lightning-spinner>
+            <lightning-spinner
+                alternative-text="Loading channels"
+                variant="brand"
+            ></lightning-spinner>
         </template>
         <div class="slds-p-horizontal_small">
-            <lightning-accordion active-section-name="subscribeAll" allow-multiple-sections-open>
-                
+            <lightning-accordion
+                active-section-name="subscribeAll"
+                allow-multiple-sections-open
+            >
                 <!-- Subscribe to ALL event -->
-                <lightning-accordion-section name="subscribeAll" label="Subscribe to all channels">
-                    <p>Subscribe to all streaming channels&nbsp;
-                        <lightning-helptext content="Custom Change Data Capture (CDC) &quot;group channels&quot; cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform Events, Standard CDC (standard and custom objects) and Monitoring Events."></lightning-helptext>
+                <lightning-accordion-section
+                    name="subscribeAll"
+                    label="Subscribe to all channels"
+                >
+                    <p>
+                        Subscribe to all streaming channels&nbsp;
+                        <lightning-helptext
+                            content='Custom Change Data Capture (CDC) "group channels" cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform Events, Standard CDC (standard and custom objects) and Monitoring Events.'
+                        ></lightning-helptext>
                     </p>
-                    <lightning-combobox label="Replay option" value={subAllReplay} onchange={handleSubAllReplayChange} options={replayOptions}></lightning-combobox>
+                    <lightning-combobox
+                        label="Replay option"
+                        value={subAllReplay}
+                        onchange={handleSubAllReplayChange}
+                        options={replayOptions}
+                    ></lightning-combobox>
                     <div class="slds-align_absolute-center slds-m-top_medium">
-                        <lightning-button variant="brand" label="Subscribe to all" onclick={handleSubscribeAll}></lightning-button>
+                        <lightning-button
+                            variant="brand"
+                            label="Subscribe to all"
+                            onclick={handleSubscribeAll}
+                        ></lightning-button>
                     </div>
                 </lightning-accordion-section>
-                
+
                 <!-- Subscribe to an event -->
-                <lightning-accordion-section name="subscribe" label="Subscribe to a channel">
-                    <lightning-combobox label="Event type" value={subEventType} options={subEventTypes} placeholder="Select type" onchange={handleSubEventTypeChange}></lightning-combobox>
-                    <lightning-combobox label="Event name" value={subEventName} options={subEventNames} placeholder={subEventNamePlaceholder} onchange={handleSubEventNameChange} disabled={isSubEventNameDisabled}></lightning-combobox>
-                    <lightning-input label="Streaming channel" value={subChannel} onchange={handleSubChannelChange} disabled={isSubChannelDisabled}></lightning-input>
-                    <lightning-combobox label="Replay option" value={subReplay} onchange={handleSubReplayChange} options={replayOptions} disabled={isSubscribeDisabled}></lightning-combobox>
+                <lightning-accordion-section
+                    name="subscribe"
+                    label="Subscribe to a channel"
+                >
+                    <lightning-combobox
+                        label="Event type"
+                        value={subEventType}
+                        options={subEventTypes}
+                        placeholder="Select type"
+                        onchange={handleSubEventTypeChange}
+                    ></lightning-combobox>
+                    <lightning-combobox
+                        label="Event name"
+                        value={subEventName}
+                        options={subEventNames}
+                        placeholder={subEventNamePlaceholder}
+                        onchange={handleSubEventNameChange}
+                        disabled={isSubEventNameDisabled}
+                    ></lightning-combobox>
+                    <lightning-input
+                        label="Streaming channel"
+                        value={subChannel}
+                        onchange={handleSubChannelChange}
+                        disabled={isSubChannelDisabled}
+                    ></lightning-input>
+                    <lightning-combobox
+                        label="Replay option"
+                        value={subReplay}
+                        onchange={handleSubReplayChange}
+                        options={replayOptions}
+                        disabled={isSubscribeDisabled}
+                    ></lightning-combobox>
                     <div class="slds-align_absolute-center slds-m-top_medium">
-                        <lightning-button variant="brand" label="Subscribe" onclick={handleSubscribe} disabled={isSubscribeDisabled}></lightning-button>
+                        <lightning-button
+                            variant="brand"
+                            label="Subscribe"
+                            onclick={handleSubscribe}
+                            disabled={isSubscribeDisabled}
+                        ></lightning-button>
                     </div>
                     <!-- CDC enablement warning -->
                     <template if:true={isCDCSub}>
                         <c-notice>
-                            <p slot="message">CDC events must be enabled in <a href="/lightning/setup/CdcObjectEnablement/home">Setup</a> in order to receive them.</p>
+                            <p slot="message">
+                                CDC events must be enabled in
+                                <a
+                                    href="/lightning/setup/CdcObjectEnablement/home"
+                                    >Setup</a
+                                >
+                                in order to receive them.
+                            </p>
                         </c-notice>
                     </template>
                     <!-- Event monitoring enablement warning -->
                     <template if:true={isEventMonitoringSub}>
                         <c-notice>
-                            <p slot="message">Streaming must be enabled in <a href="/lightning/setup/EventManager/home">Event Manager</a> in order to receive Monitoring Events.</p>
+                            <p slot="message">
+                                Streaming must be enabled in
+                                <a href="/lightning/setup/EventManager/home"
+                                    >Event Manager</a
+                                >
+                                in order to receive Monitoring Events.
+                            </p>
                         </c-notice>
                     </template>
                 </lightning-accordion-section>
-                
+
                 <!-- Publish an event -->
-                <lightning-accordion-section name="publish" label="Publish an event">
-                    <lightning-combobox label="Event type" value={pubEventType} options={pubEventTypes} placeholder="Select type" onchange={handlePubEventTypeChange}></lightning-combobox>
+                <lightning-accordion-section
+                    name="publish"
+                    label="Publish an event"
+                >
+                    <lightning-combobox
+                        label="Event type"
+                        value={pubEventType}
+                        options={pubEventTypes}
+                        placeholder="Select type"
+                        onchange={handlePubEventTypeChange}
+                    ></lightning-combobox>
                     <template if:true={pubEventType}>
                         <!-- Manual publish allowed -->
                         <template if:true={isManualPublishedAllowed}>
-                            <lightning-combobox label="Event name" value={pubEventName} options={pubEventNames} placeholder={pubEventNamePlaceholder}  onchange={handlePubEventNameChange} disabled={isPubEventNameDisabled}></lightning-combobox>
-                            <lightning-input label="Streaming channel" value={pubChannel} disabled></lightning-input>
-                            <lightning-textarea label="Event payload" value={pubPayload} onchange={handlePubPayloadChange} disabled={isPublishDisabled} field-level-help="JSON formatted payload with strings delimited by double quotes"></lightning-textarea>
-                            <div class="slds-align_absolute-center slds-m-top_medium">
-                                <lightning-button variant="brand" label="Publish" onclick={handlePublish} disabled={isPublishDisabled}></lightning-button>
+                            <lightning-combobox
+                                label="Event name"
+                                value={pubEventName}
+                                options={pubEventNames}
+                                placeholder={pubEventNamePlaceholder}
+                                onchange={handlePubEventNameChange}
+                                disabled={isPubEventNameDisabled}
+                            ></lightning-combobox>
+                            <lightning-input
+                                label="Streaming channel"
+                                value={pubChannel}
+                                disabled
+                            ></lightning-input>
+                            <lightning-textarea
+                                label="Event payload"
+                                value={pubPayload}
+                                onchange={handlePubPayloadChange}
+                                disabled={isPublishDisabled}
+                                field-level-help="JSON formatted payload with strings delimited by double quotes"
+                            ></lightning-textarea>
+                            <div
+                                class="slds-align_absolute-center slds-m-top_medium"
+                            >
+                                <lightning-button
+                                    variant="brand"
+                                    label="Publish"
+                                    onclick={handlePublish}
+                                    disabled={isPublishDisabled}
+                                ></lightning-button>
                             </div>
                         </template>
                         <!-- Manual publish not allowed -->
                         <template if:false={isManualPublishedAllowed}>
                             <c-notice>
-                                <p slot="message">This type of event can only be published via record updates.</p>
+                                <p slot="message">
+                                    This type of event can only be published via
+                                    record updates.
+                                </p>
                             </c-notice>
                         </template>
                     </template>
                 </lightning-accordion-section>
-                
+
                 <!-- Register an event type -->
-                <lightning-accordion-section name="register" label="Register/Activate an event source">
-                    <lightning-combobox label="Event type" value={regEventType} options={regEventTypes} onchange={handleRegEventTypeChange} placeholder="Select type" class="slds-m-bottom_medium"></lightning-combobox>
-            
-                        <template if:true={isPushTopicReg}>
-                                <p class="slds-m-bottom_small">Customize and execute the following code in Apex to register a new PushTopic:</p>
-                                <p class="slds-textarea push-topic-code">
-                                    PushTopic pushTopic = new PushTopic();<br/>
-                                    pushTopic.Name = 'ClosedCaseUpdates';<br/>
-                                    pushTopic.Query = 'SELECT Id, Subject FROM Case WHERE Status=\'Closed\'';<br/>
-                                    pushTopic.ApiVersion = 47.0;<br/>
-                                    pushTopic.NotifyForOperationCreate = true;<br/>
-                                    pushTopic.NotifyForOperationUpdate = true;<br/>
-                                    pushTopic.NotifyForOperationUndelete = true;<br/>
-                                    pushTopic.NotifyForOperationDelete = true;<br/>
-                                    pushTopic.NotifyForFields = 'Referenced';<br/>
-                                    insert pushTopic;
-                                </p>
-                        </template>
-                        <template if:true={isGenericReg}>
-                            Navigate to the <a href="/lightning/o/StreamingChannel/list">Streaming Channel</a> tab to register a generic event.
-                        </template>
-                        <template if:true={isPlatformEventReg}>
-                            Navigate to the <a href="/lightning/setup/EventObjects/home">Platform Event</a> page in Setup to register a platform event.
-                        </template>
-                        <template if:true={isStandardCDCReg}>
-                            Navigate to the <a href="/lightning/setup/CdcObjectEnablement/home">Change Data Capture</a> page in Setup to activate a change data capture event.
-                        </template>
-                        <template if:true={isCustomCDCReg}>
-                            Custom CDC channels cannot be declared via user interface. Follow these <a noopener target="_blank" href="https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_custom_channel.htm">metadata deploy instructions</a>.
-                        </template>
+                <lightning-accordion-section
+                    name="register"
+                    label="Register/Activate an event source"
+                >
+                    <lightning-combobox
+                        label="Event type"
+                        value={regEventType}
+                        options={regEventTypes}
+                        onchange={handleRegEventTypeChange}
+                        placeholder="Select type"
+                        class="slds-m-bottom_medium"
+                    ></lightning-combobox>
+
+                    <template if:true={isPushTopicReg}>
+                        <p class="slds-m-bottom_small">
+                            Customize and execute the following code in Apex to
+                            register a new PushTopic:
+                        </p>
+                        <p class="slds-textarea push-topic-code">
+                            PushTopic pushTopic = new PushTopic();<br />
+                            pushTopic.Name = 'ClosedCaseUpdates';<br />
+                            pushTopic.Query = 'SELECT Id, Subject FROM Case
+                            WHERE Status=\'Closed\'';<br />
+                            pushTopic.ApiVersion = 47.0;<br />
+                            pushTopic.NotifyForOperationCreate = true;<br />
+                            pushTopic.NotifyForOperationUpdate = true;<br />
+                            pushTopic.NotifyForOperationUndelete = true;<br />
+                            pushTopic.NotifyForOperationDelete = true;<br />
+                            pushTopic.NotifyForFields = 'Referenced';<br />
+                            insert pushTopic;
+                        </p>
+                    </template>
+                    <template if:true={isGenericReg}>
+                        Navigate to the
+                        <a href="/lightning/o/StreamingChannel/list"
+                            >Streaming Channel</a
+                        >
+                        tab to register a generic event.
+                    </template>
+                    <template if:true={isPlatformEventReg}>
+                        Navigate to the
+                        <a href="/lightning/setup/EventObjects/home"
+                            >Platform Event</a
+                        >
+                        page in Setup to register a platform event.
+                    </template>
+                    <template if:true={isStandardCDCReg}>
+                        Navigate to the
+                        <a href="/lightning/setup/CdcObjectEnablement/home"
+                            >Change Data Capture</a
+                        >
+                        page in Setup to activate a change data capture event.
+                    </template>
+                    <template if:true={isCustomCDCReg}>
+                        Custom CDC channels cannot be declared via user
+                        interface. Follow these
+                        <a
+                            noopener
+                            target="_blank"
+                            href="https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_custom_channel.htm"
+                            >metadata deploy instructions</a
+                        >.
+                    </template>
                 </lightning-accordion-section>
             </lightning-accordion>
         </div>

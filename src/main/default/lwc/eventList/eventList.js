@@ -1,7 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 
 export default class EventList extends LightningElement {
-    
     @api events;
     @track eventData = { time: '', channel: '', replayId: '', payload: '' };
 
@@ -24,11 +23,38 @@ export default class EventList extends LightningElement {
 
     get columns() {
         return [
-            {label: 'Time', fieldName: 'time', type: 'text', sortable: true, initialWidth: 180},
-            {label: 'Channel', fieldName: 'channel', type: 'text', sortable: true, initialWidth: 200},
-            {label: 'Replay Id', fieldName: 'replayId', type: 'number', sortable: true, initialWidth: 100},
-            {label: 'Payload', fieldName: 'payload', type: 'text'},
-            {label: ' ', type: 'button-icon', initialWidth: 50, typeAttributes: { iconName: 'utility:zoomin', name: 'view', title: 'Click to View Details'}},
+            {
+                label: 'Time',
+                fieldName: 'time',
+                type: 'text',
+                sortable: true,
+                initialWidth: 180
+            },
+            {
+                label: 'Channel',
+                fieldName: 'channel',
+                type: 'text',
+                sortable: true,
+                initialWidth: 200
+            },
+            {
+                label: 'Replay Id',
+                fieldName: 'replayId',
+                type: 'number',
+                sortable: true,
+                initialWidth: 100
+            },
+            { label: 'Payload', fieldName: 'payload', type: 'text' },
+            {
+                label: ' ',
+                type: 'button-icon',
+                initialWidth: 50,
+                typeAttributes: {
+                    iconName: 'utility:zoomin',
+                    name: 'view',
+                    title: 'Click to View Details'
+                }
+            }
         ];
     }
 

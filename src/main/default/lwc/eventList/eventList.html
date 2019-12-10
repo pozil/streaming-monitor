@@ -1,0 +1,57 @@
+<template>
+    <!-- Event data modal -->
+    <c-modal title="Event details" onclose={handleCloseEventModal}>
+        <div class="slds-region_narrow">
+            <div class="slds-form slds-form_horizontal">
+                <lightning-input
+                    label="Time"
+                    value={eventData.time}
+                    readonly
+                ></lightning-input>
+                <lightning-input
+                    label="Channel"
+                    value={eventData.channel}
+                    readonly
+                ></lightning-input>
+                <lightning-input
+                    label="Replay Id"
+                    value={eventData.replayId}
+                    readonly
+                ></lightning-input>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="eventPayload"
+                    >Payload</label
+                >
+                <div class="slds-form-element__control">
+                    <textarea id="eventPayload" class="slds-textarea" disabled>
+{eventDataPayload}</textarea
+                    >
+                </div>
+            </div>
+        </div>
+    </c-modal>
+
+    <!-- Event list -->
+    <lightning-card title="Events Received">
+        <div slot="actions">
+            <lightning-badge label={eventCount}></lightning-badge>
+            <lightning-button-icon
+                icon-name="utility:delete"
+                variant="bare"
+                alternative-text="Clear received events"
+                class="slds-m-left_x-small"
+                onclick={handleClearReceivedEvents}
+            ></lightning-button-icon>
+        </div>
+        <div class="slds-p-horizontal_small">
+            <lightning-datatable
+                key-field="id"
+                data={events}
+                columns={columns}
+                onrowaction={handleEventTableRowAction}
+                hide-checkbox-column
+            ></lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

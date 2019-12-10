@@ -1,0 +1,23 @@
+<template>
+    <div class="slds-grid slds-gutters slds-gutters_x-small">
+        <div class="slds-col slds-size_1-of-3">
+            <c-actions
+                channels={channels}
+                onsubscribeall={handleSubscribeAll}
+                onsubscribe={handleSubscribe}
+                onpublish={handlePublish}
+            ></c-actions>
+            <c-subscriptions
+                subscriptions={subscriptions}
+                onunsubscribeall={handleUnsubscribeAll}
+                onunsubscribe={handleUnsubscribe}
+            ></c-subscriptions>
+        </div>
+        <div class="slds-col slds-size_2-of-3">
+            <c-event-list
+                events={events}
+                onclearevents={handleClearEvents}
+            ></c-event-list>
+        </div>
+    </div>
+</template>

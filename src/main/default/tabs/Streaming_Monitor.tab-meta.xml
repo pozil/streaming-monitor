@@ -3,6 +3,5 @@
     <description>App that monitors streaming events</description>
     <flexiPage>Streaming_Monitor</flexiPage>
     <label>Streaming Monitor</label>
-    <mobileReady>false</mobileReady>
     <motif>Custom30: Radar dish</motif>
 </CustomTab>

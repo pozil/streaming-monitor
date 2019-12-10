@@ -1,4 +1,0 @@
-<aura:event access="global" type="APPLICATION" description="Streaming Monitor Event">
-    <aura:attribute name="action" type="String" required="true"/>
-    <aura:attribute name="params" type="Map" required="true"/>
-</aura:event>

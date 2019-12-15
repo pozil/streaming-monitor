@@ -36,19 +36,13 @@ a) create a scratch org with a "streaming" alias:
 sfdx force:org:create -s -f config/project-scratch-def.json -a streaming
 ```
 
-b) install Server Action Service dependency:
-
-```sh
-sfdx force:package:install --package 04t1t0000038r2q -w 10 -u streaming
-```
-
-c) push sources to the scratch org:
+b) push sources to the scratch org:
 
 ```sh
 sfdx force:source:push -u streaming
 ```
 
-d) assign permission set to the default user:
+c) assign permission set to the default user:
 
 ```sh
 sfdx force:user:permset:assign -n Streaming_Monitor -u streaming

@@ -150,14 +150,13 @@ public abstract class StreamingMonitorController {
     @TestVisible
     private static List<ComboBoxItem> getPlatformEventChannels() {
         List<EntityDefinition> entities = [
-            SELECT Label, QualifiedApiName
+            SELECT Label, QualifiedApiName,IsCustomizable
             FROM EntityDefinition
-            WHERE IsCustomizable = true AND QualifiedApiName LIKE '%e'
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (EntityDefinition entity : entities) {
-            if (entity.QualifiedApiName.endsWith('__e')) {
+            if (entity.QualifiedApiName.endsWith('__e') || (entity.QualifiedApiName.endsWith('Event') && !entity.QualifiedApiName.endsWith('ChangeEvent'))){
                 items.add(
                     new ComboBoxItem(entity.Label, entity.QualifiedApiName)
                 );

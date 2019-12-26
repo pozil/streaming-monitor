@@ -232,8 +232,8 @@ export default class Actions extends LightningElement {
 
     get isPlatformEventReg() {
         return (
-            this.regEventType === EVT_PLATFORM_EVENT
-            || this.regEventType === STD_EVT_PLATFORM_EVENT
+            this.regEventType === EVT_PLATFORM_EVENT ||
+            this.regEventType === STD_EVT_PLATFORM_EVENT
         );
     }
 

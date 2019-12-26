@@ -12,10 +12,10 @@ export const EVENT_TYPES = [
         value: EVT_PUSH_TOPIC,
         channelPrefix: '/topic/'
     },
-    { 
-        label: 'Generic event', 
-        value: EVT_GENERIC, 
-        channelPrefix: '/u/' 
+    {
+        label: 'Generic event',
+        value: EVT_GENERIC,
+        channelPrefix: '/u/'
     },
     {
         label: 'Standard Platform event',

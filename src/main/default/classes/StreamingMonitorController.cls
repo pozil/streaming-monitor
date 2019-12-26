@@ -1,14 +1,14 @@
 /**
  * @File Name          : StreamingMonitorController.cls
- * @Description        : 
+ * @Description        :
  * @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
- * @Group              : 
+ * @Group              :
  * @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
- * @Last Modified On   : 26/12/2019 21:27:59
- * @Modification Log   : 
+ * @Last Modified On   : 26/12/2019 21:34:31
+ * @Modification Log   :
  * Ver       Date            Author      		    Modification
  * 1.0    26/12/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
-**/
+ **/
 public abstract class StreamingMonitorController {
     public final static String EVT_PUSH_TOPIC = 'PushTopicEvent';
     public final static String EVT_GENERIC = 'GenericEvent';
@@ -24,7 +24,10 @@ public abstract class StreamingMonitorController {
         String eventName,
         String eventPayload
     ) {
-        if (eventType == EVT_PLATFORM_EVENT || eventType == STD_EVT_PLATFORM_EVENT) {
+        if (
+            eventType == EVT_PLATFORM_EVENT ||
+            eventType == STD_EVT_PLATFORM_EVENT
+        ) {
             publishPlatformEvent(eventName, eventPayload);
         } else if (eventType == EVT_GENERIC) {
             publishGenericEvent(eventName, eventPayload);
@@ -40,7 +43,10 @@ public abstract class StreamingMonitorController {
         Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
         channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
         channels.put(EVT_GENERIC, getGenericEventChannels());
-        channels.put(STD_EVT_PLATFORM_EVENT,getStandardPlatformEventChannels());
+        channels.put(
+            STD_EVT_PLATFORM_EVENT,
+            getStandardPlatformEventChannels()
+        );
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
         channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
         channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
@@ -163,14 +169,14 @@ public abstract class StreamingMonitorController {
     @TestVisible
     private static List<ComboBoxItem> getPlatformEventChannels() {
         List<EntityDefinition> entities = [
-            SELECT Label, QualifiedApiName,IsCustomizable
+            SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
             WHERE IsCustomizable = true
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (EntityDefinition entity : entities) {
-            if (entity.QualifiedApiName.endsWith('__e')){
+            if (entity.QualifiedApiName.endsWith('__e')) {
                 items.add(
                     new ComboBoxItem(entity.Label, entity.QualifiedApiName)
                 );
@@ -182,15 +188,18 @@ public abstract class StreamingMonitorController {
     @TestVisible
     private static List<ComboBoxItem> getStandardPlatformEventChannels() {
         List<EntityDefinition> entities = [
-            SELECT Label, QualifiedApiName,IsCustomizable
+            SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
-            WHERE IsCustomizable = false
+            WHERE IsCustomizable = false 
             AND IsEverCreatable = true
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (EntityDefinition entity : entities) {
-            if (entity.QualifiedApiName.endsWith('Event') && !entity.QualifiedApiName.endsWith('ChangeEvent')){
+            if (
+                entity.QualifiedApiName.endsWith('Event') &&
+                !entity.QualifiedApiName.endsWith('ChangeEvent')
+            ) {
                 items.add(
                     new ComboBoxItem(entity.Label, entity.QualifiedApiName)
                 );

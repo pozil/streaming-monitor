@@ -1,5 +1,6 @@
 export const EVT_PUSH_TOPIC = 'PushTopicEvent';
 export const EVT_GENERIC = 'GenericEvent';
+export const STD_EVT_PLATFORM_EVENT = 'StandardPlatformEvent';
 export const EVT_PLATFORM_EVENT = 'PlatformEvent';
 export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
 export const EVT_CDC_CUSTOM = 'CustomCDC';
@@ -11,9 +12,18 @@ export const EVENT_TYPES = [
         value: EVT_PUSH_TOPIC,
         channelPrefix: '/topic/'
     },
-    { label: 'Generic event', value: EVT_GENERIC, channelPrefix: '/u/' },
+    { 
+        label: 'Generic event', 
+        value: EVT_GENERIC, 
+        channelPrefix: '/u/' 
+    },
     {
-        label: 'Platform event',
+        label: 'Standard Platform event',
+        value: STD_EVT_PLATFORM_EVENT,
+        channelPrefix: '/event/'
+    },
+    {
+        label: 'Custom Platform event',
         value: EVT_PLATFORM_EVENT,
         channelPrefix: '/event/'
     },

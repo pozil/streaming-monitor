@@ -4,6 +4,7 @@ import {
     EVENT_TYPES,
     EVT_PUSH_TOPIC,
     EVT_GENERIC,
+    STD_EVT_PLATFORM_EVENT,
     EVT_PLATFORM_EVENT,
     EVT_CDC_STANDARD,
     EVT_CDC_CUSTOM,
@@ -205,7 +206,8 @@ export default class Actions extends LightningElement {
     get isManualPublishedAllowed() {
         return (
             this.pubEventType === EVT_GENERIC ||
-            this.pubEventType === EVT_PLATFORM_EVENT
+            this.pubEventType === EVT_PLATFORM_EVENT ||
+            this.pubEventType === STD_EVT_PLATFORM_EVENT
         );
     }
 
@@ -229,7 +231,10 @@ export default class Actions extends LightningElement {
     }
 
     get isPlatformEventReg() {
-        return this.regEventType === EVT_PLATFORM_EVENT;
+        return (
+            this.regEventType === EVT_PLATFORM_EVENT
+            || this.regEventType === STD_EVT_PLATFORM_EVENT
+        );
     }
 
     get isStandardCDCReg() {

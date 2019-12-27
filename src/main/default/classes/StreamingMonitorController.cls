@@ -156,7 +156,7 @@ public abstract class StreamingMonitorController {
         List<EntityDefinition> entities = [
             SELECT Label, QualifiedApiName
             FROM EntityDefinition
-            WHERE QualifiedApiName LIKE '%ChangeEvent'
+            WHERE PublisherId = 'CDC'
             ORDER BY Label
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();

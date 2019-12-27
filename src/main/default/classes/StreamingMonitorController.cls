@@ -32,7 +32,10 @@ public abstract class StreamingMonitorController {
         Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
         channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
         channels.put(EVT_GENERIC, getGenericEventChannels());
-        channels.put(STD_EVT_PLATFORM_EVENT,getStandardPlatformEventChannels());
+        channels.put(
+            STD_EVT_PLATFORM_EVENT,
+            getStandardPlatformEventChannels()
+        );
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
         channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
         channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
@@ -158,6 +161,7 @@ public abstract class StreamingMonitorController {
             SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
             WHERE IsCustomizable = true
+            AND QualifiedApiName LIKE '%e'
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();

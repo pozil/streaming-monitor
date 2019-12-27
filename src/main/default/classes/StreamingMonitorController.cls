@@ -4,7 +4,7 @@
  * @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
  * @Group              :
  * @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
- * @Last Modified On   : 26/12/2019 21:34:31
+ * @Last Modified On   : 27/12/2019 19:52:06
  * @Modification Log   :
  * Ver       Date            Author      		    Modification
  * 1.0    26/12/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
@@ -43,10 +43,7 @@ public abstract class StreamingMonitorController {
         Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
         channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
         channels.put(EVT_GENERIC, getGenericEventChannels());
-        channels.put(
-            STD_EVT_PLATFORM_EVENT,
-            getStandardPlatformEventChannels()
-        );
+        channels.put(STD_EVT_PLATFORM_EVENT,getStandardPlatformEventChannels());
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
         channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
         channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
@@ -190,8 +187,7 @@ public abstract class StreamingMonitorController {
         List<EntityDefinition> entities = [
             SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
-            WHERE IsCustomizable = false 
-            AND IsEverCreatable = true
+            WHERE IsCustomizable = false AND IsEverCreatable = true
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();

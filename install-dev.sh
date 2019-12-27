@@ -25,14 +25,10 @@ sfdx force:user:permset:assign -n Streaming_Monitor -u $ORG_ALIAS && \
 echo "" && \
 
 echo "Opening org..." && \
-sfdx force:org:open -p lightning/n/smon__Streaming_Monitor -u $ORG_ALIAS && \
+sfdx force:org:open -p lightning/n/Streaming_Monitor -u $ORG_ALIAS && \
 echo ""
 
 EXIT_CODE="$?"
-echo ""
-
-echo "Opening org..."
-sfdx force:org:open -p /lightning/n/smon__Streaming_Monitor -u $ORG_ALIAS
 echo ""
 
 # Check exit code

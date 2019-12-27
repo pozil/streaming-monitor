@@ -1,14 +1,3 @@
-/**
- * @File Name          : StreamingMonitorController.cls
- * @Description        :
- * @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
- * @Group              :
- * @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
- * @Last Modified On   : 27/12/2019 19:52:06
- * @Modification Log   :
- * Ver       Date            Author      		    Modification
- * 1.0    26/12/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
- **/
 public abstract class StreamingMonitorController {
     public final static String EVT_PUSH_TOPIC = 'PushTopicEvent';
     public final static String EVT_GENERIC = 'GenericEvent';

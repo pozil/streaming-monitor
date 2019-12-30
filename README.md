@@ -1,6 +1,6 @@
 # Streaming Monitor ([AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FYEEWUA5))
 
-[![Github Workflow](<https://github.com/pozil/streaming-monitor/workflows/Salesforce%20DX%20CI%20(scratch%20org%20only)/badge.svg?branch=master>)](https://github.com/pozil/streaming-monitor/actions)
+[![Github Workflow](<https://github.com/pozil/streaming-monitor/workflows/CI/badge.svg?branch=master>)](https://github.com/pozil/streaming-monitor/actions)
 
 This Lightning App allows to monitor streaming events: PushTopic events, generic events, platform events, CDC events and monitoring events.
 

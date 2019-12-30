@@ -1,7 +1,7 @@
 public abstract class StreamingMonitorController {
     public final static String EVT_PUSH_TOPIC = 'PushTopicEvent';
     public final static String EVT_GENERIC = 'GenericEvent';
-    public final static String STD_EVT_PLATFORM_EVENT = 'StandardPlatformEvent';
+    public final static String EVT_STD_PLATFORM_EVENT = 'StandardPlatformEvent';
     public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
     public final static String EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
     public final static String EVT_CDC_CUSTOM = 'CustomCDC';
@@ -13,10 +13,7 @@ public abstract class StreamingMonitorController {
         String eventName,
         String eventPayload
     ) {
-        if (
-            eventType == EVT_PLATFORM_EVENT ||
-            eventType == STD_EVT_PLATFORM_EVENT
-        ) {
+        if (eventType == EVT_PLATFORM_EVENT) {
             publishPlatformEvent(eventName, eventPayload);
         } else if (eventType == EVT_GENERIC) {
             publishGenericEvent(eventName, eventPayload);
@@ -33,7 +30,7 @@ public abstract class StreamingMonitorController {
         channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
         channels.put(EVT_GENERIC, getGenericEventChannels());
         channels.put(
-            STD_EVT_PLATFORM_EVENT,
+            EVT_STD_PLATFORM_EVENT,
             getStandardPlatformEventChannels()
         );
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
@@ -160,8 +157,7 @@ public abstract class StreamingMonitorController {
         List<EntityDefinition> entities = [
             SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
-            WHERE IsCustomizable = true
-            AND QualifiedApiName LIKE '%e'
+            WHERE IsCustomizable = true AND QualifiedApiName LIKE '%e'
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();

@@ -1,6 +1,6 @@
 export const EVT_PUSH_TOPIC = 'PushTopicEvent';
 export const EVT_GENERIC = 'GenericEvent';
-export const STD_EVT_PLATFORM_EVENT = 'StandardPlatformEvent';
+export const EVT_STD_PLATFORM_EVENT = 'StandardPlatformEvent';
 export const EVT_PLATFORM_EVENT = 'PlatformEvent';
 export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
 export const EVT_CDC_CUSTOM = 'CustomCDC';
@@ -19,7 +19,7 @@ export const EVENT_TYPES = [
     },
     {
         label: 'Standard Platform event',
-        value: STD_EVT_PLATFORM_EVENT,
+        value: EVT_STD_PLATFORM_EVENT,
         channelPrefix: '/event/'
     },
     {

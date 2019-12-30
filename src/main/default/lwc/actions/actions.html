@@ -82,12 +82,11 @@
                     <template if:true={isCDCSub}>
                         <c-notice>
                             <p slot="message">
-                                CDC events must be enabled in
+                                CDC events must be enabled in&nbsp;
                                 <a
                                     href="/lightning/setup/CdcObjectEnablement/home"
                                     >Setup</a
-                                >
-                                in order to receive them.
+                                >&nbsp;in order to receive them.
                             </p>
                         </c-notice>
                     </template>
@@ -95,11 +94,10 @@
                     <template if:true={isEventMonitoringSub}>
                         <c-notice>
                             <p slot="message">
-                                Streaming must be enabled in
+                                Streaming must be enabled in&nbsp;
                                 <a href="/lightning/setup/EventManager/home"
                                     >Event Manager</a
-                                >
-                                in order to receive Monitoring Events.
+                                >&nbsp;in order to receive Monitoring Events.
                             </p>
                         </c-notice>
                     </template>
@@ -155,8 +153,8 @@
                         <template if:false={isManualPublishedAllowed}>
                             <c-notice>
                                 <p slot="message">
-                                    This type of event can only be published via
-                                    record updates.
+                                    This type of event can only be published by
+                                    the Platform.
                                 </p>
                             </c-notice>
                         </template>
@@ -197,35 +195,50 @@
                         </p>
                     </template>
                     <template if:true={isGenericReg}>
-                        Navigate to the
+                        Navigate to the&nbsp;
                         <a href="/lightning/o/StreamingChannel/list"
                             >Streaming Channel</a
-                        >
-                        tab to register a generic event.
+                        >&nbsp;tab to register a generic event.
                     </template>
                     <template if:true={isPlatformEventReg}>
-                        Navigate to the
+                        Navigate to the&nbsp;
                         <a href="/lightning/setup/EventObjects/home"
                             >Platform Event</a
-                        >
-                        page in Setup to register a platform event.
+                        >&nbsp;page in Setup to register a custom platform
+                        event.
+                    </template>
+                    <template if:true={isStandardPlatformEventReg}>
+                        Standard platform events do not need to be registered.
+                        See&nbsp;
+                        <a
+                            noopener
+                            target="_blank"
+                            href="https://developer.salesforce.com/docs/atlas.en-us.platform_events.meta/platform_events/platform_events_objects_list.htm"
+                            >documentation</a
+                        >.
                     </template>
                     <template if:true={isStandardCDCReg}>
-                        Navigate to the
+                        Navigate to the&nbsp;
                         <a href="/lightning/setup/CdcObjectEnablement/home"
                             >Change Data Capture</a
-                        >
-                        page in Setup to activate a change data capture event.
+                        >&nbsp;page in Setup to activate a change data capture
+                        event.
                     </template>
                     <template if:true={isCustomCDCReg}>
                         Custom CDC channels cannot be declared via user
-                        interface. Follow these
+                        interface. Follow these&nbsp;
                         <a
                             noopener
                             target="_blank"
                             href="https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_custom_channel.htm"
                             >metadata deploy instructions</a
                         >.
+                    </template>
+                    <template if:true={isMonitoringReg}>
+                        Streaming must be enabled in&nbsp;
+                        <a href="/lightning/setup/EventManager/home"
+                            >Event Manager</a
+                        >&nbsp;in order to receive Monitoring Events.
                     </template>
                 </lightning-accordion-section>
             </lightning-accordion>

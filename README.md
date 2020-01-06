@@ -22,30 +22,18 @@ The app leverages the [lighnting:empApi](https://developer.salesforce.com/docs/c
 
 Get the Streaming Monitor from the [AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FYEEWUA5) or install it manually with the following procedure.
 
-### Unix
+1. Install the app by running this script:
 
-Execute the `install-dev.sh` bash script and open the **Streaming Monitor** tab.
+    **MacOS or Linux**
 
-### Other OS
+    ```
+    ./install-dev.sh
+    ```
 
-Execute these Salesforce DX commands:
+    **Windows**
 
-a) create a scratch org with a "streaming" alias:
+    ```
+    install-dev.bat
+    ```
 
-```sh
-sfdx force:org:create -s -f config/project-scratch-def.json -a streaming
-```
-
-b) push sources to the scratch org:
-
-```sh
-sfdx force:source:push -u streaming
-```
-
-c) assign permission set to the default user:
-
-```sh
-sfdx force:user:permset:assign -n Streaming_Monitor -u streaming
-```
-
-Open the **Streaming Monitor** tab.
+2. Open the **Streaming Monitor** tab.

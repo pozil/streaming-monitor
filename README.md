@@ -14,9 +14,9 @@ Features:
 -   Register an event source (instructions and shortcuts)
 -   Analyze past event content with flexible replay options
 
-The app leverages the [lighnting:empApi](https://developer.salesforce.com/docs/component-library/bundle/lightning:empApi/documentation) service component for streaming event subscriptions.
+The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions.
 
-<img src="gfx/event-monitor.png"/>
+<img src="gfx/event-monitor.png" alt="Streaming monitor screenshot"/>
 
 ## Installation
 

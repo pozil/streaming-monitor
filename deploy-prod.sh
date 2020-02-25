@@ -15,16 +15,12 @@ if [ "$EXIT_CODE" != 0 ]; then
 fi
 
 # Deploy to prod org
-rm -fr $TEMP_DIR
-mkdir $TEMP_DIR && \
-echo "Deployed to production org" && \
-sfdx force:source:convert -r src -d $TEMP_DIR && \
-sfdx force:mdapi:deploy -u $PROD_ORG_ALIAS -d $TEMP_DIR -w 10 && \
-rm -fr $TEMP_DIR && \
-echo "Deployed to production org" && \
+echo "Deploying to production org..." && \
+sfdx force:source:deploy -p src -u $PROD_ORG_ALIAS && \
+echo "" && \
 
-# Revert prod DX config
-echo "Cleaning project..." && \
+# Restoring DX config
+echo "Restoring project config..." && \
 git checkout -- sfdx-project.json
 EXIT_CODE="$?"
 

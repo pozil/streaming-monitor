@@ -135,7 +135,7 @@ export default class Actions extends LightningElement {
             return 'Custom CDC events require manual channel input';
         }
         const eventDefinition = EVENT_TYPES.find(
-            e => e.value === this.subEventType
+            (e) => e.value === this.subEventType
         );
         if (!eventDefinition) {
             throw new Error(`Unsupported event type ${this.subEventType}`);
@@ -182,7 +182,7 @@ export default class Actions extends LightningElement {
             return 'Waiting for event type';
         }
         const eventDefinition = EVENT_TYPES.find(
-            e => e.value === this.pubEventType
+            (e) => e.value === this.pubEventType
         );
         if (!eventDefinition) {
             throw new Error(`Unsupported event type ${this.pubEventType}`);

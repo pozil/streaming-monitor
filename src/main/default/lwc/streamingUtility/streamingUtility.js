@@ -50,7 +50,7 @@ export const EVENT_TYPES = [
  * @returns {string} the channel prefix
  */
 export function getChannelPrefix(eventType) {
-    const eventDefinition = EVENT_TYPES.find(e => e.value === eventType);
+    const eventDefinition = EVENT_TYPES.find((e) => e.value === eventType);
     if (!eventDefinition) {
         throw new Error(`Unsupported event type ${eventType}`);
     }

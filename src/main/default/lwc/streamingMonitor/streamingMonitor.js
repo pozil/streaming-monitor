@@ -30,13 +30,13 @@ export default class StreamingMonitor extends LightningElement {
     connectedCallback() {
         setDebugFlag(true);
 
-        onError(error => this.handleStreamingError(error));
+        onError((error) => this.handleStreamingError(error));
 
         getAllEventChannels()
-            .then(allChannels => {
+            .then((allChannels) => {
                 this.channels = allChannels;
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(JSON.stringify(error));
                 throw new Error('Failed to retrieve streaming channels');
             });
@@ -67,7 +67,7 @@ export default class StreamingMonitor extends LightningElement {
         ) {
             const subChannel = error.subscription;
             const subIndex = this.subscriptions.findIndex(
-                s => s.channel === subChannel
+                (s) => s.channel === subChannel
             );
             if (subIndex !== -1) {
                 this.subscriptions.splice(subIndex, 1);
@@ -92,12 +92,14 @@ export default class StreamingMonitor extends LightningElement {
 
         // Build list of channels
         const channels = [];
-        EVENT_TYPES.forEach(eventType => {
+        EVENT_TYPES.forEach((eventType) => {
             const eventTypeName = eventType.value;
             const channelPrefix = getChannelPrefix(eventTypeName);
-            this.channels[eventTypeName].forEach(channelData => {
+            this.channels[eventTypeName].forEach((channelData) => {
                 const channel = channelPrefix + channelData.value;
-                if (!this.subscriptions.some(sub => sub.channel === channel)) {
+                if (
+                    !this.subscriptions.some((sub) => sub.channel === channel)
+                ) {
                     channels.push(channel);
                 }
             });
@@ -105,14 +107,14 @@ export default class StreamingMonitor extends LightningElement {
         // Disable CDC subscribtion errors since we may try inactive channels
         this.ignoreCdcSubscribeErrors = true;
         // Queue subscriptions
-        const subscribePromises = channels.map(channel => {
-            return subscribe(channel, replayId, streamingEvent => {
+        const subscribePromises = channels.map((channel) => {
+            return subscribe(channel, replayId, (streamingEvent) => {
                 this.handleStreamingEvent(streamingEvent);
             });
         });
         // Save susbcriptions and notify success once done
-        Promise.all(subscribePromises).then(subscriptions => {
-            subscriptions.forEach(subscription => {
+        Promise.all(subscribePromises).then((subscriptions) => {
+            subscriptions.forEach((subscription) => {
                 this.saveSubscription(subscription);
             });
             this.notify(
@@ -131,7 +133,7 @@ export default class StreamingMonitor extends LightningElement {
         const { channel, replayId } = event.detail;
 
         // Check for duplicate subscription
-        if (this.subscriptions.some(sub => sub.channel === channel)) {
+        if (this.subscriptions.some((sub) => sub.channel === channel)) {
             this.notify(
                 'error',
                 'Cannot subscribe',
@@ -140,9 +142,9 @@ export default class StreamingMonitor extends LightningElement {
             return;
         }
 
-        subscribe(channel, replayId, streamingEvent => {
+        subscribe(channel, replayId, (streamingEvent) => {
             this.handleStreamingEvent(streamingEvent);
-        }).then(subscription => {
+        }).then((subscription) => {
             this.notify(
                 'success',
                 'Successfully subscribed',
@@ -188,7 +190,7 @@ export default class StreamingMonitor extends LightningElement {
                 );
                 console.log(`Payload: `, eventParams.eventPayload);
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error(JSON.stringify(error));
                 this.notify(
                     'error',
@@ -198,8 +200,8 @@ export default class StreamingMonitor extends LightningElement {
     }
 
     handleUnsubscribeAll() {
-        this.subscriptions.forEach(subscription => {
-            unsubscribe(subscription, response => {
+        this.subscriptions.forEach((subscription) => {
+            unsubscribe(subscription, (response) => {
                 if (!response.successful) {
                     console.error(JSON.stringify(response));
                 }
@@ -220,7 +222,7 @@ export default class StreamingMonitor extends LightningElement {
             return false;
         });
         if (foundIndex !== -1) {
-            unsubscribe(subscription, response => {
+            unsubscribe(subscription, (response) => {
                 if (response.successful) {
                     this.notify(
                         'success',

@@ -12,7 +12,7 @@ fs.unlinkSync(DX_PROJECT_CONFIG_PATH);
 fs.writeFileSync(
     DX_PROJECT_CONFIG_PATH,
     JSON.stringify(projectConfig),
-    error => {
+    (error) => {
         if (error) {
             throw error;
         }

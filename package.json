@@ -13,19 +13,20 @@
         "test:unit": "sfdx-lwc-jest",
         "test:unit:watch": "sfdx-lwc-jest --watch",
         "test:unit:debug": "sfdx-lwc-jest --debug",
+        "test:unit:coverage": "sfdx-lwc-jest --coverage",
         "prettier": "prettier --write '**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,yaml,yml}'",
         "prettier:verify": "prettier --list-different '**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,yaml,yml}'",
         "postinstall": "node install-scripts/check-version.js"
     },
     "author": "Philippe Ozil",
     "devDependencies": {
-        "@salesforce/eslint-config-lwc": "^0.5.0",
+        "@salesforce/eslint-config-lwc": "^0.7.0",
         "@salesforce/sfdx-lwc-jest": "^0.7.1",
-        "eslint": "^6.8.0",
+        "eslint": "^7.1.0",
         "husky": "^4.2.5",
-        "lint-staged": "^10.2.2",
+        "lint-staged": "^10.2.7",
         "prettier": "^2.0.5",
-        "prettier-plugin-apex": "^1.4.0",
+        "prettier-plugin-apex": "^1.5.0",
         "semver": "^7.3.2"
     },
     "husky": {

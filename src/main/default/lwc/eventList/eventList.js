@@ -1,8 +1,9 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class EventList extends LightningElement {
     @api events;
-    @track eventData = { time: '', channel: '', replayId: '', payload: '' };
+
+    eventData = { time: '', channel: '', replayId: '', payload: '' };
 
     handleClearReceivedEvents() {
         this.dispatchEvent(new CustomEvent('clearevents'));

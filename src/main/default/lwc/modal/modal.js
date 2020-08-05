@@ -1,4 +1,4 @@
-import { LightningElement, api, track } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class Modal extends LightningElement {
     @api title;
@@ -6,8 +6,8 @@ export default class Modal extends LightningElement {
     @api width;
     @api isDirectional;
 
-    @track isVisible = false;
-    @track hasFooter = false;
+    isVisible = false;
+    hasFooter = false;
 
     @api show() {
         this.isVisible = true;

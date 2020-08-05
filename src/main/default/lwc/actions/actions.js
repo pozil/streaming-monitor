@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { LightningElement, track, api } from 'lwc';
+import { LightningElement, api } from 'lwc';
 import {
     EVENT_TYPES,
     EVT_PUSH_TOPIC,
@@ -15,19 +15,19 @@ import {
 export default class Actions extends LightningElement {
     @api channels;
 
-    @track subAllReplay = '-1';
+    subAllReplay = '-1';
 
-    @track subEventType;
-    @track subEventName;
-    @track subChannel;
-    @track subReplay = '-1';
+    subEventType;
+    subEventName;
+    subChannel;
+    subReplay = '-1';
 
-    @track pubEventType;
-    @track pubEventName;
-    @track pubChannel;
-    @track pubPayload;
+    pubEventType;
+    pubEventName;
+    pubChannel;
+    pubPayload;
 
-    @track regEventType;
+    regEventType;
 
     handleSubscribeAll() {
         const subscribeEvent = new CustomEvent('subscribeall', {

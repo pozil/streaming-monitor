@@ -12,13 +12,12 @@ import getAllEventChannels from '@salesforce/apex/StreamingMonitorController.get
 import publishStreamingEvent from '@salesforce/apex/StreamingMonitorController.publishStreamingEvent';
 import {
     EVENT_TYPES,
+    EVT_CDC_STANDARD,
+    CHANNEL_ALL_CDC,
     isCDCChannel,
     getChannelPrefix,
     normalizeEvent
 } from 'c/streamingUtility';
-
-// Time for which CDC subscribe errors are hidden after doing a subscribe all
-const CDC_SUBSCRIBE_ERROR_HIDE_DURATION = 3000;
 
 export default class StreamingMonitor extends LightningElement {
     @track channels;
@@ -91,21 +90,25 @@ export default class StreamingMonitor extends LightningElement {
         const { replayId } = event.detail;
 
         // Build list of channels
-        const channels = [];
+        let channels = [];
         EVENT_TYPES.forEach((eventType) => {
             const eventTypeName = eventType.value;
-            const channelPrefix = getChannelPrefix(eventTypeName);
-            this.channels[eventTypeName].forEach((channelData) => {
-                const channel = channelPrefix + channelData.value;
-                if (
-                    !this.subscriptions.some((sub) => sub.channel === channel)
-                ) {
-                    channels.push(channel);
-                }
-            });
+            if (eventTypeName === EVT_CDC_STANDARD) {
+                // Use global channel for all CDC events
+                channels.push(CHANNEL_ALL_CDC);
+            } else {
+                // Get channels for specific event type
+                const channelPrefix = getChannelPrefix(eventTypeName);
+                this.channels[eventTypeName].forEach((channelData) => {
+                    channels.push(channelPrefix + channelData.value);
+                });
+            }
         });
-        // Disable CDC subscribtion errors since we may try inactive channels
-        this.ignoreCdcSubscribeErrors = true;
+        // Remove already subscribed channels
+        channels = channels.filter(
+            (channel) =>
+                !this.subscriptions.some((sub) => sub.channel === channel)
+        );
         // Queue subscriptions
         const subscribePromises = channels.map((channel) => {
             return subscribe(channel, replayId, (streamingEvent) => {
@@ -117,15 +120,7 @@ export default class StreamingMonitor extends LightningElement {
             subscriptions.forEach((subscription) => {
                 this.saveSubscription(subscription);
             });
-            this.notify(
-                'success',
-                'Successfully subscribed to all channels',
-                'Hold on for a sec as we remove CDC channels that are not enabled.'
-            );
-            // Re-enable CDC subscription errors after waiting a bit
-            setTimeout(() => {
-                this.ignoreCdcSubscribeErrors = false;
-            }, CDC_SUBSCRIBE_ERROR_HIDE_DURATION);
+            this.notify('success', 'Successfully subscribed to all channels');
         });
     }
 

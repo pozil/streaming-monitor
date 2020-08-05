@@ -6,6 +6,8 @@ export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
 export const EVT_CDC_CUSTOM = 'CustomCDC';
 export const EVT_MONITORING = 'MonitoringEvent';
 
+export const CHANNEL_ALL_CDC = '/data/ChangeEvents';
+
 export const EVENT_TYPES = [
     {
         label: 'PushTopic event',

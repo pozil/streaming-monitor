@@ -2,9 +2,11 @@
 <FlexiPage xmlns="http://soap.sforce.com/2006/04/metadata">
     <description>App that monitors streaming events</description>
     <flexiPageRegions>
-        <componentInstances>
-            <componentName>streamingMonitor</componentName>
-        </componentInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentName>streamingMonitor</componentName>
+            </componentInstance>
+        </itemInstances>
         <name>region1</name>
         <type>Region</type>
     </flexiPageRegions>

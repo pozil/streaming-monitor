@@ -157,7 +157,7 @@ public abstract class StreamingMonitorController {
         List<EntityDefinition> entities = [
             SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
-            WHERE IsCustomizable = true AND QualifiedApiName LIKE '%e'
+            WHERE IsCustomizable = TRUE AND QualifiedApiName LIKE '%e'
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
@@ -176,7 +176,7 @@ public abstract class StreamingMonitorController {
         List<EntityDefinition> entities = [
             SELECT Label, QualifiedApiName, IsCustomizable
             FROM EntityDefinition
-            WHERE IsCustomizable = false AND IsEverCreatable = true
+            WHERE IsCustomizable = FALSE AND IsEverCreatable = TRUE
             ORDER BY Label ASC
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
@@ -234,7 +234,7 @@ public abstract class StreamingMonitorController {
         public void execute(QueueableContext context) {
             String restAPIURL =
                 URL.getSalesforceBaseUrl().toExternalForm() +
-                '/services/data/v48.0/sobjects/StreamingChannel/' +
+                '/services/data/v49.0/sobjects/StreamingChannel/' +
                 channelId +
                 '/push';
             HttpRequest httpRequest = new HttpRequest();

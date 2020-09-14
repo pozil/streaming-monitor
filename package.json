@@ -1,7 +1,7 @@
 {
     "name": "streaming-monitor",
     "private": true,
-    "version": "2.3.0",
+    "version": "2.4.0",
     "description": "A Lightning app for monitoring streaming events: PushTopic, generic, platform events, CDC events and monitoring events.",
     "engines": {
         "node": ">= 10.13.0",
@@ -22,11 +22,11 @@
     "devDependencies": {
         "@salesforce/eslint-config-lwc": "^0.7.0",
         "@salesforce/sfdx-lwc-jest": "^0.9.2",
-        "eslint": "^7.6.0",
-        "husky": "^4.2.5",
-        "lint-staged": "^10.2.11",
-        "prettier": "^2.0.5",
-        "prettier-plugin-apex": "^1.6.0",
+        "eslint": "^7.9.0",
+        "husky": "^4.3.0",
+        "lint-staged": "^10.3.0",
+        "prettier": "^2.1.1",
+        "prettier-plugin-apex": "^1.7.0",
         "semver": "^7.3.2"
     },
     "husky": {

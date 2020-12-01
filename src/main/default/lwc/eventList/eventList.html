@@ -35,7 +35,7 @@
     <!-- Event list -->
     <lightning-card title="Events Received">
         <div slot="actions">
-            <lightning-badge label={eventCount}></lightning-badge>
+            <lightning-badge label={eventCountLabel}></lightning-badge>
             <lightning-button-icon
                 icon-name="utility:delete"
                 variant="bare"
@@ -45,9 +45,29 @@
             ></lightning-button-icon>
         </div>
         <div class="slds-p-horizontal_small">
+            <div class="slds-grid slds-m-bottom_small">
+                <lightning-combobox
+                    label="Channel filter"
+                    value={filterChannel}
+                    options={channelOptions}
+                    onchange={handleFilterChannelChange}
+                    disabled={hasNoChannels}
+                    placeholder="Select channel"
+                    variant="label-inline"
+                    class="slds-col filter"
+                ></lightning-combobox>
+                <lightning-button-icon
+                    if:true={filterChannel}
+                    icon-name="utility:close"
+                    variant="bare"
+                    alternative-text="Clear filter"
+                    onclick={handleClearChannelFilter}
+                    class="slds-col slds-m-top_x-small"
+                ></lightning-button-icon>
+            </div>
             <lightning-datatable
                 key-field="id"
-                data={events}
+                data={filteredEvents}
                 columns={columns}
                 onrowaction={handleEventTableRowAction}
                 hide-checkbox-column

@@ -1,25 +1,14 @@
 PROD_ORG_ALIAS="streaming-prod"
 TEMP_DIR="mdapi"
 
-# Update DX config for prod
-echo "Updating DX project config for production..."
-node install-scripts/release-prod.js && \
+echo "Add namespace in DX project..."
+sed -i '' -e 's,"namespace": "","namespace": "smon",' sfdx-project.json
 echo "Done"
-EXIT_CODE="$?"
 
-# Check exit code
-echo ""
-if [ "$EXIT_CODE" != 0 ]; then
-    echo "Installation failed."
-    exit $EXIT_CODE
-fi
-
-# Deploy to prod org
 echo "Deploying to production org..." && \
 sfdx force:source:deploy -p src -u $PROD_ORG_ALIAS && \
 echo "" && \
 
-# Restoring DX config
 echo "Restoring project config..." && \
 git checkout -- sfdx-project.json
 EXIT_CODE="$?"

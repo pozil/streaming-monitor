@@ -19,12 +19,13 @@ import {
     normalizeEvent
 } from 'c/streamingUtility';
 
+const IGNORE_SUBCRIBE_ERRORS_DELAY = 3000;
+
 export default class StreamingMonitor extends LightningElement {
     @track channels;
     @track subscriptions = [];
-    @track events = [];
 
-    ignoreCdcSubscribeErrors = false;
+    ignoreSubscribeErrors = false;
 
     connectedCallback() {
         setDebugFlag(true);
@@ -50,20 +51,17 @@ export default class StreamingMonitor extends LightningElement {
     }
 
     handleStreamingError(error) {
-        const errorMessage =
+        let showToast = true;
+        let errorMessage =
             (error.subscription ? error.subscription + ' - ' : '') +
             (error.error
                 ? error.error
                 : "See browser's dev console for details");
         console.error('Streaming API error: ' + JSON.stringify(error));
 
-        // Handle subscribe errors due to invalid channel (inactive CDC channels)
-        if (
-            error.channel === '/meta/subscribe' &&
-            error.error &&
-            error.error.indexOf('400::The channel specified is not valid') !==
-                -1
-        ) {
+        // Handle subscribe errors
+        if (error.channel === '/meta/subscribe' && error.error) {
+            // Remove faulty subscription
             const subChannel = error.subscription;
             const subIndex = this.subscriptions.findIndex(
                 (s) => s.channel === subChannel
@@ -72,15 +70,29 @@ export default class StreamingMonitor extends LightningElement {
                 this.subscriptions.splice(subIndex, 1);
                 console.warn(`Removing faulty subscription: ${subChannel}`);
             }
-            if (!this.ignoreCdcSubscribeErrors && isCDCChannel(subChannel)) {
-                this.notify(
-                    'error',
-                    'Streaming API error',
-                    `Failed to subscribe to ${subChannel}. Is the CDC event active?`
-                );
+
+            const rawErrorMessage = error.error;
+            // Invalid channel (inactive CDC channels)
+            if (
+                rawErrorMessage.startsWith(
+                    '400::The channel specified is not valid'
+                )
+            ) {
+                showToast =
+                    !this.ignoreSubscribeErrors && isCDCChannel(subChannel);
+                errorMessage = `Failed to subscribe to ${subChannel}. Is the CDC event active?`;
             }
-        } else {
-            // Notify error with a toast
+            // Subscribe rejected by security policy
+            else if (
+                rawErrorMessage.startsWith('403:denied_by_security_policy')
+            ) {
+                showToast = !this.ignoreSubscribeErrors;
+                errorMessage = `Failed to subscribe to ${subChannel}: ${rawErrorMessage}`;
+            }
+        }
+
+        // Notify error with a toast
+        if (showToast) {
             this.notify('error', 'Streaming API error', errorMessage);
         }
     }
@@ -88,6 +100,12 @@ export default class StreamingMonitor extends LightningElement {
     handleSubscribeAll(event) {
         console.log(`Subscribing to all streaming events`);
         const { replayId } = event.detail;
+
+        // Temporarily ignore subscribe errors while subscribing to all events
+        this.ignoreSubscribeErrors = true;
+        setTimeout(() => {
+            this.ignoreSubscribeErrors = false;
+        }, IGNORE_SUBCRIBE_ERRORS_DELAY);
 
         // Build list of channels
         let channels = [];
@@ -170,9 +188,9 @@ export default class StreamingMonitor extends LightningElement {
             'Received streaming event: ',
             JSON.stringify(streamingEvent)
         );
-        // Save event
+        // Add event to list
         const eventData = normalizeEvent(streamingEvent);
-        this.events.unshift(eventData);
+        this.template.querySelector('.event-list').addStreamingEvent(eventData);
     }
 
     handlePublish(event) {
@@ -231,9 +249,5 @@ export default class StreamingMonitor extends LightningElement {
             });
             this.subscriptions.splice(foundIndex, 1);
         }
-    }
-
-    handleClearEvents() {
-        this.events = [];
     }
 }

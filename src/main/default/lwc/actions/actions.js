@@ -61,8 +61,9 @@ export default class Actions extends LightningElement {
         this.dispatchEvent(publishEvent);
     }
 
-    handleSubAllReplayChange(event) {
-        this.subAllReplay = event.detail.value;
+    handleValueChange(event) {
+        const { name } = event.target;
+        this[name] = event.detail.value;
     }
 
     handleSubEventTypeChange(event) {
@@ -80,14 +81,6 @@ export default class Actions extends LightningElement {
             getChannelPrefix(this.subEventType) + this.subEventName;
     }
 
-    handleSubChannelChange(event) {
-        this.subChannel = event.detail.value;
-    }
-
-    handleSubReplayChange(event) {
-        this.subReplay = event.detail.value;
-    }
-
     handlePubEventTypeChange(event) {
         this.pubEventType = event.detail.value;
         this.pubEventName = undefined;
@@ -102,11 +95,18 @@ export default class Actions extends LightningElement {
     }
 
     handlePubPayloadChange(event) {
-        this.pubPayload = event.detail.value;
-    }
-
-    handleRegEventTypeChange(event) {
-        this.regEventType = event.detail.value;
+        const payloadElement = event.target;
+        const { value } = event.detail;
+        this.pubPayload = value;
+        // Validate JSON
+        try {
+            if (value) {
+                JSON.parse(value);
+            }
+            payloadElement.setCustomValidity('');
+        } catch (error) {
+            payloadElement.setCustomValidity('Invalid JSON');
+        }
     }
 
     get isLoading() {

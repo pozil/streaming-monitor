@@ -24,8 +24,9 @@
                     </p>
                     <lightning-combobox
                         label="Replay option"
+                        name="subAllReplay"
                         value={subAllReplay}
-                        onchange={handleSubAllReplayChange}
+                        onchange={handleValueChange}
                         options={replayOptions}
                     ></lightning-combobox>
                     <div class="slds-align_absolute-center slds-m-top_medium">
@@ -59,14 +60,16 @@
                     ></lightning-combobox>
                     <lightning-input
                         label="Streaming channel"
+                        name="subChannel"
                         value={subChannel}
-                        onchange={handleSubChannelChange}
+                        onchange={handleValueChange}
                         disabled={isSubChannelDisabled}
                     ></lightning-input>
                     <lightning-combobox
                         label="Replay option"
+                        name="subReplay"
                         value={subReplay}
-                        onchange={handleSubReplayChange}
+                        onchange={handleValueChange}
                         options={replayOptions}
                         disabled={isSubscribeDisabled}
                     ></lightning-combobox>
@@ -168,9 +171,10 @@
                 >
                     <lightning-combobox
                         label="Event type"
+                        name="regEventType"
                         value={regEventType}
                         options={regEventTypes}
-                        onchange={handleRegEventTypeChange}
+                        onchange={handleValueChange}
                         placeholder="Select type"
                         class="slds-m-bottom_medium"
                     ></lightning-combobox>

@@ -85,11 +85,11 @@
                     <template if:true={isCDCSub}>
                         <c-notice>
                             <p slot="message">
-                                CDC events must be enabled in&nbsp;
+                                Enable Change Data Capture events in&nbsp;
                                 <a
                                     href="/lightning/setup/CdcObjectEnablement/home"
                                     >Setup</a
-                                >&nbsp;in order to receive them.
+                                >&nbsp;to receive them on the /data/ChangeEvents channel or the single-event channels. This doesn't apply to custom channels you define.
                             </p>
                         </c-notice>
                     </template>
@@ -229,7 +229,7 @@
                         event.
                     </template>
                     <template if:true={isCustomCDCReg}>
-                        Custom CDC channels cannot be declared via user
+                        Custom Change Data Capture channels cannot be declared via the user
                         interface. Follow these&nbsp;
                         <a
                             rel="noopener noreferrer"

@@ -30,12 +30,12 @@ export const EVENT_TYPES = [
         channelPrefix: '/event/'
     },
     {
-        label: 'Standard Change Data Capture event',
+        label: 'Change Data Capture event',
         value: EVT_CDC_STANDARD,
         channelPrefix: '/data/'
     },
     {
-        label: 'Custom Change Data Capture channel',
+        label: 'Change Data Capture channel',
         value: EVT_CDC_CUSTOM,
         channelPrefix: '/data/'
     },

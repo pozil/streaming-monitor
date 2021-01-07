@@ -19,7 +19,7 @@
                     <p>
                         Subscribe to all streaming channels&nbsp;
                         <lightning-helptext
-                            content='Custom Change Data Capture (CDC) "group channels" cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform Events, Standard CDC (standard and custom objects) and Monitoring Events.'
+                            content="Custom Change Data Capture channels cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform events, Change Data Capture events and Monitoring events."
                         ></lightning-helptext>
                     </p>
                     <lightning-combobox
@@ -89,7 +89,10 @@
                                 <a
                                     href="/lightning/setup/CdcObjectEnablement/home"
                                     >Setup</a
-                                >&nbsp;to receive them on the /data/ChangeEvents channel or the single-event channels. This doesn't apply to custom channels you define.
+                                >&nbsp;to receive them on the
+                                <code>/data/ChangeEvents</code> channel or the
+                                single-event channels. This doesn't apply to
+                                custom channels you define.
                             </p>
                         </c-notice>
                     </template>
@@ -229,8 +232,8 @@
                         event.
                     </template>
                     <template if:true={isCustomCDCReg}>
-                        Custom Change Data Capture channels cannot be declared via the user
-                        interface. Follow these&nbsp;
+                        Custom Change Data Capture channels cannot be declared
+                        via the user interface. Follow these&nbsp;
                         <a
                             rel="noopener noreferrer"
                             target="_blank"

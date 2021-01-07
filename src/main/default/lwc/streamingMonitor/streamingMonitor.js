@@ -80,7 +80,7 @@ export default class StreamingMonitor extends LightningElement {
             ) {
                 showToast =
                     !this.ignoreSubscribeErrors && isCDCChannel(subChannel);
-                errorMessage = `Failed to subscribe to ${subChannel}. Is the CDC event active?`;
+                errorMessage = `Failed to subscribe to ${subChannel}. Is the Change Data Capture event active?`;
             }
             // Subscribe rejected by security policy
             else if (

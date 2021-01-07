@@ -19,7 +19,7 @@
                     <p>
                         Subscribe to all streaming channels&nbsp;
                         <lightning-helptext
-                            content='Custom Change Data Capture (CDC) "group channels" cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform Events, Standard CDC (standard and custom objects) and Monitoring Events.'
+                            content="Custom Change Data Capture channels cannot be automatically discovered. Supported channels: PushTopic, Generic, Platform events, Change Data Capture events and Monitoring events."
                         ></lightning-helptext>
                     </p>
                     <lightning-combobox
@@ -85,11 +85,14 @@
                     <template if:true={isCDCSub}>
                         <c-notice>
                             <p slot="message">
-                                CDC events must be enabled in&nbsp;
+                                Enable Change Data Capture events in&nbsp;
                                 <a
                                     href="/lightning/setup/CdcObjectEnablement/home"
                                     >Setup</a
-                                >&nbsp;in order to receive them.
+                                >&nbsp;to receive them on the
+                                <code>/data/ChangeEvents</code> channel or the
+                                single-event channels. This doesn't apply to
+                                custom channels you define.
                             </p>
                         </c-notice>
                     </template>
@@ -229,8 +232,8 @@
                         event.
                     </template>
                     <template if:true={isCustomCDCReg}>
-                        Custom CDC channels cannot be declared via user
-                        interface. Follow these&nbsp;
+                        Custom Change Data Capture channels cannot be declared
+                        via the user interface. Follow these&nbsp;
                         <a
                             rel="noopener noreferrer"
                             target="_blank"

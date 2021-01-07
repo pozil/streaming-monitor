@@ -132,7 +132,7 @@ export default class Actions extends LightningElement {
             return 'Waiting for event type';
         }
         if (this.subEventType === EVT_CDC_CUSTOM) {
-            return 'Custom CDC events require manual channel input';
+            return 'The /data/ChangeEvents channel and custom channels require manual channel input';
         }
         const eventDefinition = EVENT_TYPES.find(
             (e) => e.value === this.subEventType

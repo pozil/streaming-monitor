@@ -2,7 +2,7 @@
 
 [![Github Workflow](https://github.com/pozil/streaming-monitor/workflows/CI/badge.svg?branch=master)](https://github.com/pozil/streaming-monitor/actions) [![codecov](https://codecov.io/gh/pozil/streaming-monitor/branch/master/graph/badge.svg)](https://codecov.io/gh/pozil/streaming-monitor)
 
-This Lightning App allows to monitor streaming events: PushTopic events, generic events, standard and custom platform events, CDC events and monitoring events.
+This Lightning App allows to monitor streaming events: PushTopic events, generic events, standard and custom platform events, Change Data Capture events, and monitoring events.
 
 [Presentation Video](https://youtu.be/T9HT-TTCz2s)
 

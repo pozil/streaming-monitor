@@ -16,7 +16,15 @@ Features:
 
 The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions.
 
-<img src="gfx/event-monitor.png" alt="Streaming monitor screenshot"/>
+![Streaming monitor - Timeline screenshot](gfx/timeline.png)
+
+<details><summary>Click here for more screenshots</summary>
+<p>
+![Streaming monitor - Timeline screenshot](gfx/table.png)
+![Streaming monitor - Timeline screenshot](gfx/subscribe.png)
+![Streaming monitor - Timeline screenshot](gfx/event-details.png)
+</p>
+</details>
 
 ## Installation
 

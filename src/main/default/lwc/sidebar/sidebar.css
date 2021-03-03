@@ -1,0 +1,23 @@
+button {
+    border-top-width: 0;
+    border-bottom-width: 0;
+}
+
+button.slds-is-closed {
+    border-width: 0;
+    border-right: 1px solid #0070d2;
+}
+
+button.slds-is-open:hover {
+    background-color: #f4f6fe;
+}
+
+button.slds-is-closed:hover {
+    background-color: #0070d2;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+}
+
+button.slds-is-closed:hover svg {
+    fill: #ffffff;
+}

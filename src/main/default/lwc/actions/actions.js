@@ -12,8 +12,14 @@ import {
     getChannelPrefix
 } from 'c/streamingUtility';
 
+import subscribeAll from './subscribeAll.html';
+import subscribe from './subscribe.html';
+import publish from './publish.html';
+import register from './register.html';
+
 export default class Actions extends LightningElement {
-    @api channels;
+    @api action = 'subscribeAll';
+    @api channels = [];
 
     subAllReplay = '-1';
 
@@ -28,6 +34,21 @@ export default class Actions extends LightningElement {
     pubPayload;
 
     regEventType;
+
+    render() {
+        switch (this.action) {
+            case 'subscribeAll':
+                return subscribeAll;
+            case 'subscribe':
+                return subscribe;
+            case 'publish':
+                return publish;
+            case 'register':
+                return register;
+            default:
+                throw new Error(`Unsupported action: ${this.action}`);
+        }
+    }
 
     handleSubscribeAll() {
         const subscribeEvent = new CustomEvent('subscribeall', {
@@ -107,10 +128,6 @@ export default class Actions extends LightningElement {
         } catch (error) {
             payloadElement.setCustomValidity('Invalid JSON');
         }
-    }
-
-    get isLoading() {
-        return this.channels === undefined;
     }
 
     get subEventTypes() {

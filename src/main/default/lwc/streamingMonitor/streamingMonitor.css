@@ -1,4 +1,19 @@
-c-subscriptions {
-    margin-top: 0.75rem;
+.main-card-body {
+    display: flex;
+    min-height: 36rem;
+}
+
+c-sidebar {
+    display: flex;
+    flex-shrink: 0;
+    margin-right: 1rem;
+}
+
+.body {
+    flex-grow: 1;
+}
+
+c-actions {
     display: block;
+    max-width: 50rem;
 }

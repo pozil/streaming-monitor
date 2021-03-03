@@ -1,0 +1,55 @@
+<template>
+    <lightning-card title="Publish a streaming event">
+        <div class="slds-p-horizontal_large">
+            <lightning-combobox
+                label="Event type"
+                value={pubEventType}
+                options={pubEventTypes}
+                placeholder="Select type"
+                onchange={handlePubEventTypeChange}
+            ></lightning-combobox>
+            <template if:true={pubEventType}>
+                <!-- Manual publish allowed -->
+                <template if:true={isManualPublishedAllowed}>
+                    <lightning-combobox
+                        label="Event name"
+                        value={pubEventName}
+                        options={pubEventNames}
+                        placeholder={pubEventNamePlaceholder}
+                        onchange={handlePubEventNameChange}
+                        disabled={isPubEventNameDisabled}
+                    ></lightning-combobox>
+                    <lightning-input
+                        label="Streaming channel"
+                        value={pubChannel}
+                        disabled
+                    ></lightning-input>
+                    <lightning-textarea
+                        label="Event payload"
+                        value={pubPayload}
+                        onchange={handlePubPayloadChange}
+                        disabled={isPublishDisabled}
+                        field-level-help="JSON formatted payload with strings delimited by double quotes"
+                    ></lightning-textarea>
+                    <div class="slds-align_absolute-center slds-m-top_medium">
+                        <lightning-button
+                            variant="brand"
+                            label="Publish"
+                            onclick={handlePublish}
+                            disabled={isPublishDisabled}
+                        ></lightning-button>
+                    </div>
+                </template>
+                <!-- Manual publish not allowed -->
+                <template if:false={isManualPublishedAllowed}>
+                    <c-notice>
+                        <p>
+                            This type of event can only be published by the
+                            Platform.
+                        </p>
+                    </c-notice>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

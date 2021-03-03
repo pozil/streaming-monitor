@@ -14,9 +14,9 @@
         "test:debug": "sfdx-lwc-jest --debug",
         "test:coverage": "sfdx-lwc-jest --coverage",
         "prettier": "prettier --write '**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,yaml,yml}'",
-        "prettier:verify": "prettier --list-different '**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,yaml,yml}'",
+        "prettier:verify": "prettier --check '**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,yaml,yml}'",
         "postinstall": "node install-scripts/check-version.js && husky install",
-        "qualitygate": "npm run prettier:verify && npm run lint && npm run test"
+        "qualitygate": "npm run prettier:verify && [ $? -eq 0 ] && (npm run lint && npm run test) || exit -1"
     },
     "author": "Philippe Ozil",
     "devDependencies": {

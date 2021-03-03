@@ -1,0 +1,16 @@
+.payload {
+    height: 300px;
+    font-family: 'Courier New', monospace;
+}
+
+c-event-filters {
+    display: block;
+    max-width: 60rem;
+    margin: 0 auto;
+    padding-bottom: 1rem;
+}
+
+c-event-timeline {
+    display: block;
+    margin-bottom: 1.5rem;
+}

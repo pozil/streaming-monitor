@@ -234,7 +234,7 @@ public abstract class StreamingMonitorController {
         public void execute(QueueableContext context) {
             String restAPIURL =
                 URL.getSalesforceBaseUrl().toExternalForm() +
-                '/services/data/v50.0/sobjects/StreamingChannel/' +
+                '/services/data/v51.0/sobjects/StreamingChannel/' +
                 channelId +
                 '/push';
             HttpRequest httpRequest = new HttpRequest();

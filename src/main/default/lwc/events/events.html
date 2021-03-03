@@ -1,0 +1,114 @@
+<template>
+    <!-- Event data modal -->
+    <c-modal title="Event details" onclose={handleCloseEventModal}>
+        <div class="slds-region_narrow">
+            <div class="slds-form slds-form_horizontal">
+                <lightning-input
+                    label="Time"
+                    value={selectedEvent.timeLabel}
+                    readonly
+                ></lightning-input>
+                <lightning-input
+                    label="Channel"
+                    value={selectedEvent.channel}
+                    readonly
+                ></lightning-input>
+                <lightning-input
+                    label="Replay Id"
+                    value={selectedEvent.replayId}
+                    readonly
+                ></lightning-input>
+            </div>
+            <div class="slds-form-element">
+                <label class="slds-form-element__label" for="eventPayload"
+                    >Payload</label
+                >
+                <div class="slds-form-element__control">
+                    <textarea
+                        id="eventPayload"
+                        class="slds-textarea payload"
+                        disabled
+                    >
+{selectedEventPayload}</textarea
+                    >
+                </div>
+            </div>
+        </div>
+    </c-modal>
+
+    <!-- Event list -->
+    <lightning-card title="Streaming Monitor" icon-name="utility:events">
+        <!-- Begin card header -->
+        <div slot="actions">
+            <template if:true={hasData}>
+                <lightning-badge
+                    label={eventCountLabel}
+                    class="slds-m-right_small"
+                ></lightning-badge>
+                <c-events-header-controls
+                    onclear={handleClearEvents}
+                    onfiltertoggle={handleFiltersDisplayToggle}
+                    onviewmodechange={handleViewModeChange}
+                ></c-events-header-controls>
+            </template>
+        </div>
+        <!-- End card header -->
+
+        <div class="slds-p-horizontal_small">
+            <template if:true={hasData}>
+                <!-- Begin filters -->
+                <div class="slds-m-bottom_large">
+                    <c-event-filters
+                        class={filterClasses}
+                        channels={channels}
+                        onfilterchange={handleFilterChange}
+                    ></c-event-filters>
+                    <c-notice if:true={hasActiveFilters}
+                        >Current filters that may prevent incoming events from
+                        being displayed.</c-notice
+                    >
+                </div>
+                <!-- End filters -->
+
+                <!-- Begin view modes -->
+                <template if:true={hasVisibleData}>
+                    <template if:true={isTableViewMode}>
+                        <lightning-datatable
+                            key-field="id"
+                            data={filteredEvents}
+                            columns={tableColumns}
+                            onrowaction={handleEventTableRowAction}
+                            hide-checkbox-column
+                        ></lightning-datatable>
+                    </template>
+                    <template if:true={isTimelineViewMode}>
+                        <c-event-timeline
+                            events={filteredEvents}
+                            channels={channels}
+                            onselect={handleTimelineSelection}
+                        ></c-event-timeline>
+                    </template>
+                </template>
+                <!-- End view modes -->
+            </template>
+
+            <template if:true={illustrationMessage}>
+                <div
+                    class="slds-illustration slds-illustration_large"
+                    aria-hidden="true"
+                >
+                    <img
+                        src="/img/chatter/OpenRoad.svg"
+                        class="slds-illustration__svg"
+                        alt=""
+                    />
+                    <div class="slds-text-color_weak slds-m-bottom_large">
+                        <h3 class="slds-text-heading_medium">
+                            {illustrationMessage}
+                        </h3>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

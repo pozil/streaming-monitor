@@ -1,0 +1,92 @@
+<template>
+    <div class="filters slds-grid slds-wrap slds-grid_vertical-align-center">
+        <!-- Channel -->
+        <div class="slds-col slds-size_9-of-12">
+            <lightning-combobox
+                label="Include channel"
+                value={channel}
+                options={channelOptions}
+                onchange={handleChannelChange}
+                placeholder="Select channel"
+                variant="label-inline"
+            ></lightning-combobox>
+        </div>
+        <div class="slds-col slds-size_3-of-12">&nbsp;</div>
+
+        <!-- Payload -->
+        <div class="slds-col slds-size_9-of-12">
+            <lightning-input
+                label="Include payload with keyword"
+                value={payload}
+                onchange={handlePayloadChange}
+                type="search"
+                placeholder="Search in payload content"
+                variant="label-inline"
+            >
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_3-of-12 slds-p-bottom_small">
+            <lightning-input
+                label="Match case"
+                type="checkbox"
+                checked={isCaseSensitive}
+                onchange={handleIsCaseSensitiveChange}
+            >
+            </lightning-input>
+        </div>
+
+        <!-- After time -->
+        <div class="slds-col slds-size_3-of-12 slds-m-bottom_small">
+            <lightning-input
+                label="Include events after"
+                type="toggle"
+                class="toggle"
+                checked={hasAfterTime}
+                onchange={handleAfterTimeToggle}
+            >
+            </lightning-input>
+        </div>
+        <div class="slds-size_9-of-12 slds-m-bottom_small">
+            <lightning-input
+                label="After time"
+                value={afterTime}
+                onchange={handleAfterTimeChange}
+                disabled={afterTimeDisabled}
+                variant="label-hidden"
+                type="datetime"
+            ></lightning-input>
+        </div>
+
+        <!-- Before time -->
+        <div class="slds-col slds-size_3-of-12">
+            <lightning-input
+                label="Include events before"
+                type="toggle"
+                class="toggle"
+                checked={hasBeforeTime}
+                onchange={handleBeforeTimeToggle}
+            >
+            </lightning-input>
+        </div>
+        <div class="slds-size_9-of-12">
+            <lightning-input
+                label="Before time"
+                value={beforeTime}
+                onchange={handleBeforeTimeChange}
+                disabled={beforeTimeDisabled}
+                variant="label-hidden"
+                type="datetime"
+            ></lightning-input>
+        </div>
+
+        <!-- Reset -->
+        <div
+            class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-m-top_small"
+        >
+            <lightning-button
+                label="Clear filters"
+                onclick={handleClearFilters}
+            ></lightning-button>
+        </div>
+    </div>
+</template>

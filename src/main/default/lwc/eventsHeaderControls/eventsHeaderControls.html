@@ -1,0 +1,35 @@
+<template>
+    <lightning-button-group>
+        <lightning-button
+            label="Clear events"
+            icon-name="utility:delete"
+            onclick={handleClear}
+        ></lightning-button>
+        <lightning-button-icon-stateful
+            alternative-text="Toggle filter view"
+            icon-name="utility:filterList"
+            selected={isFiltersDisplayed}
+            onclick={handleFiltersDisplayToggle}
+        ></lightning-button-icon-stateful>
+        <lightning-button-menu
+            alternative-text="Display as"
+            icon-name={viewModeIconName}
+            menu-alignment="right"
+            onselect={handleViewModeSelect}
+        >
+            <lightning-menu-subheader
+                label="Display as"
+            ></lightning-menu-subheader>
+            <template for:each={viewModes} for:item="option">
+                <lightning-menu-item
+                    key={option.value}
+                    label={option.label}
+                    value={option.value}
+                    icon-name={option.iconName}
+                    checked={option.checked}
+                >
+                </lightning-menu-item>
+            </template>
+        </lightning-button-menu>
+    </lightning-button-group>
+</template>

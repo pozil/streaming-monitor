@@ -4,27 +4,31 @@
 
 This Lightning App allows to monitor streaming events: PushTopic events, generic events, standard and custom platform events, Change Data Capture events, and monitoring events.
 
-[Presentation Video](https://youtu.be/T9HT-TTCz2s)
+📺&nbsp;&nbsp;[Presentation Video](https://youtu.be/T9HT-TTCz2s) (old UI)
 
 Features:
 
 -   Subscribe to all streaming events (event types are automatically discovered)
 -   Subscribe to and unsubscribe from specific streaming events with a user-friendly UI
--   Publish an event (Generic events and platform events)
+-   Publish an event (generic events and platform events)
 -   Register an event source (instructions and shortcuts)
--   Analyze past event content with flexible replay options
+-   Analyze past event content with
+    -   timeline or table view
+    -   dynamic filters
+    -   flexible replay options
 
-The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions.
+The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions and [D3.js](https://d3js.org/) to draw a dymamic event timeline.
 
 ![Streaming monitor - Timeline screenshot](gfx/timeline.png)
 
-<details><summary>Click here for more screenshots</summary>
-<p>
-![Streaming monitor - Timeline screenshot](gfx/table.png)
-![Streaming monitor - Timeline screenshot](gfx/subscribe.png)
-![Streaming monitor - Timeline screenshot](gfx/event-details.png)
-</p>
+<br/>
+<details><summary><b> Click here for more screenshots 🖼</b></summary>
+    <br/>
+    <p><img src="gfx/table.png" alt="Streaming monitor - Timeline screenshot"/></p>
+    <p><img src="gfx/subscribe.png" alt="Streaming monitor - Timeline screenshot"/></p>
+    <p><img src="gfx/event-details.png" alt="Streaming monitor - Timeline screenshot"/></p>
 </details>
+<br/>
 
 ## Installation
 

@@ -52,7 +52,7 @@ export default class StreamingMonitor extends LightningElement {
                 throw new Error('Failed to retrieve streaming channels');
             });
 
-        window.addEventListener('resize', this.forceEventsRerender.bind(this));
+        window.addEventListener('resize', this.handleWindowResize.bind(this));
     }
 
     disconnectedCallback() {

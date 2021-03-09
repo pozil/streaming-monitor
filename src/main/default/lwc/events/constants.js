@@ -1,6 +1,6 @@
 export const TABLE_COLUMNS = [
     {
-        label: 'Time',
+        label: 'Local Time',
         fieldName: 'timeLabel',
         type: 'text',
         initialWidth: 180

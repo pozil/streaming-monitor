@@ -98,9 +98,13 @@ export function normalizeEvent(event) {
         time = new Date(event.data.payload.CreatedDate);
     }
     if (time) {
+        // UTC timestamp
+        timestamp = time.getTime();
         // Adjust time to local timezone and format label
-        timestamp = time.getTime() - time.getTimezoneOffset() * 60000;
-        timeLabel = new Date(timestamp).toISOString().replace(/z|t/gi, ' ');
+        const localTimestamp = timestamp - time.getTimezoneOffset() * 60000;
+        timeLabel = new Date(localTimestamp)
+            .toISOString()
+            .replace(/z|t/gi, ' ');
         timeLabel = timeLabel.substr(0, timeLabel.length - 5);
     }
     // Assemble payload

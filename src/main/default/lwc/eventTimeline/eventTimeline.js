@@ -2,6 +2,7 @@
 import { LightningElement, api } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import D3 from '@salesforce/resourceUrl/d3';
+import { getTimeLabel } from 'c/streamingUtility';
 
 const xAccessor = (d) => d.timestamp;
 const yAccessor = (d) => d.channel;
@@ -30,7 +31,8 @@ export default class EventTimeline extends LightningElement {
     isD3Initialized = false;
     dimensions;
     bounds;
-    tooltip;
+    tooltipElement;
+    isDataTooltip = false;
     xScale;
     yScale;
     xAxis;
@@ -60,14 +62,38 @@ export default class EventTimeline extends LightningElement {
         // Get chart dimensions & use them as the SVG viewbox
         const rootElementRect = rootElement.getBoundingClientRect();
         this.dimensions = {
+            x: rootElementRect.x,
+            y: rootElementRect.y,
             width: rootElementRect.width,
             height: rootElementRect.height,
             margin: { top: 0, right: 0, bottom: 20, left: 200 }
         };
-        svgElement.attr(
-            'viewBox',
-            `0 0 ${this.dimensions.width} ${this.dimensions.height}`
-        );
+        svgElement
+            .attr(
+                'viewBox',
+                `0 0 ${this.dimensions.width} ${this.dimensions.height}`
+            )
+            .on('mousemove', (event) => {
+                if (this.isDataTooltip) {
+                    return;
+                }
+
+                const mousePos = d3.pointer(event);
+                if (
+                    mousePos[0] > this.dimensions.margin.left &&
+                    mousePos[1] <
+                        this.dimensions.height - this.dimensions.margin.bottom
+                ) {
+                    const time = this.xScale.invert(mousePos[0]);
+                    const timeLabel = getTimeLabel(time);
+                    this.drawTooltip(mousePos, timeLabel);
+                } else {
+                    this.hideTooltip();
+                }
+            })
+            .on('mouseout', () => {
+                this.hideTooltip();
+            });
         this.bounds = svgElement.append('g');
 
         // Add axis wrappers
@@ -106,10 +132,9 @@ export default class EventTimeline extends LightningElement {
         this.yAxis = d3.axisLeft(this.yScale);
 
         // Add tooltip element
-        this.tooltip = d3
+        this.tooltipElement = d3
             .select(rootElement)
             .append('div')
-            .attr('class', 'tooltip')
             .style('visibility', 'hidden');
     }
 
@@ -150,15 +175,18 @@ export default class EventTimeline extends LightningElement {
             .attr('r', 10)
             .attr('stroke', 'white')
             .on('mouseenter', (event, d) => {
-                this.drawTooltip(event, d);
+                this.isDataTooltip = true;
+                const mousePos = d3.pointer(event);
+                const label = `${d.timeLabel}<br/>${d.channel}<br/><br/>Click for more details.`;
+                this.drawTooltip(mousePos, label);
+                //this.drawEventTooltip(event, d);
             })
             .on('mouseout', () => {
-                // Hide tooltip
-                this.tooltip.style('visibility', 'hidden');
+                this.isDataTooltip = false;
             })
             .on('click', (event, d) => {
-                // Hide tooltip
-                this.tooltip.style('visibility', 'hidden');
+                this.hideTooltip();
+                this.isDataTooltip = false;
                 // Notify selection
                 const selectEvent = new CustomEvent('select', {
                     detail: d
@@ -167,20 +195,22 @@ export default class EventTimeline extends LightningElement {
             });
     }
 
-    drawTooltip(event, d) {
-        // Update tooltip content to recalculate size
-        this.tooltip.html(
-            `${d.timeLabel}<br/>${d.channel}<br/><br/>Click for more details.`
-        );
-        const tooltipRect = this.tooltip.node().getBoundingClientRect();
-        // Calculate tooltip pos based on circle pos
-        const circleRect = event.target.getBoundingClientRect();
-        const posX = circleRect.x + 10 - tooltipRect.width / 2;
-        const posY = circleRect.y - 10 - tooltipRect.height;
+    hideTooltip() {
+        this.tooltipElement.style('visibility', 'hidden');
+    }
+
+    drawTooltip(mousePos, label) {
+        // Update tooltip content in order to recalculate size
+        this.tooltipElement.html(label);
+        const tooltipRect = this.tooltipElement.node().getBoundingClientRect();
+        // Calculate tooltip pos
+        const posX = mousePos[0] + this.dimensions.x - tooltipRect.width / 2;
+        const posY = mousePos[1] + this.dimensions.y - 30 - tooltipRect.height;
         // Set tooltip pos and display it
-        this.tooltip
+        this.tooltipElement
             .style('left', `${posX}px`)
             .style('top', `${posY}px`)
-            .style('visibility', 'visible');
+            .style('visibility', 'visible')
+            .attr('class', this.isDataTooltip ? 'tooltip data' : 'tooltip');
     }
 }

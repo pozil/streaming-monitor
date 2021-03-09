@@ -18,8 +18,11 @@ circle:hover {
     text-align: center;
     padding: 4px;
     background: black;
-    opacity: 0.8;
     color: white;
     pointer-events: none;
     z-index: 1000;
+}
+
+.tooltip.data {
+    background: #005583;
 }

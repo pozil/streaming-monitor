@@ -98,14 +98,8 @@ export function normalizeEvent(event) {
         time = new Date(event.data.payload.CreatedDate);
     }
     if (time) {
-        // UTC timestamp
         timestamp = time.getTime();
-        // Adjust time to local timezone and format label
-        const localTimestamp = timestamp - time.getTimezoneOffset() * 60000;
-        timeLabel = new Date(localTimestamp)
-            .toISOString()
-            .replace(/z|t/gi, ' ');
-        timeLabel = timeLabel.substr(0, timeLabel.length - 5);
+        timeLabel = getTimeLabel(time);
     }
     // Assemble payload
     let payload = null;
@@ -125,6 +119,19 @@ export function normalizeEvent(event) {
         payload: JSON.stringify(payload)
     };
     return eventData;
+}
+
+/**
+ * Formats a UTC time and returns a label in local time
+ * @param {Date} time
+ */
+export function getTimeLabel(time) {
+    const localTimestamp = time.getTime() - time.getTimezoneOffset() * 60000;
+    let timeLabel = new Date(localTimestamp)
+        .toISOString()
+        .replace(/z|t/gi, ' ');
+    timeLabel = timeLabel.substr(0, timeLabel.length - 5);
+    return timeLabel;
 }
 
 /**

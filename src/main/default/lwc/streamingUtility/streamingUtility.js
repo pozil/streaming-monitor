@@ -77,7 +77,7 @@ export function normalizeEvent(event) {
     // Build id for datatable
     let id = '';
     if (event.data.schema) {
-        // Generic event does not support schema Id
+        // Generic and PushTopic events do not support schema Id
         id = event.data.schema;
     } else {
         id = event.channel;

@@ -3,3 +3,4 @@
 .vscode
 **/jsconfig.json
 **/staticresources
+coverage

@@ -237,7 +237,6 @@ export default class StreamingMonitor extends LightningElement {
                     'success',
                     `Successfully published event ${eventParams.eventName}`
                 );
-                console.log(`Payload: `, eventParams.eventPayload);
                 this.view = VIEW_MONITOR;
             })
             .catch((error) => {

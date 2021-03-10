@@ -119,14 +119,18 @@ export default class Actions extends LightningElement {
         const payloadElement = event.target;
         const { value } = event.detail;
         this.pubPayload = value;
-        // Validate JSON
-        try {
-            if (value) {
-                JSON.parse(value);
-            }
+        // Validate payload
+        if (this.pubEventType === EVT_GENERIC) {
             payloadElement.setCustomValidity('');
-        } catch (error) {
-            payloadElement.setCustomValidity('Invalid JSON');
+        } else {
+            try {
+                if (value) {
+                    JSON.parse(value);
+                }
+                payloadElement.setCustomValidity('');
+            } catch (error) {
+                payloadElement.setCustomValidity('Invalid JSON');
+            }
         }
     }
 
@@ -275,5 +279,11 @@ export default class Actions extends LightningElement {
 
     get isEventMonitoringSub() {
         return this.subEventType === EVT_MONITORING;
+    }
+
+    get pubPayloadHelp() {
+        return this.pubEventType === EVT_GENERIC
+            ? 'Plain string payload'
+            : 'JSON formatted payload with strings delimited by double quotes';
     }
 }

@@ -4,7 +4,7 @@
 
 This Lightning App allows to monitor streaming events: PushTopic events, generic events, standard and custom platform events, Change Data Capture events, and monitoring events.
 
-📺&nbsp;&nbsp;[Presentation Video](https://youtu.be/T9HT-TTCz2s) (old UI)
+📺&nbsp;&nbsp;[Presentation Video](https://youtu.be/OTsePo1zMxE)
 
 Features:
 

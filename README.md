@@ -32,7 +32,7 @@ The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/
 
 ## Installation
 
-Get the Streaming Monitor from the [AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FYEEWUA5) or install it manually with the following procedure.
+Get the Streaming Monitor from the [AppExchange](https://appexchange.salesforce.com/appxListingDetail?listingId=a0N3A00000FYEEWUA5) (recommended for automatic updates) or install it manually with the following procedure.
 
 1. Install the app by running this script:
 

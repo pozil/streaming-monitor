@@ -17,7 +17,7 @@ Features:
     -   dynamic filters
     -   flexible replay options
 
-The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions and [D3.js](https://d3js.org/) to draw a dymamic event timeline.
+The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions and [D3.js](https://d3js.org/) to draw a dynamic event timeline.
 
 ![Streaming monitor - Timeline screenshot](gfx/timeline.png)
 

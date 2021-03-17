@@ -1,0 +1,23 @@
+{
+    "data": {
+        "schema": "i2dNLlIiwAjZX6fZp8yT6g",
+        "payload": {
+            "LastModifiedDate": "2021-03-10T09:08:59Z",
+            "Description": "This is a test account.",
+            "ChangeEventHeader": {
+                "commitNumber": 389896250651,
+                "commitUser": "0051X000006rkObQAI",
+                "sequenceNumber": 1,
+                "entityName": "Account",
+                "changeType": "UPDATE",
+                "changedFields": ["Description", "LastModifiedDate"],
+                "changeOrigin": "com/salesforce/api/soap/51.0;client=SfdcInternalAPI/",
+                "transactionKey": "0006b519-cb7b-7418-abd5-e47fe932ae26",
+                "commitTimestamp": 1615367339000,
+                "recordIds": ["0011X00000mzMB4QAM"]
+            }
+        },
+        "event": { "replayId": 2633138 }
+    },
+    "channel": "/data/AccountChangeEvent"
+}

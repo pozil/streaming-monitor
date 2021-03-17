@@ -1,0 +1,28 @@
+circle {
+    fill: #0070d2;
+    cursor: pointer;
+}
+
+circle:hover {
+    fill: #005fb2;
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.major-tick {
+    font-weight: bold;
+}
+
+.tooltip {
+    position: fixed;
+    text-align: center;
+    padding: 4px;
+    background: black;
+    color: white;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.tooltip.data {
+    background: #005583;
+}

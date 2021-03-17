@@ -4,6 +4,7 @@
 .localdevserver
 node_modules
 jsconfig.json
+coverage
 
 # Sample objects
 **/objects/

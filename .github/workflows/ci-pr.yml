@@ -41,7 +41,7 @@ jobs:
 
             # LWC unit tests
             - name: 'LWC unit tests'
-              run: npm run test:unit:coverage
+              run: npm run test:coverage
 
     scratch-org-tests:
         runs-on: ubuntu-latest

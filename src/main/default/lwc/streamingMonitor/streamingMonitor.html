@@ -1,20 +1,44 @@
 <template>
-    <div class="slds-grid slds-gutters slds-gutters_x-small">
-        <div class="slds-col slds-size_1-of-3">
-            <c-actions
-                channels={channels}
-                onsubscribeall={handleSubscribeAll}
-                onsubscribe={handleSubscribe}
-                onpublish={handlePublish}
-            ></c-actions>
-            <c-subscriptions
-                subscriptions={subscriptions}
-                onunsubscribeall={handleUnsubscribeAll}
-                onunsubscribe={handleUnsubscribe}
-            ></c-subscriptions>
-        </div>
-        <div class="slds-col slds-size_2-of-3">
-            <c-event-list class="event-list"></c-event-list>
-        </div>
-    </div>
+    <!-- Lading channels, show spinner -->
+    <template if:true={isLoadingChannels}>
+        <lightning-spinner
+            alternative-text="Loading channels"
+            variant="brand"
+        ></lightning-spinner>
+    </template>
+
+    <!-- Done loading channels, display UI -->
+    <template if:false={isLoadingChannels}>
+        <article class="slds-card">
+            <div class="main-card-body">
+                <c-sidebar
+                    selected-item={view}
+                    onnavigate={handleNavigate}
+                    ontoggle={handleSidebarToggle}
+                >
+                    <c-subscriptions
+                        subscriptions={subscriptions}
+                        onunsubscribeall={handleUnsubscribeAll}
+                        onunsubscribe={handleUnsubscribe}
+                    ></c-subscriptions>
+                </c-sidebar>
+
+                <div class="body">
+                    <c-events
+                        subscriptions={subscriptions}
+                        class={monitorClasses}
+                    ></c-events>
+                    <template if:true={isActionView}>
+                        <c-actions
+                            action={view}
+                            channels={channels}
+                            onsubscribeall={handleSubscribeAll}
+                            onsubscribe={handleSubscribe}
+                            onpublish={handlePublish}
+                        ></c-actions>
+                    </template>
+                </div>
+            </div>
+        </article>
+    </template>
 </template>

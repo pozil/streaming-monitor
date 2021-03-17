@@ -1,0 +1,76 @@
+<template>
+    <lightning-card title="Register a streaming event source">
+        <div class="slds-p-horizontal_large">
+            <lightning-combobox
+                label="Event type"
+                name="regEventType"
+                value={regEventType}
+                options={regEventTypes}
+                onchange={handleValueChange}
+                placeholder="Select type"
+                class="slds-m-bottom_medium"
+            ></lightning-combobox>
+
+            <template if:true={isPushTopicReg}>
+                <p class="slds-m-bottom_small">
+                    Customize and execute the following code in Apex to register
+                    a new PushTopic:
+                </p>
+                <p class="slds-textarea push-topic-code">
+                    PushTopic pushTopic = new PushTopic();<br />
+                    pushTopic.Name = 'ClosedCaseUpdates';<br />
+                    pushTopic.Query = 'SELECT Id, Subject FROM Case WHERE
+                    Status=\'Closed\'';<br />
+                    pushTopic.ApiVersion = 51.0;<br />
+                    pushTopic.NotifyForOperationCreate = true;<br />
+                    pushTopic.NotifyForOperationUpdate = true;<br />
+                    pushTopic.NotifyForOperationUndelete = true;<br />
+                    pushTopic.NotifyForOperationDelete = true;<br />
+                    pushTopic.NotifyForFields = 'Referenced';<br />
+                    insert pushTopic;
+                </p>
+            </template>
+            <template if:true={isGenericReg}>
+                Navigate to the&nbsp;
+                <a href="/lightning/o/StreamingChannel/list"
+                    >Streaming Channel</a
+                >&nbsp;tab to register a generic event.
+            </template>
+            <template if:true={isPlatformEventReg}>
+                Navigate to the&nbsp;
+                <a href="/lightning/setup/EventObjects/home">Platform Event</a
+                >&nbsp;page in Setup to register a custom platform event.
+            </template>
+            <template if:true={isStandardPlatformEventReg}>
+                Standard platform events do not need to be registered. See&nbsp;
+                <a
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href="https://developer.salesforce.com/docs/atlas.en-us.platform_events.meta/platform_events/platform_events_objects_list.htm"
+                    >documentation</a
+                >.
+            </template>
+            <template if:true={isStandardCDCReg}>
+                Navigate to the&nbsp;
+                <a href="/lightning/setup/CdcObjectEnablement/home"
+                    >Change Data Capture</a
+                >&nbsp;page in Setup to activate a change data capture event.
+            </template>
+            <template if:true={isCustomCDCReg}>
+                Custom Change Data Capture channels cannot be declared via the
+                user interface. Follow these&nbsp;
+                <a
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href="https://developer.salesforce.com/docs/atlas.en-us.change_data_capture.meta/change_data_capture/cdc_custom_channel.htm"
+                    >metadata deploy instructions</a
+                >.
+            </template>
+            <template if:true={isMonitoringReg}>
+                Streaming must be enabled in&nbsp;
+                <a href="/lightning/setup/EventManager/home">Event Manager</a
+                >&nbsp;in order to receive Monitoring Events.
+            </template>
+        </div>
+    </lightning-card>
+</template>

@@ -1,0 +1,12 @@
+{
+    "data": {
+        "schema": "l2FajcERlSKIdAfICjQwzw",
+        "payload": {
+            "CreatedById": "0051X000006rkObQAI",
+            "Message__c": "Sent at 16:23",
+            "CreatedDate": "2021-03-09T15:23:51Z"
+        },
+        "event": { "replayId": 1459005 }
+    },
+    "channel": "/event/Sample__e"
+}

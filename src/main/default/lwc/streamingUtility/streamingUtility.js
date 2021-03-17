@@ -77,14 +77,16 @@ export function normalizeEvent(event) {
     // Build id for datatable
     let id = '';
     if (event.data.schema) {
-        // Generic event does not support schema Id
+        // Generic and PushTopic events do not support schema Id
         id = event.data.schema;
     } else {
         id = event.channel;
     }
     id += event.data.event.replayId;
     // Extract time from event
-    let time = null;
+    let time,
+        timeLabel,
+        timestamp = null;
     if (event.data.event.createdDate) {
         // Generic event and PushTopic
         time = new Date(event.data.event.createdDate);
@@ -96,8 +98,8 @@ export function normalizeEvent(event) {
         time = new Date(event.data.payload.CreatedDate);
     }
     if (time) {
-        time = time.toISOString().replace(/z|t/gi, ' ');
-        time = time.substr(0, time.length - 5);
+        timestamp = time.getTime();
+        timeLabel = getTimeLabel(time);
     }
     // Assemble payload
     let payload = null;
@@ -110,10 +112,58 @@ export function normalizeEvent(event) {
     // Assemble normalized event data
     const eventData = {
         id,
-        time,
+        timestamp,
+        timeLabel,
         channel: event.channel,
         replayId: event.data.event.replayId,
         payload: JSON.stringify(payload)
     };
     return eventData;
+}
+
+/**
+ * Formats a UTC time and returns a label in local time
+ * @param {Date} time
+ */
+export function getTimeLabel(time) {
+    const localTimestamp = time.getTime() - time.getTimezoneOffset() * 60000;
+    let timeLabel = new Date(localTimestamp)
+        .toISOString()
+        .replace(/z|t/gi, ' ');
+    timeLabel = timeLabel.substr(0, timeLabel.length - 5);
+    return timeLabel;
+}
+
+/**
+ * Sorts items alphabetically based on the 'channel' property
+ * @param {*} a
+ * @param {*} b
+ */
+export function channelSort(a, b) {
+    const valueA = a.channel.toUpperCase();
+    const valueB = b.channel.toUpperCase();
+    if (valueA < valueB) {
+        return -1;
+    }
+    if (valueA > valueB) {
+        return 1;
+    }
+    return 0;
+}
+
+/**
+ * Sorts items based on the 'timestamp' property
+ * @param {*} a
+ * @param {*} b
+ */
+export function timestampSort(a, b) {
+    const valueA = a.timestamp;
+    const valueB = b.timestamp;
+    if (valueA < valueB) {
+        return -1;
+    }
+    if (valueA > valueB) {
+        return 1;
+    }
+    return 0;
 }

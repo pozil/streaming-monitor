@@ -12,8 +12,14 @@ import {
     getChannelPrefix
 } from 'c/streamingUtility';
 
+import subscribeAll from './subscribeAll.html';
+import subscribe from './subscribe.html';
+import publish from './publish.html';
+import register from './register.html';
+
 export default class Actions extends LightningElement {
-    @api channels;
+    @api action = 'subscribeAll';
+    @api channels = [];
 
     subAllReplay = '-1';
 
@@ -28,6 +34,21 @@ export default class Actions extends LightningElement {
     pubPayload;
 
     regEventType;
+
+    render() {
+        switch (this.action) {
+            case 'subscribeAll':
+                return subscribeAll;
+            case 'subscribe':
+                return subscribe;
+            case 'publish':
+                return publish;
+            case 'register':
+                return register;
+            default:
+                throw new Error(`Unsupported action: ${this.action}`);
+        }
+    }
 
     handleSubscribeAll() {
         const subscribeEvent = new CustomEvent('subscribeall', {
@@ -98,19 +119,19 @@ export default class Actions extends LightningElement {
         const payloadElement = event.target;
         const { value } = event.detail;
         this.pubPayload = value;
-        // Validate JSON
-        try {
-            if (value) {
-                JSON.parse(value);
-            }
+        // Validate payload
+        if (this.pubEventType === EVT_GENERIC) {
             payloadElement.setCustomValidity('');
-        } catch (error) {
-            payloadElement.setCustomValidity('Invalid JSON');
+        } else {
+            try {
+                if (value) {
+                    JSON.parse(value);
+                }
+                payloadElement.setCustomValidity('');
+            } catch (error) {
+                payloadElement.setCustomValidity('Invalid JSON');
+            }
         }
-    }
-
-    get isLoading() {
-        return this.channels === undefined;
     }
 
     get subEventTypes() {
@@ -258,5 +279,11 @@ export default class Actions extends LightningElement {
 
     get isEventMonitoringSub() {
         return this.subEventType === EVT_MONITORING;
+    }
+
+    get pubPayloadHelp() {
+        return this.pubEventType === EVT_GENERIC
+            ? 'Plain string payload'
+            : 'JSON formatted payload with strings delimited by double quotes';
     }
 }

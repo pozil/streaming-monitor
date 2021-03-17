@@ -1,0 +1,11 @@
+{
+    "data": {
+        "event": {
+            "createdDate": "2021-03-10T08:56:22.910Z",
+            "replayId": 1,
+            "type": "updated"
+        },
+        "sobject": { "Id": "5001X000008HDwPQAW", "Subject": "Some case" }
+    },
+    "channel": "/topic/ClosedCaseUpdates"
+}

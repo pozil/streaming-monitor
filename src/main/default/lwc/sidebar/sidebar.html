@@ -1,0 +1,59 @@
+<template>
+    <div class={splitViewContainerClasses}>
+        <button
+            title="Toggle sidebar"
+            onclick={handleToggleSidebar}
+            class={toggleButtonClasses}
+            aria-controls="split-view-id"
+            aria-expanded={isSidebarVisible}
+        >
+            <svg
+                class="slds-button__icon slds-button__icon_x-small"
+                aria-hidden="true"
+                viewBox="0 0 52 52"
+            >
+                <path
+                    d="M38 8.3v35.4c0 1-1.3 1.7-2.2.9L14.6 27.3c-.8-.6-.8-1.9 0-2.5L35.8 7.3c.9-.7 2.2-.1 2.2 1z"
+                ></path>
+            </svg>
+            <span class="slds-assistive-text">Toggle sidebar</span>
+        </button>
+        <article
+            aria-hidden={isSidebarHidden}
+            id="split-view-id"
+            class="slds-split-view slds-grid slds-grid_vertical slds-grow"
+        >
+            <lightning-vertical-navigation
+                selected-item={selectedItem}
+                onselect={handleMenuSelect}
+            >
+                <lightning-vertical-navigation-item-icon
+                    label="Streaming Monitor"
+                    name="monitor"
+                    icon-name="utility:events"
+                ></lightning-vertical-navigation-item-icon>
+                <lightning-vertical-navigation-section label="Actions">
+                    <lightning-vertical-navigation-item
+                        label="Subscribe to all channels"
+                        name="subscribeAll"
+                    ></lightning-vertical-navigation-item>
+                    <lightning-vertical-navigation-item
+                        label="Subscribe to a channel"
+                        name="subscribe"
+                    ></lightning-vertical-navigation-item>
+                    <lightning-vertical-navigation-item
+                        label="Publish an event"
+                        name="publish"
+                    ></lightning-vertical-navigation-item>
+                    <lightning-vertical-navigation-item
+                        label="Register an event source"
+                        name="register"
+                    ></lightning-vertical-navigation-item>
+                </lightning-vertical-navigation-section>
+            </lightning-vertical-navigation>
+
+            <!-- Main slot for subscriptions -->
+            <slot></slot>
+        </article>
+    </div>
+</template>

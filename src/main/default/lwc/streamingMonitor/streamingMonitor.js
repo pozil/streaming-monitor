@@ -16,16 +16,27 @@ import {
     CHANNEL_ALL_CDC,
     isCDCChannel,
     getChannelPrefix,
-    normalizeEvent
+    normalizeEvent,
+    channelSort
 } from 'c/streamingUtility';
 
+const RERENDER_DELAY = 200;
 const IGNORE_SUBCRIBE_ERRORS_DELAY = 3000;
+
+const VIEW_MONITOR = 'monitor';
+const VIEW_SUBSCRIBE_ALL = 'subscribeAll';
+const VIEW_SUBSCRIBE = 'subscribe';
+const VIEW_PUBLISH = 'publish';
+const VIEW_REGISTER = 'register';
 
 export default class StreamingMonitor extends LightningElement {
     @track channels;
     @track subscriptions = [];
 
+    view = VIEW_MONITOR;
     ignoreSubscribeErrors = false;
+    eventsElement;
+    rerenderTimeout;
 
     connectedCallback() {
         setDebugFlag(true);
@@ -40,10 +51,37 @@ export default class StreamingMonitor extends LightningElement {
                 console.error(JSON.stringify(error));
                 throw new Error('Failed to retrieve streaming channels');
             });
+
+        window.addEventListener('resize', this.handleWindowResize.bind(this));
     }
 
     disconnectedCallback() {
         this.handleUnsubscribeAll();
+        window.removeEventListener('resize', this.handleWindowResize);
+    }
+
+    handleWindowResize() {
+        // Debounce
+        if (this.rerenderTimeout) {
+            clearTimeout(this.rerenderTimeout);
+        }
+        this.rerenderTimeout = setTimeout(() => {
+            const eventsElement = this.template.querySelector('c-events');
+            if (eventsElement) {
+                eventsElement.forceRerender();
+            }
+        }, RERENDER_DELAY);
+    }
+
+    handleNavigate(event) {
+        this.view = event.detail;
+    }
+
+    handleSidebarToggle() {
+        const eventsElement = this.template.querySelector('c-events');
+        if (eventsElement) {
+            eventsElement.forceRerender();
+        }
     }
 
     notify(variant, title, message) {
@@ -139,6 +177,7 @@ export default class StreamingMonitor extends LightningElement {
                 this.saveSubscription(subscription);
             });
             this.notify('success', 'Successfully subscribed to all channels');
+            this.view = VIEW_MONITOR;
         });
     }
 
@@ -164,22 +203,16 @@ export default class StreamingMonitor extends LightningElement {
                 subscription.channel
             );
             this.saveSubscription(subscription);
+            this.view = VIEW_MONITOR;
         });
     }
 
     saveSubscription(subscription) {
-        this.subscriptions.push(subscription);
-        this.subscriptions.sort((a, b) => {
-            const channelA = a.channel.toUpperCase();
-            const channelB = b.channel.toUpperCase();
-            if (channelA < channelB) {
-                return -1;
-            }
-            if (channelA > channelB) {
-                return 1;
-            }
-            return 0;
-        });
+        // Clone subscriptions due to @track array bug
+        const subscriptions = [...this.subscriptions];
+        subscriptions.push(subscription);
+        subscriptions.sort(channelSort);
+        this.subscriptions = subscriptions;
     }
 
     handleStreamingEvent(streamingEvent) {
@@ -190,7 +223,10 @@ export default class StreamingMonitor extends LightningElement {
         );
         // Add event to list
         const eventData = normalizeEvent(streamingEvent);
-        this.template.querySelector('.event-list').addStreamingEvent(eventData);
+        if (!this.eventsElement) {
+            this.eventsElement = this.template.querySelector('c-events');
+        }
+        this.eventsElement.addStreamingEvent(eventData);
     }
 
     handlePublish(event) {
@@ -201,7 +237,7 @@ export default class StreamingMonitor extends LightningElement {
                     'success',
                     `Successfully published event ${eventParams.eventName}`
                 );
-                console.log(`Payload: `, eventParams.eventPayload);
+                this.view = VIEW_MONITOR;
             })
             .catch((error) => {
                 console.error(JSON.stringify(error));
@@ -249,5 +285,22 @@ export default class StreamingMonitor extends LightningElement {
             });
             this.subscriptions.splice(foundIndex, 1);
         }
+    }
+
+    get isLoadingChannels() {
+        return this.channels === undefined;
+    }
+
+    get monitorClasses() {
+        return this.view === VIEW_MONITOR ? 'slds-show' : 'slds-hide';
+    }
+
+    get isActionView() {
+        return (
+            this.view === VIEW_SUBSCRIBE_ALL ||
+            this.view === VIEW_SUBSCRIBE ||
+            this.view === VIEW_PUBLISH ||
+            this.view === VIEW_REGISTER
+        );
     }
 }

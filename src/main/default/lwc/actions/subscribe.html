@@ -1,0 +1,69 @@
+<template>
+    <lightning-card title="Subscribe to a channel">
+        <div class="slds-p-horizontal_large">
+            <lightning-combobox
+                label="Event type"
+                value={subEventType}
+                options={subEventTypes}
+                placeholder="Select type"
+                onchange={handleSubEventTypeChange}
+            ></lightning-combobox>
+            <lightning-combobox
+                label="Event name"
+                value={subEventName}
+                options={subEventNames}
+                placeholder={subEventNamePlaceholder}
+                onchange={handleSubEventNameChange}
+                disabled={isSubEventNameDisabled}
+            ></lightning-combobox>
+            <lightning-input
+                label="Streaming channel"
+                name="subChannel"
+                value={subChannel}
+                onchange={handleValueChange}
+                disabled={isSubChannelDisabled}
+            ></lightning-input>
+            <lightning-combobox
+                label="Replay option"
+                name="subReplay"
+                value={subReplay}
+                onchange={handleValueChange}
+                options={replayOptions}
+                disabled={isSubscribeDisabled}
+            ></lightning-combobox>
+            <div class="slds-align_absolute-center slds-m-top_medium">
+                <lightning-button
+                    variant="brand"
+                    label="Subscribe"
+                    onclick={handleSubscribe}
+                    disabled={isSubscribeDisabled}
+                ></lightning-button>
+            </div>
+            <!-- CDC enablement warning -->
+            <template if:true={isCDCSub}>
+                <c-notice>
+                    <p>
+                        Enable Change Data Capture events in&nbsp;
+                        <a href="/lightning/setup/CdcObjectEnablement/home"
+                            >Setup</a
+                        >&nbsp;to receive them on the
+                        <code>/data/ChangeEvents</code> channel or the
+                        single-event channels. This doesn't apply to custom
+                        channels you define.
+                    </p>
+                </c-notice>
+            </template>
+            <!-- Event monitoring enablement warning -->
+            <template if:true={isEventMonitoringSub}>
+                <c-notice>
+                    <p>
+                        Streaming must be enabled in&nbsp;
+                        <a href="/lightning/setup/EventManager/home"
+                            >Event Manager</a
+                        >&nbsp;in order to receive Monitoring Events.
+                    </p>
+                </c-notice>
+            </template>
+        </div>
+    </lightning-card>
+</template>

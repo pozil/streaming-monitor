@@ -1,6 +1,11 @@
 <template>
-    <lightning-card title="Active Subscriptions">
-        <div slot="actions">
+    <div
+        class="slds-m-top_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center"
+    >
+        <div class="slds-col">
+            <h2 class="slds-nav-vertical__title">Subscriptions</h2>
+        </div>
+        <div class="slds-col slds-m-right_medium">
             <lightning-badge label={subscriptionCount}></lightning-badge>
             <lightning-button-icon
                 icon-name="utility:delete"
@@ -10,26 +15,27 @@
                 onclick={handleUnsubscribeAll}
             ></lightning-button-icon>
         </div>
-        <div class="slds-p-horizontal_x-small">
-            <template for:each={subscriptions} for:item="subscription">
-                <div
-                    key={subscription.channel}
-                    class="slds-grid slds-p-vertical_x-small slds-p-horizontal_xx-small subscription"
-                >
-                    <div class="slds-has-flexi-truncate">
-                        <div class="slds-truncate">{subscription.channel}</div>
-                    </div>
-                    <div class="slds-no-flex">
-                        <lightning-button-icon
-                            icon-name="utility:close"
-                            variant="bare"
-                            alternative-text="Unsubscribe"
-                            onclick={handleUnsubscribe}
-                            name={subscription.channel}
-                        ></lightning-button-icon>
-                    </div>
+    </div>
+
+    <div class="slds-p-horizontal_x-small slds-m-bottom_large">
+        <template for:each={subscriptions} for:item="subscription">
+            <div
+                key={subscription.channel}
+                class="slds-grid slds-p-vertical_x-small slds-p-horizontal_xx-small subscription"
+            >
+                <div class="slds-has-flexi-truncate">
+                    <div class="slds-truncate">{subscription.channel}</div>
                 </div>
-            </template>
-        </div>
-    </lightning-card>
+                <div class="slds-no-flex">
+                    <lightning-button-icon
+                        icon-name="utility:close"
+                        variant="bare"
+                        alternative-text="Unsubscribe"
+                        onclick={handleUnsubscribe}
+                        name={subscription.channel}
+                    ></lightning-button-icon>
+                </div>
+            </div>
+        </template>
+    </div>
 </template>

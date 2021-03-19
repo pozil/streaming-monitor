@@ -53,7 +53,7 @@ export default class Actions extends LightningElement {
     handleSubscribeAll() {
         const subscribeEvent = new CustomEvent('subscribeall', {
             detail: {
-                replayId: this.subReplay
+                replayId: this.subAllReplay
             }
         });
         this.dispatchEvent(subscribeEvent);

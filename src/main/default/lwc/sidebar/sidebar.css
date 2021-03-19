@@ -21,3 +21,8 @@ button.slds-is-closed:hover {
 button.slds-is-closed:hover svg {
     fill: #ffffff;
 }
+
+/* SLDS bug fix: removes list marker on nav menu */
+lightning-vertical-navigation-item-icon {
+    list-style: none;
+}

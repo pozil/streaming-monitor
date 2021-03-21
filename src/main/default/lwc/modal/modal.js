@@ -8,6 +8,7 @@ export default class Modal extends LightningElement {
 
     isVisible = false;
     hasFooter = false;
+    keyUpHandler;
 
     @api show() {
         this.isVisible = true;
@@ -15,6 +16,19 @@ export default class Modal extends LightningElement {
 
     @api hide() {
         this.isVisible = false;
+    }
+
+    connectedCallback() {
+        this.keyUpHandler = window.addEventListener('keyup', (event) => {
+            // Close modal when escape key is pressed
+            if (this.isVisible && event.code === 'Escape') {
+                this.handleCloseModal();
+            }
+        });
+    }
+
+    disconnectedCallback() {
+        window.removeEventListener(this.keyUpHandler);
     }
 
     handleCloseModal() {

@@ -139,16 +139,35 @@ public abstract class StreamingMonitorController {
 
     @TestVisible
     private static List<ComboBoxItem> getChangeDataCaptureEventChannels() {
-        List<EntityDefinition> entities = [
+        List<ComboBoxItem> items = new List<ComboBoxItem>();
+        // Standard CDC
+        List<EntityDefinition> standardCdc = [
             SELECT Label, QualifiedApiName
             FROM EntityDefinition
             WHERE PublisherId = 'CDC'
-            ORDER BY Label
         ];
-        List<ComboBoxItem> items = new List<ComboBoxItem>();
-        for (EntityDefinition entity : entities) {
+        for (EntityDefinition entity : standardCdc) {
             items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
         }
+        // Custom CDC
+        List<EntityDefinition> customCdc = [
+            SELECT Label, QualifiedApiName
+            FROM EntityDefinition
+            WHERE PublisherId = '<local>'
+        ];
+        for (EntityDefinition entity : customCdc) {
+            String apiName = entity.QualifiedApiName;
+            if (apiName.endsWith('__c')) {
+                items.add(
+                    new ComboBoxItem(
+                        entity.Label + ' Change Event',
+                        apiName.replace('__c', '__ChangeEvent')
+                    )
+                );
+            }
+        }
+
+        items.sort();
         return items;
     }
 
@@ -208,7 +227,7 @@ public abstract class StreamingMonitorController {
         return items;
     }
 
-    public class ComboBoxItem {
+    public class ComboBoxItem implements Comparable {
         @AuraEnabled
         public String label;
 
@@ -218,6 +237,10 @@ public abstract class StreamingMonitorController {
         public ComboBoxItem(String label, String value) {
             this.label = label;
             this.value = value;
+        }
+
+        public Integer compareTo(Object other) {
+            return this.label.compareTo(((ComboBoxItem) other).label);
         }
     }
 

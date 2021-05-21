@@ -1,6 +1,9 @@
 <template>
     <div
-        class="slds-m-top_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center"
+        class="
+            slds-m-top_medium
+            slds-grid slds-grid_align-spread slds-grid_vertical-align-center
+        "
     >
         <div class="slds-col">
             <h2 class="slds-nav-vertical__title">Subscriptions</h2>
@@ -21,7 +24,12 @@
         <template for:each={subscriptions} for:item="subscription">
             <div
                 key={subscription.channel}
-                class="slds-grid slds-p-vertical_x-small slds-p-horizontal_xx-small subscription"
+                class="
+                    slds-grid
+                    slds-p-vertical_x-small
+                    slds-p-horizontal_xx-small
+                    subscription
+                "
             >
                 <div class="slds-has-flexi-truncate">
                     <div class="slds-truncate">{subscription.channel}</div>

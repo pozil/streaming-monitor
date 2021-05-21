@@ -84,13 +84,8 @@ export default class EventList extends LightningElement {
     }
 
     applyFilters() {
-        const {
-            channel,
-            payload,
-            isCaseSensitive,
-            afterTime,
-            beforeTime
-        } = this.filters;
+        const { channel, payload, isCaseSensitive, afterTime, beforeTime } =
+            this.filters;
         // Clone events due to datatable bug
         let filteredEvents = [...this.events];
         // Apply channel filter

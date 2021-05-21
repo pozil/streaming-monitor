@@ -17,6 +17,11 @@ import subscribe from './subscribe.html';
 import publish from './publish.html';
 import register from './register.html';
 
+const ACTION_SUBSCRIBE_ALL = 'subscribeAll';
+const ACTION_SUBSCRIBE = 'subscribe';
+const ACTION_PUBLISH = 'publish';
+const ACTION_REGISTER = 'register';
+
 export default class Actions extends LightningElement {
     @api action = 'subscribeAll';
     @api channels = [];
@@ -26,7 +31,8 @@ export default class Actions extends LightningElement {
     subEventType;
     subEventName;
     subChannel;
-    subReplay = '-1';
+    subReplayOption = '-1';
+    subReplayId;
 
     pubEventType;
     pubEventName;
@@ -37,13 +43,13 @@ export default class Actions extends LightningElement {
 
     render() {
         switch (this.action) {
-            case 'subscribeAll':
+            case ACTION_SUBSCRIBE_ALL:
                 return subscribeAll;
-            case 'subscribe':
+            case ACTION_SUBSCRIBE:
                 return subscribe;
-            case 'publish':
+            case ACTION_PUBLISH:
                 return publish;
-            case 'register':
+            case ACTION_REGISTER:
                 return register;
             default:
                 throw new Error(`Unsupported action: ${this.action}`);
@@ -59,16 +65,23 @@ export default class Actions extends LightningElement {
         this.dispatchEvent(subscribeEvent);
     }
 
-    handleSubscribe() {
+    handleSubscribe(event) {
+        event.preventDefault();
+        const replayId =
+            this.subReplayOption === 'custom'
+                ? this.subReplayId
+                : this.subReplayOption;
         const subscribeEvent = new CustomEvent('subscribe', {
             detail: {
                 channel: this.subChannel,
-                replayId: this.subReplay
+                replayId
             }
         });
         this.dispatchEvent(subscribeEvent);
         this.subEventName = undefined;
         this.subChannel = '';
+        this.subReplayOption = '-1';
+        this.subReplayId = undefined;
     }
 
     handlePublish() {
@@ -236,10 +249,21 @@ export default class Actions extends LightningElement {
     }
 
     get replayOptions() {
-        return [
+        const options = [
             { label: 'No replay', value: '-1' },
             { label: 'Replay past events', value: '-2' }
         ];
+        if (this.action === ACTION_SUBSCRIBE) {
+            options.push({ label: 'Custom replay ID', value: 'custom' });
+        }
+        return options;
+    }
+
+    get isCustomReplayIdVisible() {
+        return (
+            this.action === ACTION_SUBSCRIBE &&
+            this.subReplayOption === 'custom'
+        );
     }
 
     get isPushTopicReg() {

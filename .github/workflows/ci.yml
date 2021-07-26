@@ -46,7 +46,7 @@ jobs:
 
             # Upload LWC code coverage data
             - name: 'Upload code coverage for LWC to Codecov.io'
-              uses: codecov/codecov-action@v1
+              uses: codecov/codecov-action@v2.0.2
               with:
                   flags: LWC
 
@@ -94,7 +94,7 @@ jobs:
 
             # Upload Apex code coverage data
             - name: 'Upload code coverage for Apex to Codecov.io'
-              uses: codecov/codecov-action@v1
+              uses: codecov/codecov-action@v2.0.2
               with:
                   flags: Apex
 

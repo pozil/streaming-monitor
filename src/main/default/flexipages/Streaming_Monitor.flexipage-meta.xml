@@ -4,6 +4,7 @@
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <identifier>streamingMonitor</identifier>
                 <componentName>streamingMonitor</componentName>
             </componentInstance>
         </itemInstances>

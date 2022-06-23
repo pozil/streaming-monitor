@@ -5,3 +5,4 @@
 **/lwc/**/*.xml
 **/staticresources/**
 .sfdx
+.sf

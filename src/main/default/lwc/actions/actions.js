@@ -8,6 +8,7 @@ import {
     EVT_PLATFORM_EVENT,
     EVT_CDC_STANDARD,
     EVT_CDC_CUSTOM,
+    EVT_CUSTOM_CHANNEL,
     EVT_MONITORING,
     getChannelPrefix
 } from 'c/streamingUtility';
@@ -103,10 +104,14 @@ export default class Actions extends LightningElement {
     handleSubEventTypeChange(event) {
         this.subEventType = event.detail.value;
         this.subEventName = undefined;
-        this.subChannel =
-            this.subEventType === EVT_CDC_CUSTOM
-                ? getChannelPrefix(EVT_CDC_CUSTOM)
-                : '';
+        if (
+            this.subEventType === EVT_CDC_CUSTOM ||
+            this.subEventType === EVT_CUSTOM_CHANNEL
+        ) {
+            this.subChannel = getChannelPrefix(this.subEventType);
+        } else {
+            this.subChannel = '';
+        }
     }
 
     handleSubEventNameChange(event) {
@@ -167,6 +172,8 @@ export default class Actions extends LightningElement {
         }
         if (this.subEventType === EVT_CDC_CUSTOM) {
             return 'The /data/ChangeEvents channel and custom channels require manual channel input';
+        } else if (this.subEventType === EVT_CUSTOM_CHANNEL) {
+            return 'Custom channels require manual channel input';
         }
         const eventDefinition = EVENT_TYPES.find(
             (e) => e.value === this.subEventType
@@ -185,15 +192,26 @@ export default class Actions extends LightningElement {
     }
 
     get isSubChannelDisabled() {
-        return this.subEventType !== EVT_CDC_CUSTOM;
+        return (
+            this.subEventType !== EVT_CDC_CUSTOM &&
+            this.subEventType !== EVT_CUSTOM_CHANNEL
+        );
     }
 
     get isSubscribeDisabled() {
+        if (
+            this.subEventType === EVT_CDC_CUSTOM ||
+            this.subEventType === EVT_CUSTOM_CHANNEL
+        ) {
+            const channel = this.subChannel.trim();
+            return (
+                channel === '' ||
+                channel === getChannelPrefix(this.subEventType)
+            );
+        }
         return (
-            (this.subEventType === EVT_CDC_CUSTOM &&
-                this.subChannel.trim() === '') ||
-            (this.subEventType !== EVT_CDC_CUSTOM &&
-                this.subEventName === undefined)
+            this.subEventType !== EVT_CDC_CUSTOM &&
+            this.subEventName === undefined
         );
     }
 

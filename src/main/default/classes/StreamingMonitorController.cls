@@ -5,6 +5,7 @@ public abstract class StreamingMonitorController {
     public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
     public final static String EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
     public final static String EVT_CDC_CUSTOM = 'CustomCDC';
+    public final static String EVT_CUSTOM_CHANNEL = 'CustomChannel';
     public final static String EVT_MONITORING = 'MonitoringEvent';
 
     private final static List<String> MONITORING_EVENTS = new List<String>{
@@ -58,6 +59,7 @@ public abstract class StreamingMonitorController {
         channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
         channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
         channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
+        channels.put(EVT_CUSTOM_CHANNEL, new List<ComboBoxItem>());
         channels.put(EVT_MONITORING, getEventMonitoringChannels());
         return channels;
     }

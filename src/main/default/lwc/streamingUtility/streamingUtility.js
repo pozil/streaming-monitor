@@ -4,6 +4,7 @@ export const EVT_STD_PLATFORM_EVENT = 'StandardPlatformEvent';
 export const EVT_PLATFORM_EVENT = 'PlatformEvent';
 export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
 export const EVT_CDC_CUSTOM = 'CustomCDC';
+export const EVT_CUSTOM_CHANNEL = 'CustomChannel';
 export const EVT_MONITORING = 'MonitoringEvent';
 
 export const CHANNEL_ALL_CDC = '/data/ChangeEvents';
@@ -27,6 +28,11 @@ export const EVENT_TYPES = [
     {
         label: 'Custom Platform event',
         value: EVT_PLATFORM_EVENT,
+        channelPrefix: '/event/'
+    },
+    {
+        label: 'Custom Channel',
+        value: EVT_CUSTOM_CHANNEL,
         channelPrefix: '/event/'
     },
     {

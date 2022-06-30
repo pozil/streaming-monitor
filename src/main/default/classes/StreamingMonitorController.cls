@@ -7,6 +7,28 @@ public abstract class StreamingMonitorController {
     public final static String EVT_CDC_CUSTOM = 'CustomCDC';
     public final static String EVT_MONITORING = 'MonitoringEvent';
 
+    private final static List<String> MONITORING_EVENTS = new List<String>{
+        'ApiAnomalyEvent',
+        'ApiEventStream',
+        'BulkApiResultEvent',
+        'ConcurLongRunApexErrEvent',
+        'CredentialStuffingEvent',
+        'LightningUriEventStream',
+        'ListViewEventStream',
+        'LoginAsEventStream',
+        'LoginEventStream',
+        'LogoutEventStream',
+        'MobileEmailEvent',
+        'MobileEnforcedPolicyEvent',
+        'MobileScreenshotEvent',
+        'MobileTelephonyEvent',
+        'PermissionSetEvent',
+        'ReportAnomalyEvent',
+        'ReportEventStream',
+        'SessionHijackingEvent',
+        'UriEventStream'
+    };
+
     @AuraEnabled
     public static void publishStreamingEvent(
         String eventType,
@@ -214,15 +236,9 @@ public abstract class StreamingMonitorController {
 
     @TestVisible
     private static List<ComboBoxItem> getEventMonitoringChannels() {
-        List<EntityDefinition> entities = [
-            SELECT Label, QualifiedApiName
-            FROM EntityDefinition
-            WHERE QualifiedApiName LIKE '%EventStream'
-            ORDER BY Label ASC
-        ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
-        for (EntityDefinition entity : entities) {
-            items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
+        for (String eventName : MONITORING_EVENTS) {
+            items.add(new ComboBoxItem(eventName, eventName));
         }
         return items;
     }

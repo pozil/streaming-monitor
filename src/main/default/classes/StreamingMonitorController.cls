@@ -13,6 +13,7 @@ public abstract class StreamingMonitorController {
         'ApiEventStream',
         'BulkApiResultEvent',
         'ConcurLongRunApexErrEvent',
+        'ConsentEvent',
         'CredentialStuffingEvent',
         'LightningUriEventStream',
         'ListViewEventStream',

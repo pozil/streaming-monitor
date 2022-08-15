@@ -179,7 +179,6 @@ export default class EventTimeline extends LightningElement {
                 const mousePos = d3.pointer(event);
                 const label = `${d.timeLabel}<br/>${d.channel}<br/><br/>Click for more details.`;
                 this.drawTooltip(mousePos, label);
-                //this.drawEventTooltip(event, d);
             })
             .on('mouseout', () => {
                 this.isDataTooltip = false;

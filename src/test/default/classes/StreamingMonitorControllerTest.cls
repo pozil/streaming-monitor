@@ -1,6 +1,7 @@
 @isTest
 public class StreamingMonitorControllerTest {
-    static testMethod void publishStreamingEvent_should_fail_when_eventType_is_unsupported() {
+    @isTest
+    static void publishStreamingEvent_fails_when_eventType_is_unsupported() {
         try {
             StreamingMonitorController.publishStreamingEvent(
                 StreamingMonitorController.EVT_PUSH_TOPIC,
@@ -9,54 +10,91 @@ public class StreamingMonitorControllerTest {
             );
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
-            System.assert(e instanceof AuraHandledException);
+            System.assert(
+                e instanceof StreamingMonitorController.StreamingException
+            );
+            assertContains(e.getMessage(), 'Unsupported event type');
         }
     }
 
-    static testMethod void publishPlatformEvent_should_fail_when_eventName_is_unknown_sObject() {
+    @isTest
+    static void publishStreamingEvent_platformEvent_fails_when_eventName_is_unknown_sObject() {
         try {
-            StreamingMonitorController.publishPlatformEvent('unknown', '{}');
+            StreamingMonitorController.publishStreamingEvent(
+                StreamingMonitorController.EVT_PLATFORM_EVENT,
+                'mock',
+                '{}'
+            );
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
-            System.assert(e instanceof AuraHandledException);
+            System.assert(
+                e instanceof StreamingMonitorController.StreamingException
+            );
+            assertContains(e.getMessage(), 'Unknown platform event type');
         }
     }
 
-    static testMethod void publishPlatformEvent_should_fail_when_eventName_is_not_platform_event() {
+    @isTest
+    static void publishStreamingEvent_platformEvent_fails_when_eventName_is_not_platform_event() {
         try {
-            StreamingMonitorController.publishPlatformEvent('Account', '{}');
+            StreamingMonitorController.publishStreamingEvent(
+                StreamingMonitorController.EVT_PLATFORM_EVENT,
+                'Account',
+                '{}'
+            );
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
-            System.assert(e instanceof AuraHandledException);
+            System.assert(
+                e instanceof StreamingMonitorController.StreamingException
+            );
+            assertContains(e.getMessage(), 'Failed to publish');
         }
     }
 
-    static testMethod void publishPlatformEvent_should_fail_when_payload_is_invalid_json() {
+    @isTest
+    static void publishStreamingEvent_platformEvent_fails_when_payload_is_invalid_json() {
         try {
-            StreamingMonitorController.publishPlatformEvent(
+            StreamingMonitorController.publishStreamingEvent(
+                StreamingMonitorController.EVT_PLATFORM_EVENT,
                 'Account',
                 'invalid'
             );
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
-            System.assert(e instanceof AuraHandledException);
+            System.assert(
+                e instanceof StreamingMonitorController.StreamingException
+            );
+            assertContains(e.getMessage(), 'Failed to instantiate');
         }
     }
 
-    static testMethod void publishGenericEvent_should_fail_when_invalid_eventName() {
+    @isTest
+    static void publishStreamingEvent_genericEvent_fails_when_invalid_eventName() {
         try {
-            StreamingMonitorController.publishGenericEvent('unknown', '{}');
+            StreamingMonitorController.publishStreamingEvent(
+                StreamingMonitorController.EVT_GENERIC,
+                'unknown',
+                '{}'
+            );
             System.assert(false, 'Exception was expected');
         } catch (Exception e) {
-            System.assert(e instanceof AuraHandledException);
+            System.assert(
+                e instanceof StreamingMonitorController.StreamingException
+            );
+            assertContains(e.getMessage(), 'Unknown generic event type');
         }
     }
 
-    static testMethod void publishGenericEvent_should_work() {
+    @isTest
+    static void publishStreamingEvent_genericEvent_works() {
         Test.setMock(HttpCalloutMock.class, new GenericEventPostMock(200));
         insert new StreamingChannel(Name = '/u/TestSC');
 
-        StreamingMonitorController.publishGenericEvent('TestSC', 'TestPayload');
+        StreamingMonitorController.publishStreamingEvent(
+            StreamingMonitorController.EVT_GENERIC,
+            'TestSC',
+            'TestPayload'
+        );
 
         List<AsyncApexJob> jobs = [
             SELECT Status, NumberOfErrors
@@ -65,7 +103,8 @@ public class StreamingMonitorControllerTest {
         System.assertEquals(1, jobs.size(), 'Expected an AsyncApexJob');
     }
 
-    static testMethod void QueueableGenericEventPost_should_fail_when_rest_call_fails() {
+    @isTest
+    static void QueueableGenericEventPost_fails_when_rest_call_fails() {
         Test.setMock(HttpCalloutMock.class, new GenericEventPostMock(500));
         StreamingMonitorController.QueueableGenericEventPost post = new StreamingMonitorController.QueueableGenericEventPost(
             '/u/TestSC',
@@ -80,16 +119,27 @@ public class StreamingMonitorControllerTest {
         }
     }
 
-    static testMethod void getAllEventChannels_should_work() {
-        Map<String, List<StreamingMonitorController.ComboBoxItem>> channels = StreamingMonitorController.getAllEventChannels();
-        System.assert(channels.size() > 0, 'Expected a list of channels');
+    @isTest
+    static void getOrgLimits_works() {
+        List<StreamingMonitorController.OrgLimitWrapper> limits = StreamingMonitorController.getOrgLimits();
+        System.assert(limits.size() > 0);
     }
 
-    static testMethod void getPushTopicEventChannels_should_work() {
+    @isTest
+    static void getAllEventChannels_works() {
+        Map<String, List<StreamingMonitorController.ComboBoxItem>> channels = StreamingMonitorController.getAllEventChannels();
+        System.assert(
+            channels.size() == 8,
+            'Expected a Map with 8 channel types'
+        );
+    }
+
+    @isTest
+    static void getPushTopicEventChannels_works() {
         PushTopic pushTopic = new PushTopic();
         pushTopic.Name = 'TestPT';
         pushTopic.Query = 'SELECT Id, Name FROM Account';
-        pushTopic.ApiVersion = 46.0;
+        pushTopic.ApiVersion = 56.0;
         pushTopic.NotifyForOperationCreate = true;
         pushTopic.NotifyForOperationUpdate = true;
         pushTopic.NotifyForOperationUndelete = true;
@@ -102,10 +152,22 @@ public class StreamingMonitorControllerTest {
         System.assertEquals('TestPT', channels.get(0).value);
     }
 
-    static testMethod void getGenericEventChannels_should_work() {
+    @isTest
+    static void getGenericEventChannels_works() {
         insert new StreamingChannel(Name = '/u/TestSC');
         List<StreamingMonitorController.ComboBoxItem> channels = StreamingMonitorController.getGenericEventChannels();
         System.assertEquals(1, channels.size());
         System.assertEquals('TestSC', channels.get(0).value);
+    }
+
+    private static void assertContains(String actual, String expectedContent) {
+        System.assert(
+            actual?.contains(expectedContent),
+            'Expected "' +
+            actual +
+            '" to contain "' +
+            expectedContent +
+            '"'
+        );
     }
 }

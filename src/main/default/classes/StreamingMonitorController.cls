@@ -42,7 +42,7 @@ public abstract class StreamingMonitorController {
         } else if (eventType == EVT_GENERIC) {
             publishGenericEvent(eventName, eventPayload);
         } else {
-            throw new AuraHandledException(
+            throw new StreamingException(
                 'Unsupported event type: ' + eventType
             );
         }
@@ -50,22 +50,29 @@ public abstract class StreamingMonitorController {
 
     @AuraEnabled
     public static Map<String, List<ComboBoxItem>> getAllEventChannels() {
-        Map<String, List<ComboBoxItem>> channels = new Map<String, List<ComboBoxItem>>();
-        channels.put(EVT_PUSH_TOPIC, getPushTopicEventChannels());
-        channels.put(EVT_GENERIC, getGenericEventChannels());
-        channels.put(
-            EVT_STD_PLATFORM_EVENT,
-            getStandardPlatformEventChannels()
-        );
-        channels.put(EVT_PLATFORM_EVENT, getPlatformEventChannels());
-        channels.put(EVT_CDC_STANDARD, getChangeDataCaptureEventChannels());
-        channels.put(EVT_CDC_CUSTOM, new List<ComboBoxItem>());
-        channels.put(EVT_CUSTOM_CHANNEL, new List<ComboBoxItem>());
-        channels.put(EVT_MONITORING, getEventMonitoringChannels());
-        return channels;
+        return new Map<String, List<ComboBoxItem>>{
+            EVT_PUSH_TOPIC => getPushTopicEventChannels(),
+            EVT_GENERIC => getGenericEventChannels(),
+            EVT_STD_PLATFORM_EVENT => getStandardPlatformEventChannels(),
+            EVT_PLATFORM_EVENT => getPlatformEventChannels(),
+            EVT_CDC_STANDARD => getChangeDataCaptureEventChannels(),
+            EVT_CDC_CUSTOM => new List<ComboBoxItem>(),
+            EVT_CUSTOM_CHANNEL => new List<ComboBoxItem>(),
+            EVT_MONITORING => getEventMonitoringChannels()
+        };
     }
 
-    @TestVisible
+    @AuraEnabled
+    public static List<OrgLimitWrapper> getOrgLimits() {
+        // Can't output directly OrgLimit so we have to use a wrapper
+        List<OrgLimitWrapper> output = new List<OrgLimitWrapper>();
+        List<OrgLimit> limits = OrgLimits.getAll();
+        for (OrgLimit l : limits) {
+            output.add(new OrgLimitWrapper(l));
+        }
+        return output;
+    }
+
     private static void publishPlatformEvent(
         String eventName,
         String eventPayload
@@ -73,7 +80,7 @@ public abstract class StreamingMonitorController {
         // Load event type
         Type platformEventType = Type.forName(null, eventName);
         if (platformEventType == null) {
-            throw new AuraHandledException(
+            throw new StreamingException(
                 'Unknown platform event type: ' + eventName
             );
         }
@@ -84,7 +91,7 @@ public abstract class StreamingMonitorController {
         } catch (Exception e) {
             System.debug(e);
             System.debug(e.getCause());
-            throw new AuraHandledException(
+            throw new StreamingException(
                 'Failed to instantiate ' +
                 eventName +
                 ' platform event with provided data: ' +
@@ -109,11 +116,10 @@ public abstract class StreamingMonitorController {
                     error.getFields()
                 );
             }
-            throw new AuraHandledException(errorMessage);
+            throw new StreamingException(errorMessage);
         }
     }
 
-    @TestVisible
     private static void publishGenericEvent(
         String eventName,
         String eventPayload
@@ -127,7 +133,7 @@ public abstract class StreamingMonitorController {
             LIMIT 1
         ];
         if (channels.size() != 1) {
-            throw new AuraHandledException(
+            throw new StreamingException(
                 'Unknown generic event type: ' + eventName
             );
         }
@@ -263,6 +269,23 @@ public abstract class StreamingMonitorController {
         }
     }
 
+    public class OrgLimitWrapper {
+        @AuraEnabled
+        public String name;
+
+        @AuraEnabled
+        public Integer value;
+
+        @AuraEnabled
+        public Integer max;
+
+        public OrgLimitWrapper(OrgLimit orgLimit) {
+            this.name = orgLimit.getName();
+            this.value = orgLimit.getValue();
+            this.max = orgLimit.getLimit();
+        }
+    }
+
     @TestVisible
     private class QueueableGenericEventPost implements Queueable, Database.AllowsCallouts {
         private String channelId;
@@ -276,7 +299,7 @@ public abstract class StreamingMonitorController {
         public void execute(QueueableContext context) {
             String restAPIURL =
                 URL.getSalesforceBaseUrl().toExternalForm() +
-                '/services/data/v55.0/sobjects/StreamingChannel/' +
+                '/services/data/v56.0/sobjects/StreamingChannel/' +
                 channelId +
                 '/push';
             HttpRequest httpRequest = new HttpRequest();
@@ -304,5 +327,8 @@ public abstract class StreamingMonitorController {
                 throw new CalloutException(httpResponse.getBody());
             }
         }
+    }
+
+    public class StreamingException extends Exception {
     }
 }

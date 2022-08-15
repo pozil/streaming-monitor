@@ -1,0 +1,26 @@
+.bar:nth-child(even) {
+    fill: #0176d3;
+}
+.bar:nth-child(odd) {
+    fill: #57a3fd;
+}
+.bar:hover {
+    fill: #014486;
+}
+.tick {
+    font-size: 14px;
+}
+.label {
+    font-size: 14px;
+}
+.tooltip {
+    position: fixed;
+    padding: 6px;
+    background: #014486;
+    color: white;
+    pointer-events: none;
+    z-index: 1000;
+}
+.inactive {
+    visibility: hidden;
+}

@@ -21,8 +21,7 @@ export default class OrgLimits extends LightningElement {
             this.limits = limits
                 .map((limit) => {
                     const l = { ...limit };
-                    //l.percent = Math.trunc((l.value / l.max) * 100);
-                    l.percent = Math.trunc(Math.random() * 99);
+                    l.percent = Math.trunc((l.value / l.max) * 100);
                     return l;
                 })
                 .sort((a, b) => a.name.localeCompare(b.name));

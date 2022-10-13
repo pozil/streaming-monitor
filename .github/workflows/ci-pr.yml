@@ -14,12 +14,12 @@ jobs:
         steps:
             # Checkout the code in the pull request
             - name: 'Checkout source code'
-              uses: actions/checkout@v2
+              uses: actions/checkout@v3
 
             # Cache node_modules to speed up the process
             - name: Restore node_modules cache
               id: cache-npm
-              uses: actions/cache@v1
+              uses: actions/cache@v3
               with:
                   path: node_modules
                   key: npm-${{ hashFiles('**/package-lock.json') }}
@@ -46,7 +46,7 @@ jobs:
 
             # Upload LWC code coverage data
             - name: 'Upload code coverage for LWC to Codecov.io'
-              uses: codecov/codecov-action@v2.0.2
+              uses: codecov/codecov-action@v3
               with:
                   flags: LWC
 
@@ -98,7 +98,7 @@ jobs:
 
             # Upload Apex code coverage data
             - name: 'Upload code coverage for Apex to Codecov.io'
-              uses: codecov/codecov-action@v2.0.2
+              uses: codecov/codecov-action@v3
               with:
                   flags: Apex
 

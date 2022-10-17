@@ -69,7 +69,9 @@ public abstract class StreamingMonitorController {
         // Temporary hack in API v56.0: can't use OrgLimits.getAll() because it produces some duplicates in the limit list
         List<OrgLimit> limits = OrgLimits.getMap().values();
         for (OrgLimit l : limits) {
-            output.add(new OrgLimitWrapper(l));
+            if (l.getLimit() != null && l.getValue() != null) {
+                output.add(new OrgLimitWrapper(l));
+            }
         }
         return output;
     }

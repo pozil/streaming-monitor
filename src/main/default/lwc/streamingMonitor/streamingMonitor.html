@@ -37,6 +37,9 @@
                             onpublish={handlePublish}
                         ></c-actions>
                     </template>
+                    <template if:true={isOrgLimitsView}>
+                        <c-org-limits></c-org-limits>
+                    </template>
                 </div>
             </div>
         </article>

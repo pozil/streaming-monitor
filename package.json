@@ -2,7 +2,7 @@
     "name": "streaming-monitor",
     "author": "Philippe Ozil (pozil)",
     "private": true,
-    "version": "3.7.0",
+    "version": "3.8.0",
     "description": "A Lightning app for monitoring streaming events: PushTopic, generic, platform events, CDC events and monitoring events.",
     "scripts": {
         "lint": "eslint **/lwc/**",
@@ -23,18 +23,18 @@
             "eslint"
         ],
         "**/lwc/**": [
-            "sfdx-lwc-jest --skipApiVersionCheck -- --bail --findRelatedTests"
+            "sfdx-lwc-jest --skipApiVersionCheck -- --bail --findRelatedTests --passWithNoTests"
         ]
     },
     "devDependencies": {
-        "@lwc/eslint-plugin-lwc": "^1.4.0",
+        "@lwc/eslint-plugin-lwc": "^1.5.0",
         "@prettier/plugin-xml": "^2.2.0",
         "@salesforce/eslint-config-lwc": "^3.3.3",
         "@salesforce/eslint-plugin-lightning": "^1.0.0",
-        "@salesforce/sfdx-lwc-jest": "^1.1.2",
-        "eslint": "^8.21.0",
+        "@salesforce/sfdx-lwc-jest": "^1.1.3",
+        "eslint": "^8.25.0",
         "eslint-plugin-import": "^2.26.0",
-        "eslint-plugin-jest": "^26.8.2",
+        "eslint-plugin-jest": "^27.1.1",
         "husky": "^8.0.1",
         "lint-staged": "^13.0.3",
         "prettier": "^2.7.1",

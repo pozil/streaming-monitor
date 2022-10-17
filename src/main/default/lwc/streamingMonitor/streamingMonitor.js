@@ -28,6 +28,7 @@ const VIEW_SUBSCRIBE_ALL = 'subscribeAll';
 const VIEW_SUBSCRIBE = 'subscribe';
 const VIEW_PUBLISH = 'publish';
 const VIEW_REGISTER = 'register';
+const VIEW_ORG_LIMITS = 'view-org-limits';
 
 export default class StreamingMonitor extends LightningElement {
     @track channels;
@@ -302,5 +303,9 @@ export default class StreamingMonitor extends LightningElement {
             this.view === VIEW_PUBLISH ||
             this.view === VIEW_REGISTER
         );
+    }
+
+    get isOrgLimitsView() {
+        return this.view === VIEW_ORG_LIMITS;
     }
 }

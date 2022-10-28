@@ -137,6 +137,16 @@ export default class EventList extends LightningElement {
         this.updateIllustrationMessage();
     }
 
+    handleDownloadEvents() {
+        const a = document.createElement('a');
+        var blob = new Blob([JSON.stringify(this.events)], {
+            type: 'application/octet-stream'
+        });
+        a.href = window.URL.createObjectURL(blob);
+        a.download = 'events.json';
+        a.click();
+    }
+
     handleFiltersDisplayToggle(event) {
         this.isFiltersDisplayed = event.detail.value;
     }

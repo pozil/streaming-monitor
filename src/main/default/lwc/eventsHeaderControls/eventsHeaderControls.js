@@ -20,6 +20,10 @@ export default class EventsHeaderControls extends LightningElement {
         this.dispatchEvent(new CustomEvent('clear'));
     }
 
+    handleDownload() {
+        this.dispatchEvent(new CustomEvent('download'));
+    }
+
     handleFiltersDisplayToggle() {
         this.isFiltersDisplayed = !this.isFiltersDisplayed;
         const event = new CustomEvent('filtertoggle', {

@@ -163,11 +163,7 @@ public class StreamingMonitorControllerTest {
     private static void assertContains(String actual, String expectedContent) {
         System.assert(
             actual?.contains(expectedContent),
-            'Expected "' +
-            actual +
-            '" to contain "' +
-            expectedContent +
-            '"'
+            'Expected "' + actual + '" to contain "' + expectedContent + '"'
         );
     }
 }

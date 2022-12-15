@@ -38,19 +38,23 @@ export default class EventTimeline extends LightningElement {
     xAxis;
     yAxis;
 
-    async renderedCallback() {
-        if (this.isD3Initialized) {
-            this.drawTimeline();
-            return;
-        }
+    async connectedCallback() {
         await loadScript(this, D3);
         this.isD3Initialized = true;
         this.initializeTimeline();
-        this.drawTimeline();
+    }
+
+    async renderedCallback() {
+        this.initializeTimeline();
     }
 
     initializeTimeline() {
+        if (!this.isD3Initialized) {
+            return;
+        }
+
         const rootElement = this.template.querySelector('.timeline');
+        rootElement.childNodes.forEach((childNode) => childNode.remove());
 
         // Add SVG element
         const svgElement = d3

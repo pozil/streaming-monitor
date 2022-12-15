@@ -17,7 +17,11 @@ export default class OrgLimits extends LightningElement {
 
     async connectedCallback() {
         try {
-            const limits = await getOrgLimits();
+            const [limits] = await Promise.all([
+                getOrgLimits(),
+                loadScript(this, D3)
+            ]);
+            this.isD3Initialized = true;
             this.limits = limits
                 .map((limit) => {
                     const l = { ...limit };
@@ -33,23 +37,16 @@ export default class OrgLimits extends LightningElement {
     }
 
     async renderedCallback() {
-        try {
-            if (!this.isD3Initialized) {
-                await loadScript(this, D3);
-                this.isD3Initialized = true;
-            }
-            this.drawChart();
-        } catch (error) {
-            this.error = JSON.stringify(error);
-        }
+        this.drawChart();
     }
 
     drawChart() {
-        if (!this.isD3Initialized || !this.limits) {
+        if (!this.isD3Initialized) {
             return;
         }
 
         const rootElement = this.template.querySelector('.chart');
+        rootElement.childNodes.forEach((childNode) => childNode.remove());
 
         // Add SVG element
         const svg = d3

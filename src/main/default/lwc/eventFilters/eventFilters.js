@@ -28,7 +28,7 @@ export default class EventFilters extends LightningElement {
         this.afterTime = yesterday.toISOString();
     }
 
-    nofifyFilterChange() {
+    notifyFilterChange() {
         let payload = this.payload ? this.payload.trim() : undefined;
         if (payload && payload.length === 0) {
             payload = undefined;
@@ -62,42 +62,42 @@ export default class EventFilters extends LightningElement {
         this.hasAfterTime = false;
         this.beforeTime = undefined;
         this.afterTime = undefined;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handleChannelChange(event) {
         this.channel = event.detail.value;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handlePayloadChange(event) {
         this.payload = event.detail.value;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handleIsCaseSensitiveChange(event) {
         this.isCaseSensitive = event.target.checked;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handleAfterTimeToggle(event) {
         this.hasAfterTime = event.target.checked;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handleBeforeTimeToggle(event) {
         this.hasBeforeTime = event.target.checked;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handleAfterTimeChange(event) {
         this.afterTime = event.detail.value;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     handleBeforeTimeChange(event) {
         this.beforeTime = event.detail.value;
-        this.nofifyFilterChange();
+        this.notifyFilterChange();
     }
 
     get afterTimeDisabled() {

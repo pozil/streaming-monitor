@@ -13,3 +13,5 @@ coverage
 # Mac files
 **/.DS_Store
 **/__MACOSX
+
+/sampleData.js

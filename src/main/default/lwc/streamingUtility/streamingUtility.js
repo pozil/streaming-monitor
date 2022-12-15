@@ -173,3 +173,13 @@ export function timestampSort(a, b) {
     }
     return 0;
 }
+
+export function toTitleCase(original) {
+    return original
+        .replaceAll('_', ' ')
+        .replace(
+            /\w\S*/g,
+            (word) =>
+                word.charAt(0).toUpperCase() + word.substr(1).toLowerCase()
+        );
+}

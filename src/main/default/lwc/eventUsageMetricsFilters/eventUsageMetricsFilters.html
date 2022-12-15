@@ -1,0 +1,81 @@
+<template>
+    <div class="filters slds-grid slds-wrap slds-grid_vertical-align-center">
+        <!-- After time -->
+        <div class="slds-col slds-size_3-of-12 slds-m-bottom_small">
+            <lightning-input
+                label="Include events after"
+                type="toggle"
+                class="toggle"
+                checked={hasAfterTime}
+                onchange={handleAfterTimeToggle}
+            >
+            </lightning-input>
+        </div>
+        <div class="slds-size_9-of-12 slds-m-bottom_small">
+            <lightning-input
+                label="After time"
+                value={afterTime}
+                onchange={handleAfterTimeChange}
+                disabled={afterTimeDisabled}
+                variant="label-hidden"
+                type="datetime"
+            ></lightning-input>
+        </div>
+
+        <!-- Before time -->
+        <div class="slds-col slds-size_3-of-12">
+            <lightning-input
+                label="Include events before"
+                type="toggle"
+                class="toggle"
+                checked={hasBeforeTime}
+                onchange={handleBeforeTimeToggle}
+            >
+            </lightning-input>
+        </div>
+        <div class="slds-size_9-of-12">
+            <lightning-input
+                label="Before time"
+                value={beforeTime}
+                onchange={handleBeforeTimeChange}
+                disabled={beforeTimeDisabled}
+                variant="label-hidden"
+                type="datetime"
+            ></lightning-input>
+        </div>
+
+        <!-- Event types -->
+        <div class="event-types slds-p-top_medium">
+            <template for:each={eventTypeOptions} for:item="eventType">
+                <div
+                    key={eventType.index}
+                    class="event-type slds-m-right_x-large"
+                >
+                    <span
+                        class="dot slds-m-right_xx-small"
+                        style={eventType.style}
+                    ></span>
+                    <lightning-input
+                        type="toggle"
+                        label={eventType.label}
+                        message-toggle-active="Displayed"
+                        message-toggle-inactive="Hidden"
+                        checked={eventType.checked}
+                        data-index={eventType.index}
+                        onchange={handleEventTypeToggle}
+                    ></lightning-input>
+                </div>
+            </template>
+        </div>
+
+        <!-- Reset -->
+        <div
+            class="slds-col slds-size_12-of-12 slds-align_absolute-center slds-m-top_small"
+        >
+            <lightning-button
+                label="Clear filters"
+                onclick={handleClearFilters}
+            ></lightning-button>
+        </div>
+    </div>
+</template>

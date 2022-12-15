@@ -1,0 +1,16 @@
+.event-types {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.event-type {
+    display: flex;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+}

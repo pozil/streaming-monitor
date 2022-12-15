@@ -1,0 +1,24 @@
+c-event-usage-metrics-filters {
+    display: block;
+    margin: 0 auto;
+    padding-bottom: 1rem;
+}
+
+circle:hover {
+    stroke: black;
+    stroke-width: 1px;
+}
+
+.tooltip {
+    position: fixed;
+    text-align: center;
+    padding: 4px;
+    background: black;
+    color: white;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.tooltip.data {
+    background: #005583;
+}

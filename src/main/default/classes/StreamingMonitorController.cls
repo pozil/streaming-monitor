@@ -76,6 +76,15 @@ public abstract class StreamingMonitorController {
         return output;
     }
 
+    @AuraEnabled
+    public static List<PlatformEventUsageMetric> getEventUsageMetrics() {
+        return [
+            SELECT Name, StartDate, Value
+            FROM PlatformEventUsageMetric
+            ORDER BY StartDate
+        ];
+    }
+
     private static void publishPlatformEvent(
         String eventName,
         String eventPayload

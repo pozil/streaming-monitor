@@ -140,6 +140,8 @@ export default class EventTimeline extends LightningElement {
             .select(rootElement)
             .append('div')
             .style('visibility', 'hidden');
+
+        this.drawTimeline();
     }
 
     drawTimeline() {

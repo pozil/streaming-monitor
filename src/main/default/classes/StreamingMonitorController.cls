@@ -4,8 +4,8 @@ public abstract class StreamingMonitorController {
     public final static String EVT_STD_PLATFORM_EVENT = 'StandardPlatformEvent';
     public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
     public final static String EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
-    public final static String EVT_CDC_CUSTOM = 'CustomCDC';
-    public final static String EVT_CUSTOM_CHANNEL = 'CustomChannel';
+    public final static String EVT_CUSTOM_CHANNEL_CDC = 'CustomChannelCDC';
+    public final static String EVT_CUSTOM_CHANNEL_PE = 'CustomChannelPE';
     public final static String EVT_MONITORING = 'MonitoringEvent';
 
     private final static List<String> MONITORING_EVENTS = new List<String>{
@@ -56,8 +56,8 @@ public abstract class StreamingMonitorController {
             EVT_STD_PLATFORM_EVENT => getStandardPlatformEventChannels(),
             EVT_PLATFORM_EVENT => getPlatformEventChannels(),
             EVT_CDC_STANDARD => getChangeDataCaptureEventChannels(),
-            EVT_CDC_CUSTOM => new List<ComboBoxItem>(),
-            EVT_CUSTOM_CHANNEL => new List<ComboBoxItem>(),
+            EVT_CUSTOM_CHANNEL_CDC => new List<ComboBoxItem>(),
+            EVT_CUSTOM_CHANNEL_PE => new List<ComboBoxItem>(),
             EVT_MONITORING => getEventMonitoringChannels()
         };
     }

@@ -56,9 +56,19 @@
                     >Change Data Capture</a
                 >&nbsp;page in Setup to activate a change data capture event.
             </template>
-            <template if:true={isCustomCDCReg}>
-                Custom Change Data Capture channels cannot be declared via the
-                user interface. Follow these&nbsp;
+            <template if:true={isCustomChannelPEReg}>
+                Custom channels cannot be declared via the user interface.
+                Follow these&nbsp;
+                <a
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    href="https://developer.salesforce.com/docs/atlas.en-us.240.0.platform_events.meta/platform_events/platform_events_custom_channel_configure.htm"
+                    >metadata deploy instructions</a
+                >.
+            </template>
+            <template if:true={isCustomChannelCDCReg}>
+                Custom channels cannot be declared via the user interface.
+                Follow these&nbsp;
                 <a
                     rel="noopener noreferrer"
                     target="_blank"

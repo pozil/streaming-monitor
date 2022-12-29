@@ -7,8 +7,8 @@ import {
     EVT_STD_PLATFORM_EVENT,
     EVT_PLATFORM_EVENT,
     EVT_CDC_STANDARD,
-    EVT_CDC_CUSTOM,
-    EVT_CUSTOM_CHANNEL,
+    EVT_CUSTOM_CHANNEL_CDC,
+    EVT_CUSTOM_CHANNEL_PE,
     EVT_MONITORING,
     getChannelPrefix
 } from 'c/streamingUtility';
@@ -105,8 +105,8 @@ export default class Actions extends LightningElement {
         this.subEventType = event.detail.value;
         this.subEventName = undefined;
         if (
-            this.subEventType === EVT_CDC_CUSTOM ||
-            this.subEventType === EVT_CUSTOM_CHANNEL
+            this.subEventType === EVT_CUSTOM_CHANNEL_CDC ||
+            this.subEventType === EVT_CUSTOM_CHANNEL_PE
         ) {
             this.subChannel = getChannelPrefix(this.subEventType);
         } else {
@@ -170,9 +170,9 @@ export default class Actions extends LightningElement {
         if (!this.subEventType) {
             return 'Waiting for event type';
         }
-        if (this.subEventType === EVT_CDC_CUSTOM) {
+        if (this.subEventType === EVT_CUSTOM_CHANNEL_CDC) {
             return 'The /data/ChangeEvents channel and custom channels require manual channel input';
-        } else if (this.subEventType === EVT_CUSTOM_CHANNEL) {
+        } else if (this.subEventType === EVT_CUSTOM_CHANNEL_PE) {
             return 'Custom channels require manual channel input';
         }
         const eventDefinition = EVENT_TYPES.find(
@@ -193,15 +193,15 @@ export default class Actions extends LightningElement {
 
     get isSubChannelDisabled() {
         return (
-            this.subEventType !== EVT_CDC_CUSTOM &&
-            this.subEventType !== EVT_CUSTOM_CHANNEL
+            this.subEventType !== EVT_CUSTOM_CHANNEL_CDC &&
+            this.subEventType !== EVT_CUSTOM_CHANNEL_PE
         );
     }
 
     get isSubscribeDisabled() {
         if (
-            this.subEventType === EVT_CDC_CUSTOM ||
-            this.subEventType === EVT_CUSTOM_CHANNEL
+            this.subEventType === EVT_CUSTOM_CHANNEL_CDC ||
+            this.subEventType === EVT_CUSTOM_CHANNEL_PE
         ) {
             const channel = this.subChannel.trim();
             return (
@@ -210,7 +210,7 @@ export default class Actions extends LightningElement {
             );
         }
         return (
-            this.subEventType !== EVT_CDC_CUSTOM &&
+            this.subEventType !== EVT_CUSTOM_CHANNEL_CDC &&
             this.subEventName === undefined
         );
     }
@@ -304,8 +304,12 @@ export default class Actions extends LightningElement {
         return this.regEventType === EVT_CDC_STANDARD;
     }
 
-    get isCustomCDCReg() {
-        return this.regEventType === EVT_CDC_CUSTOM;
+    get isCustomChannelCDCReg() {
+        return this.regEventType === EVT_CUSTOM_CHANNEL_CDC;
+    }
+
+    get isCustomChannelPEReg() {
+        return this.regEventType === EVT_CUSTOM_CHANNEL_PE;
     }
 
     get isMonitoringReg() {
@@ -315,7 +319,7 @@ export default class Actions extends LightningElement {
     get isCDCSub() {
         return (
             this.subEventType === EVT_CDC_STANDARD ||
-            this.subEventType === EVT_CDC_CUSTOM
+            this.subEventType === EVT_CUSTOM_CHANNEL_CDC
         );
     }
 

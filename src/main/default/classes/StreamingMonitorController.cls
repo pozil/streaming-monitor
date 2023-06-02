@@ -67,8 +67,7 @@ public abstract class StreamingMonitorController {
     public static List<OrgLimitWrapper> getOrgLimits() {
         // Can't output directly OrgLimit so we have to use a wrapper
         List<OrgLimitWrapper> output = new List<OrgLimitWrapper>();
-        // Temporary hack in API v56.0: can't use OrgLimits.getAll() because it produces some duplicates in the limit list
-        List<OrgLimit> limits = OrgLimits.getMap().values();
+        List<OrgLimit> limits = OrgLimits.getAll();
         for (OrgLimit l : limits) {
             if (l.getLimit() != null && l.getValue() != null) {
                 output.add(new OrgLimitWrapper(l));

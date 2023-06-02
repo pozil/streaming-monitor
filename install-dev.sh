@@ -9,23 +9,23 @@ echo ""
 
 # Install script
 echo "Cleaning previous scratch org..."
-sfdx force:org:delete -p -u $ORG_ALIAS &> /dev/null
+sf org delete scratch -p -o $ORG_ALIAS &> /dev/null
 echo ""
 
 echo "Creating scratch org..." && \
-sfdx force:org:create -s -f config/project-scratch-def.json -d 30 -a $ORG_ALIAS && \
+sf org create scratch -f config/project-scratch-def.json -a $ORG_ALIAS -d -y 30 && \
 echo "" && \
 
 echo "Pushing source..." && \
-sfdx force:source:push -u $ORG_ALIAS && \
+sf project deploy start && \
 echo "" && \
 
 echo "Assigning permission sets..." && \
-sfdx force:user:permset:assign -n Streaming_Monitor -u $ORG_ALIAS && \
+sf org assign permset -n Streaming_Monitor && \
 echo "" && \
 
 echo "Opening org..." && \
-sfdx force:org:open -p lightning/n/Streaming_Monitor -u $ORG_ALIAS && \
+sf org open -p lightning/n/Streaming_Monitor && \
 echo ""
 
 EXIT_CODE="$?"

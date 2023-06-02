@@ -10,7 +10,7 @@ sed -i '' -e 's,"namespace": "","namespace": "smon",' sfdx-project.json && \
 echo "" && \
 
 echo "Deploying to packaging org..." && \
-sfdx force:source:deploy -p src -u $PACKAGING_ORG_ALIAS && \
+sf project deploy start -d src -o $PACKAGING_ORG_ALIAS && \
 echo "" && \
 
 echo "Restoring project config..." && \

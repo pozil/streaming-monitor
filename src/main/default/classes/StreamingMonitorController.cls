@@ -15,6 +15,7 @@ public abstract class StreamingMonitorController {
         'ConcurLongRunApexErrEvent',
         'ConsentEvent',
         'CredentialStuffingEvent',
+        'FileEvent',
         'LightningUriEventStream',
         'ListViewEventStream',
         'LoginAsEventStream',

@@ -218,7 +218,11 @@ export default class StreamingMonitor extends LightningElement {
     }
 
     handleStreamingEvent(streamingEvent) {
-        this.notify('info', 'Received event', streamingEvent.channel);
+        this.notify(
+            'info',
+            'Received event on channel',
+            streamingEvent.channel
+        );
         console.log(
             'Received streaming event: ',
             JSON.stringify(streamingEvent)

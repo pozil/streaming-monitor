@@ -11,7 +11,7 @@
                 "entityName": "Account",
                 "changeType": "UPDATE",
                 "changedFields": ["Description", "LastModifiedDate"],
-                "changeOrigin": "com/salesforce/api/soap/56.0;client=SfdcInternalAPI/",
+                "changeOrigin": "com/salesforce/api/soap/58.0;client=SfdcInternalAPI/",
                 "transactionKey": "0006b519-cb7b-7418-abd5-e47fe932ae26",
                 "commitTimestamp": 1615367339000,
                 "recordIds": ["0011X00000mzMB4QAM"]

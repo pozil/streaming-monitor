@@ -6,8 +6,8 @@ import getEventUsageMetrics from '@salesforce/apex/StreamingMonitorController.ge
 import { getTimeLabel, toTitleCase } from 'c/streamingUtility';
 
 export default class EventUsageMetrics extends LightningElement {
-    allMetrics;
-    filteredMetrics;
+    allMetrics = [];
+    filteredMetrics = [];
     eventTypes = [];
 
     isD3Initialized = false;
@@ -157,11 +157,14 @@ export default class EventUsageMetrics extends LightningElement {
         try {
             this.drawTimeline();
         } catch (error) {
-            console.error('Failed to draw chart', error);
+            console.error('Failed to draw chart: ', JSON.stringify(error));
         }
     }
 
     drawTimeline() {
+        if (this.filteredMetrics.length === 0) {
+            return;
+        }
         // Get x (time) range
         const xMin = this.filteredMetrics[0].timestamp;
         const xMax =

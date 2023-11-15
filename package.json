@@ -27,25 +27,24 @@
         ]
     },
     "devDependencies": {
-        "@lwc/eslint-plugin-lwc": "^1.5.0",
-        "@prettier/plugin-xml": "^2.2.0",
-        "@salesforce/eslint-config-lwc": "^3.3.3",
+        "@lwc/eslint-plugin-lwc": "^1.6.4",
+        "@prettier/plugin-xml": "^3.2.2",
+        "@salesforce/eslint-config-lwc": "^3.5.2",
         "@salesforce/eslint-plugin-lightning": "^1.0.0",
-        "@salesforce/sfdx-lwc-jest": "^1.2.1",
-        "eslint": "^8.29.0",
-        "eslint-plugin-import": "^2.26.0",
-        "eslint-plugin-jest": "^27.1.6",
-        "husky": "^8.0.2",
-        "lint-staged": "^13.1.0",
-        "prettier": "^2.8.1",
-        "prettier-plugin-apex": "^1.12.0"
+        "@salesforce/sfdx-lwc-jest": "^3.0.1",
+        "eslint": "^8.53.0",
+        "eslint-plugin-import": "^2.29.0",
+        "eslint-plugin-jest": "^27.6.0",
+        "husky": "^8.0.3",
+        "lint-staged": "^15.1.0",
+        "prettier": "^3.1.0",
+        "prettier-plugin-apex": "^2.0.1"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/pozil/streaming-monitor"
     },
     "volta": {
-        "node": "16.18.0",
-        "npm": "8.19.2"
+        "node": "18.18.2"
     }
 }

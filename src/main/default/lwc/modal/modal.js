@@ -28,7 +28,7 @@ export default class Modal extends LightningElement {
     }
 
     disconnectedCallback() {
-        window.removeEventListener(this.keyUpHandler);
+        window.removeEventListener('keyup', this.keyUpHandler);
     }
 
     handleCloseModal() {

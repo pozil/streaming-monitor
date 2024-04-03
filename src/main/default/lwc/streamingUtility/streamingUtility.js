@@ -107,6 +107,17 @@ export function normalizeEvent(event) {
         timestamp = time.getTime();
         timeLabel = getTimeLabel(time);
     }
+    // Get event type
+    let type = null;
+    if (event.data.event?.type) {
+        type = `PushTopic: ${event.data.event.type}`;
+    } else if (event.data.event.createdDate) {
+        type = `Generic`;
+    } else if (event.data.payload.ChangeEventHeader) {
+        type = `Change Event: ${event.data.payload.ChangeEventHeader.entityName} ${event.data.payload.ChangeEventHeader.changeType}`;
+    } else if (event.data.payload.CreatedDate) {
+        type = 'Platform Event';
+    }
     // Assemble payload
     let payload = null;
     if (event.data.payload) {
@@ -122,6 +133,7 @@ export function normalizeEvent(event) {
         timeLabel,
         channel: event.channel,
         replayId: event.data.event.replayId,
+        type,
         payload: JSON.stringify(payload)
     };
     return eventData;

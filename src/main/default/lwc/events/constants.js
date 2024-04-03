@@ -12,6 +12,12 @@ export const TABLE_COLUMNS = [
         initialWidth: 200
     },
     {
+        label: 'Type',
+        fieldName: 'type',
+        type: 'text',
+        initialWidth: 200
+    },
+    {
         label: 'Replay Id',
         fieldName: 'replayId',
         type: 'text',

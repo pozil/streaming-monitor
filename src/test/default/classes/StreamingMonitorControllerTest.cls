@@ -139,7 +139,7 @@ public class StreamingMonitorControllerTest {
         PushTopic pushTopic = new PushTopic();
         pushTopic.Name = 'TestPT';
         pushTopic.Query = 'SELECT Id, Name FROM Account';
-        pushTopic.ApiVersion = 59.0;
+        pushTopic.ApiVersion = 60.0;
         pushTopic.NotifyForOperationCreate = true;
         pushTopic.NotifyForOperationUpdate = true;
         pushTopic.NotifyForOperationUndelete = true;

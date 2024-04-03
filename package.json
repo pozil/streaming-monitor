@@ -27,18 +27,18 @@
         ]
     },
     "devDependencies": {
-        "@lwc/eslint-plugin-lwc": "^1.6.4",
-        "@prettier/plugin-xml": "^3.2.2",
-        "@salesforce/eslint-config-lwc": "^3.5.2",
+        "@lwc/eslint-plugin-lwc": "^1.7.2",
+        "@prettier/plugin-xml": "^3.4.1",
+        "@salesforce/eslint-config-lwc": "^3.5.3",
         "@salesforce/eslint-plugin-lightning": "^1.0.0",
-        "@salesforce/sfdx-lwc-jest": "^3.0.1",
-        "eslint": "^8.53.0",
-        "eslint-plugin-import": "^2.29.0",
-        "eslint-plugin-jest": "^27.6.0",
-        "husky": "^8.0.3",
-        "lint-staged": "^15.1.0",
-        "prettier": "^3.1.0",
-        "prettier-plugin-apex": "^2.0.1"
+        "@salesforce/sfdx-lwc-jest": "^4.0.1",
+        "eslint": "^8.57.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-jest": "^27.9.0",
+        "husky": "^9.0.11",
+        "lint-staged": "^15.2.2",
+        "prettier": "^3.2.5",
+        "prettier-plugin-apex": "^2.1.0"
     },
     "repository": {
         "type": "git",

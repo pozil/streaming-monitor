@@ -224,9 +224,7 @@ public abstract class StreamingMonitorController {
         ];
         List<ComboBoxItem> items = new List<ComboBoxItem>();
         for (EntityDefinition entity : entities) {
-            items.add(
-                new ComboBoxItem(entity.Label, entity.QualifiedApiName)
-            );
+            items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
         }
         return items;
     }

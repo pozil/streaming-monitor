@@ -217,7 +217,7 @@ public abstract class StreamingMonitorController {
     @TestVisible
     private static List<ComboBoxItem> getPlatformEventChannels() {
         List<EntityDefinition> entities = [
-            SELECT Label, QualifiedApiName, IsCustomizable
+            SELECT Label, QualifiedApiName
             FROM EntityDefinition
             WHERE KeyPrefix LIKE 'e%'
             ORDER BY Label ASC

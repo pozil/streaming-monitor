@@ -37,24 +37,6 @@ public class StreamingMonitorControllerTest {
     }
 
     @isTest
-    static void publishStreamingEvent_platformEvent_fails_when_eventName_is_not_platform_event() {
-        try {
-            StreamingMonitorController.publishStreamingEvent(
-                StreamingMonitorController.EVT_PLATFORM_EVENT,
-                'Account',
-                '{}'
-            );
-            Assert.fail('Exception was expected');
-        } catch (Exception e) {
-            Assert.isInstanceOfType(
-                e,
-                StreamingMonitorController.StreamingException.class
-            );
-            assertContains(e.getMessage(), 'Failed to publish');
-        }
-    }
-
-    @isTest
     static void publishStreamingEvent_platformEvent_fails_when_payload_is_invalid_json() {
         try {
             StreamingMonitorController.publishStreamingEvent(

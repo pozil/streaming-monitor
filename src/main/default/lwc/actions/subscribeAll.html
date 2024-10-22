@@ -1,11 +1,19 @@
 <template>
-    <lightning-card title="Subscribe to all streaming channels">
+    <lightning-card title="Subscribe to multiple streaming channels">
         <div class="slds-p-horizontal_large">
             <p class="slds-m-vertical_small">
                 Custom Change Data Capture channels cannot be automatically
                 discovered. Supported channels: PushTopic, Generic, Platform
                 events, Change Data Capture events and Monitoring events.
             </p>
+            <lightning-combobox
+                label="Filter"
+                name="subAllFilter"
+                value={subAllFilter}
+                onchange={handleValueChange}
+                options={subAllFilterOptions}
+            >
+            </lightning-combobox>
             <lightning-combobox
                 label="Replay option"
                 name="subAllReplay"
@@ -16,7 +24,7 @@
             <div class="slds-align_absolute-center slds-m-top_medium">
                 <lightning-button
                     variant="brand"
-                    label="Subscribe to all"
+                    label="Subscribe"
                     onclick={handleSubscribeAll}
                 ></lightning-button>
             </div>

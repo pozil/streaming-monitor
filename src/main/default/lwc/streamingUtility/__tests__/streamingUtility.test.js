@@ -6,7 +6,11 @@ import {
     normalizeEvent,
     getTimeLabel,
     channelSort,
-    timestampSort
+    timestampSort,
+    isCustomChannel,
+    EVT_CDC,
+    EVT_PLATFORM_EVENT,
+    EVT_STD_PLATFORM_EVENT
 } from 'c/streamingUtility';
 
 const MOCK_PUSH_TOPIC = require('./data/pushtopic.json');
@@ -27,14 +31,37 @@ describe('streamingUtility', () => {
         );
     });
 
-    it('detects if channel is CDC', () => {
+    it('detects that channel is CDC', () => {
         const isCdc = isCDCChannel('/data/something');
         expect(isCdc).toBeTruthy();
     });
 
-    it('detects if channel is not CDC', () => {
+    it('detects that channel is not CDC', () => {
         const isCdc = isCDCChannel('/event/something');
         expect(isCdc).toBeFalsy();
+    });
+
+    it('detects that CDC channel is custom', () => {
+        let isCustom = isCustomChannel(EVT_CDC, '/data/Sample__ChangeEvent');
+        expect(isCustom).toBeTruthy();
+    });
+
+    it('detects that CDC channel is not custom', () => {
+        const isCustom = isCustomChannel(EVT_CDC, '/data/AccountChangeEvent');
+        expect(isCustom).toBeFalsy();
+    });
+
+    it('detects that PE channel is custom', () => {
+        let isCustom = isCustomChannel(EVT_PLATFORM_EVENT, '/event/Sample__e');
+        expect(isCustom).toBeTruthy();
+    });
+
+    it('detects that standard PE channel is not custom', () => {
+        let isCustom = isCustomChannel(
+            EVT_STD_PLATFORM_EVENT,
+            '/event/LoginEventStream'
+        );
+        expect(isCustom).toBeFalsy();
     });
 
     it('normalizes PushTopic event', () => {

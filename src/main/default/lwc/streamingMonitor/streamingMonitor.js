@@ -12,16 +12,19 @@ import getAllEventChannels from '@salesforce/apex/StreamingMonitorController.get
 import publishStreamingEvent from '@salesforce/apex/StreamingMonitorController.publishStreamingEvent';
 import {
     EVENT_TYPES,
-    EVT_CDC_STANDARD,
+    EVT_CDC,
     CHANNEL_ALL_CDC,
+    FILTER_CUSTOM,
+    FILTER_ALL,
     isCDCChannel,
     getChannelPrefix,
     normalizeEvent,
-    channelSort
+    channelSort,
+    isCustomChannel
 } from 'c/streamingUtility';
 
 const RERENDER_DELAY = 200;
-const IGNORE_SUBCRIBE_ERRORS_DELAY = 3000;
+const IGNORE_SUBCRIBE_ERRORS_DELAY = 4000;
 
 const VIEW_MONITOR = 'monitor';
 const VIEW_SUBSCRIBE_ALL = 'subscribeAll';
@@ -40,20 +43,17 @@ export default class StreamingMonitor extends LightningElement {
     eventsElement;
     rerenderTimeout;
 
-    connectedCallback() {
+    async connectedCallback() {
         setDebugFlag(true);
 
         onError((error) => this.handleStreamingError(error));
 
-        getAllEventChannels()
-            .then((allChannels) => {
-                this.channels = allChannels;
-            })
-            .catch((error) => {
-                console.error(JSON.stringify(error));
-                throw new Error('Failed to retrieve streaming channels');
-            });
-
+        try {
+            this.channels = await getAllEventChannels();
+        } catch (error) {
+            console.error(JSON.stringify(error));
+            throw new Error('Failed to retrieve streaming channels');
+        }
         window.addEventListener('resize', this.handleWindowResize.bind(this));
     }
 
@@ -137,53 +137,81 @@ export default class StreamingMonitor extends LightningElement {
         }
     }
 
-    handleSubscribeAll(event) {
-        console.log(`Subscribing to all streaming events`);
-        const { replayId } = event.detail;
-
-        // Temporarily ignore subscribe errors while subscribing to all events
-        this.ignoreSubscribeErrors = true;
-        setTimeout(() => {
-            this.ignoreSubscribeErrors = false;
-        }, IGNORE_SUBCRIBE_ERRORS_DELAY);
+    async handleSubscribeAll(event) {
+        const { replayId, filter } = event.detail;
+        console.log(
+            `Subscribing to multiple streaming channels with filter ${filter} and replay ID ${replayId}`
+        );
 
         // Build list of channels
         let channels = [];
         EVENT_TYPES.forEach((eventType) => {
             const eventTypeName = eventType.value;
-            if (eventTypeName === EVT_CDC_STANDARD) {
-                // Use global channel for all CDC events
-                channels.push(CHANNEL_ALL_CDC);
-            } else {
-                // Get channels for specific event type
+            if (filter === FILTER_ALL) {
+                if (eventTypeName === EVT_CDC) {
+                    // Use global channel for all CDC events
+                    channels.push(CHANNEL_ALL_CDC);
+                } else {
+                    // Get all channels for the other event types
+                    const channelPrefix = getChannelPrefix(eventTypeName);
+                    this.channels[eventTypeName].forEach((channelData) => {
+                        channels.push(channelPrefix + channelData.value);
+                    });
+                }
+            } else if (filter === FILTER_CUSTOM) {
+                // Get custom channels for all event types
                 const channelPrefix = getChannelPrefix(eventTypeName);
                 this.channels[eventTypeName].forEach((channelData) => {
-                    channels.push(channelPrefix + channelData.value);
+                    if (isCustomChannel(eventTypeName, channelData.value)) {
+                        channels.push(channelPrefix + channelData.value);
+                    }
                 });
+            } else {
+                throw new Error(`Unsupported filter value: ${filter}`);
             }
         });
+
         // Remove already subscribed channels
         channels = channels.filter(
             (channel) =>
                 !this.subscriptions.some((sub) => sub.channel === channel)
         );
+
+        // Abort if there are no remaining channels
+        if (channels.length === 0) {
+            this.notify(
+                'warn',
+                'There are no channels to subscribe to with the specified filter and current subscriptions'
+            );
+            return;
+        }
+
+        // Temporarily ignore subscribe errors while subscribing to events
+        this.ignoreSubscribeErrors = true;
+        setTimeout(() => {
+            this.ignoreSubscribeErrors = false;
+        }, IGNORE_SUBCRIBE_ERRORS_DELAY);
+
         // Queue subscriptions
         const subscribePromises = channels.map((channel) => {
             return subscribe(channel, replayId, (streamingEvent) => {
                 this.handleStreamingEvent(streamingEvent);
             });
         });
+
         // Save susbcriptions and notify success once done
-        Promise.all(subscribePromises).then((subscriptions) => {
-            subscriptions.forEach((subscription) => {
-                this.saveSubscription(subscription);
-            });
-            this.notify('success', 'Successfully subscribed to all channels');
-            this.view = VIEW_MONITOR;
+        const subscriptions = await Promise.all(subscribePromises);
+        subscriptions.forEach((subscription) => {
+            this.saveSubscription(subscription);
         });
+        this.notify(
+            'success',
+            'Successfully subscribed to the specified channels'
+        );
+        this.view = VIEW_MONITOR;
     }
 
-    handleSubscribe(event) {
+    async handleSubscribe(event) {
         const { channel, replayId } = event.detail;
 
         // Check for duplicate subscription
@@ -196,17 +224,17 @@ export default class StreamingMonitor extends LightningElement {
             return;
         }
 
-        subscribe(channel, replayId, (streamingEvent) => {
-            this.handleStreamingEvent(streamingEvent);
-        }).then((subscription) => {
-            this.notify(
-                'success',
-                'Successfully subscribed',
-                subscription.channel
-            );
-            this.saveSubscription(subscription);
-            this.view = VIEW_MONITOR;
-        });
+        // Subscribe
+        const subscription = await subscribe(
+            channel,
+            replayId,
+            (streamingEvent) => {
+                this.handleStreamingEvent(streamingEvent);
+            }
+        );
+        this.notify('success', 'Successfully subscribed', subscription.channel);
+        this.saveSubscription(subscription);
+        this.view = VIEW_MONITOR;
     }
 
     saveSubscription(subscription) {
@@ -235,23 +263,19 @@ export default class StreamingMonitor extends LightningElement {
         this.eventsElement.addStreamingEvent(eventData);
     }
 
-    handlePublish(event) {
+    async handlePublish(event) {
         const eventParams = event.detail;
-        publishStreamingEvent(eventParams)
-            .then(() => {
-                this.notify(
-                    'success',
-                    `Successfully published event ${eventParams.eventName}`
-                );
-                this.view = VIEW_MONITOR;
-            })
-            .catch((error) => {
-                console.error(JSON.stringify(error));
-                this.notify(
-                    'error',
-                    `Failed to publish ${eventParams.eventName}`
-                );
-            });
+        try {
+            await publishStreamingEvent(eventParams);
+            this.notify(
+                'success',
+                `Successfully published event ${eventParams.eventName}`
+            );
+            this.view = VIEW_MONITOR;
+        } catch (error) {
+            console.error(JSON.stringify(error));
+            this.notify('error', `Failed to publish ${eventParams.eventName}`);
+        }
     }
 
     handleUnsubscribeAll() {

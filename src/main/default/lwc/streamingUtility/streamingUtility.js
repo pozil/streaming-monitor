@@ -2,10 +2,13 @@ export const EVT_PUSH_TOPIC = 'PushTopicEvent';
 export const EVT_GENERIC = 'GenericEvent';
 export const EVT_STD_PLATFORM_EVENT = 'StandardPlatformEvent';
 export const EVT_PLATFORM_EVENT = 'PlatformEvent';
-export const EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
+export const EVT_CDC = 'ChangeDataCaptureEvent';
 export const EVT_CUSTOM_CHANNEL_CDC = 'CustomChannelCDC';
 export const EVT_CUSTOM_CHANNEL_PE = 'CustomChannelPE';
 export const EVT_MONITORING = 'MonitoringEvent';
+
+export const FILTER_ALL = 'all';
+export const FILTER_CUSTOM = 'custom';
 
 export const CHANNEL_ALL_CDC = '/data/ChangeEvents';
 
@@ -32,7 +35,7 @@ export const EVENT_TYPES = [
     },
     {
         label: 'Change Data Capture event',
-        value: EVT_CDC_STANDARD,
+        value: EVT_CDC,
         channelPrefix: '/data/'
     },
     {
@@ -72,6 +75,35 @@ export function getChannelPrefix(eventType) {
  */
 export function isCDCChannel(channel) {
     return channel.startsWith('/data/');
+}
+
+/**
+ * Tests whether a channel is custom
+ * @param {string} eventTypeName
+ * @param {string} channel
+ * @returns {boolean} true if channel is custom else false
+ */
+export function isCustomChannel(eventTypeName, channel) {
+    switch (eventTypeName) {
+        case EVT_PUSH_TOPIC:
+            return true;
+        case EVT_GENERIC:
+            return true;
+        case EVT_STD_PLATFORM_EVENT:
+            return false;
+        case EVT_PLATFORM_EVENT:
+            return channel.endsWith('__e');
+        case EVT_CDC:
+            return channel.endsWith('__ChangeEvent');
+        case EVT_CUSTOM_CHANNEL_CDC:
+            return true;
+        case EVT_CUSTOM_CHANNEL_PE:
+            return true;
+        case EVT_MONITORING:
+            return false;
+        default:
+            throw new Error(`Unsupported event type: ${eventTypeName}`);
+    }
 }
 
 /**

@@ -6,10 +6,12 @@ import {
     EVT_GENERIC,
     EVT_STD_PLATFORM_EVENT,
     EVT_PLATFORM_EVENT,
-    EVT_CDC_STANDARD,
+    EVT_CDC,
     EVT_CUSTOM_CHANNEL_CDC,
     EVT_CUSTOM_CHANNEL_PE,
     EVT_MONITORING,
+    FILTER_ALL,
+    FILTER_CUSTOM,
     getChannelPrefix
 } from 'c/streamingUtility';
 
@@ -27,6 +29,7 @@ export default class Actions extends LightningElement {
     @api action = 'subscribeAll';
     @api channels = [];
 
+    subAllFilter = FILTER_ALL;
     subAllReplay = '-1';
 
     subEventType;
@@ -60,6 +63,7 @@ export default class Actions extends LightningElement {
     handleSubscribeAll() {
         const subscribeEvent = new CustomEvent('subscribeall', {
             detail: {
+                filter: this.subAllFilter,
                 replayId: this.subAllReplay
             }
         });
@@ -301,7 +305,7 @@ export default class Actions extends LightningElement {
     }
 
     get isStandardCDCReg() {
-        return this.regEventType === EVT_CDC_STANDARD;
+        return this.regEventType === EVT_CDC;
     }
 
     get isCustomChannelCDCReg() {
@@ -318,7 +322,7 @@ export default class Actions extends LightningElement {
 
     get isCDCSub() {
         return (
-            this.subEventType === EVT_CDC_STANDARD ||
+            this.subEventType === EVT_CDC ||
             this.subEventType === EVT_CUSTOM_CHANNEL_CDC
         );
     }
@@ -331,5 +335,12 @@ export default class Actions extends LightningElement {
         return this.pubEventType === EVT_GENERIC
             ? 'Plain string payload'
             : 'JSON formatted payload with strings delimited by double quotes';
+    }
+
+    get subAllFilterOptions() {
+        return [
+            { label: 'All events', value: FILTER_ALL },
+            { label: 'Custom events only', value: FILTER_CUSTOM }
+        ];
     }
 }

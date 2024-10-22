@@ -3,7 +3,7 @@ public abstract class StreamingMonitorController {
     public final static String EVT_GENERIC = 'GenericEvent';
     public final static String EVT_STD_PLATFORM_EVENT = 'StandardPlatformEvent';
     public final static String EVT_PLATFORM_EVENT = 'PlatformEvent';
-    public final static String EVT_CDC_STANDARD = 'ChangeDataCaptureEvent';
+    public final static String EVT_CDC = 'ChangeDataCaptureEvent';
     public final static String EVT_CUSTOM_CHANNEL_CDC = 'CustomChannelCDC';
     public final static String EVT_CUSTOM_CHANNEL_PE = 'CustomChannelPE';
     public final static String EVT_MONITORING = 'MonitoringEvent';
@@ -56,7 +56,7 @@ public abstract class StreamingMonitorController {
             EVT_GENERIC => getGenericEventChannels(),
             EVT_STD_PLATFORM_EVENT => getStandardPlatformEventChannels(),
             EVT_PLATFORM_EVENT => getPlatformEventChannels(),
-            EVT_CDC_STANDARD => getChangeDataCaptureEventChannels(),
+            EVT_CDC => getChangeDataCaptureEventChannels(),
             EVT_CUSTOM_CHANNEL_CDC => new List<ComboBoxItem>(),
             EVT_CUSTOM_CHANNEL_PE => new List<ComboBoxItem>(),
             EVT_MONITORING => getEventMonitoringChannels()
@@ -307,7 +307,7 @@ public abstract class StreamingMonitorController {
         public void execute(QueueableContext context) {
             String restAPIURL =
                 URL.getOrgDomainUrl().toExternalForm() +
-                '/services/data/v60.0/sobjects/StreamingChannel/' +
+                '/services/data/v62.0/sobjects/StreamingChannel/' +
                 channelId +
                 '/push';
             HttpRequest httpRequest = new HttpRequest();

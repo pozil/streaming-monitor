@@ -143,72 +143,96 @@ export default class StreamingMonitor extends LightningElement {
             `Subscribing to multiple streaming channels with filter ${filter} and replay ID ${replayId}`
         );
 
-        // Build list of channels
-        let channels = [];
-        EVENT_TYPES.forEach((eventType) => {
-            const eventTypeName = eventType.value;
-            if (filter === FILTER_ALL) {
-                if (eventTypeName === EVT_CDC) {
+        try {
+            // Build list of channels
+            let channels = [];
+            switch (filter) {
+                case FILTER_ALL:
+                    // Get all event channels
+                    EVENT_TYPES.forEach((type) => {
+                        const typeName = type.value;
+                        if (typeName === EVT_CDC) {
+                            // Use global channel for all CDC events
+                            channels.push(CHANNEL_ALL_CDC);
+                        } else {
+                            // Get all channels for the other event types
+                            const channelPrefix = getChannelPrefix(typeName);
+                            this.channels[typeName].forEach((channelData) => {
+                                channels.push(
+                                    channelPrefix + channelData.value
+                                );
+                            });
+                        }
+                    });
+                    break;
+                case FILTER_CUSTOM:
+                    // Get custom channels for all event types
+                    EVENT_TYPES.forEach((type) => {
+                        const typeName = type.value;
+                        const channelPrefix = getChannelPrefix(typeName);
+                        this.channels[typeName].forEach((channelData) => {
+                            if (isCustomChannel(typeName, channelData.value)) {
+                                channels.push(
+                                    channelPrefix + channelData.value
+                                );
+                            }
+                        });
+                    });
+                    break;
+                case EVT_CDC:
                     // Use global channel for all CDC events
                     channels.push(CHANNEL_ALL_CDC);
-                } else {
-                    // Get all channels for the other event types
-                    const channelPrefix = getChannelPrefix(eventTypeName);
-                    this.channels[eventTypeName].forEach((channelData) => {
+                    break;
+                default: {
+                    // Add channels of given type
+                    const channelPrefix = getChannelPrefix(filter);
+                    this.channels[filter].forEach((channelData) => {
                         channels.push(channelPrefix + channelData.value);
                     });
                 }
-            } else if (filter === FILTER_CUSTOM) {
-                // Get custom channels for all event types
-                const channelPrefix = getChannelPrefix(eventTypeName);
-                this.channels[eventTypeName].forEach((channelData) => {
-                    if (isCustomChannel(eventTypeName, channelData.value)) {
-                        channels.push(channelPrefix + channelData.value);
-                    }
-                });
-            } else {
-                throw new Error(`Unsupported filter value: ${filter}`);
             }
-        });
 
-        // Remove already subscribed channels
-        channels = channels.filter(
-            (channel) =>
-                !this.subscriptions.some((sub) => sub.channel === channel)
-        );
-
-        // Abort if there are no remaining channels
-        if (channels.length === 0) {
-            this.notify(
-                'warn',
-                'There are no channels to subscribe to with the specified filter and current subscriptions'
+            // Remove already subscribed channels
+            channels = channels.filter(
+                (channel) =>
+                    !this.subscriptions.some((sub) => sub.channel === channel)
             );
-            return;
-        }
 
-        // Temporarily ignore subscribe errors while subscribing to events
-        this.ignoreSubscribeErrors = true;
-        setTimeout(() => {
-            this.ignoreSubscribeErrors = false;
-        }, IGNORE_SUBCRIBE_ERRORS_DELAY);
+            // Abort if there are no remaining channels
+            if (channels.length === 0) {
+                this.notify(
+                    'warn',
+                    'There are no channels to subscribe to with the specified filter and current subscriptions'
+                );
+                return;
+            }
 
-        // Queue subscriptions
-        const subscribePromises = channels.map((channel) => {
-            return subscribe(channel, replayId, (streamingEvent) => {
-                this.handleStreamingEvent(streamingEvent);
+            // Temporarily ignore subscribe errors while subscribing to events
+            this.ignoreSubscribeErrors = true;
+            setTimeout(() => {
+                this.ignoreSubscribeErrors = false;
+            }, IGNORE_SUBCRIBE_ERRORS_DELAY);
+
+            // Queue subscriptions
+            const subscribePromises = channels.map((channel) => {
+                return subscribe(channel, replayId, (streamingEvent) => {
+                    this.handleStreamingEvent(streamingEvent);
+                });
             });
-        });
 
-        // Save susbcriptions and notify success once done
-        const subscriptions = await Promise.all(subscribePromises);
-        subscriptions.forEach((subscription) => {
-            this.saveSubscription(subscription);
-        });
-        this.notify(
-            'success',
-            'Successfully subscribed to the specified channels'
-        );
-        this.view = VIEW_MONITOR;
+            // Save susbcriptions and notify success once done
+            const subscriptions = await Promise.all(subscribePromises);
+            subscriptions.forEach((subscription) => {
+                this.saveSubscription(subscription);
+            });
+            this.notify(
+                'success',
+                'Successfully subscribed to the specified channels'
+            );
+            this.view = VIEW_MONITOR;
+        } catch (error) {
+            console.error(error.message);
+        }
     }
 
     async handleSubscribe(event) {

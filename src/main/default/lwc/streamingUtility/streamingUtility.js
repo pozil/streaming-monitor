@@ -49,7 +49,7 @@ export const EVENT_TYPES = [
         channelPrefix: '/data/'
     },
     {
-        label: 'Monitoring events',
+        label: 'Monitoring event',
         value: EVT_MONITORING,
         channelPrefix: '/event/'
     }

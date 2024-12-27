@@ -338,9 +338,20 @@ export default class Actions extends LightningElement {
     }
 
     get subAllFilterOptions() {
-        return [
+        const options = [
             { label: 'All events', value: FILTER_ALL },
-            { label: 'Custom events only', value: FILTER_CUSTOM }
+            { label: 'All custom events', value: FILTER_CUSTOM }
         ];
+        EVENT_TYPES.forEach((type) => {
+            const { value } = type;
+            if (
+                value !== EVT_CUSTOM_CHANNEL_PE &&
+                value !== EVT_CUSTOM_CHANNEL_CDC
+            ) {
+                const label = `Only ${type.label}s`;
+                options.push({ label, value });
+            }
+        });
+        return options;
     }
 }

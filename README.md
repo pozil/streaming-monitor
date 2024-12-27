@@ -8,15 +8,15 @@ This Lightning App allows to monitor streaming events: PushTopic events, generic
 
 Features:
 
--   Subscribe to all streaming events (event types are automatically discovered)
--   Subscribe to and unsubscribe from specific streaming events with a user-friendly UI
--   Publish an event (generic events and platform events)
--   Register an event source (instructions and shortcuts)
--   Analyze past event content with
-    -   timeline or table view
-    -   dynamic filters
-    -   flexible replay options
--   View org limits and event usage metrics
+- Subscribe to all streaming events (event types are automatically discovered)
+- Subscribe to and unsubscribe from specific streaming events with a user-friendly UI
+- Publish an event (generic events and platform events)
+- Register an event source (instructions and shortcuts)
+- Analyze past event content with
+    - timeline or table view
+    - dynamic filters
+    - flexible replay options
+- View org limits and event usage metrics
 
 The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/component-library/bundle/lightning-emp-api/documentation) Lightning Web Component for streaming event subscriptions and [D3.js](https://d3js.org/) to draw a dynamic event timeline.
 

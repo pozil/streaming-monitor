@@ -68,7 +68,7 @@ export default class EventUsageMetrics extends LightningElement {
         }
 
         const rootElement = this.template.querySelector('.timeline');
-        rootElement.childNodes.forEach((childNode) => childNode.remove());
+        d3.select(rootElement).selectAll('*').remove();
 
         // Add SVG element
         const svgElement = d3

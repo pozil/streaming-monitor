@@ -149,8 +149,7 @@ export default class Actions extends LightningElement {
                     JSON.parse(value);
                 }
                 payloadElement.setCustomValidity('');
-            } catch (error) {
-                /* eslint-disable-next-line no-unused-vars */
+            } catch (error /* eslint-disable-line no-unused-vars */) {
                 payloadElement.setCustomValidity('Invalid JSON');
             }
         }

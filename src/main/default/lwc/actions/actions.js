@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { LightningElement, api } from 'lwc';
 import {
     EVENT_TYPES,
@@ -151,6 +150,7 @@ export default class Actions extends LightningElement {
                 }
                 payloadElement.setCustomValidity('');
             } catch (error) {
+                /* eslint-disable-next-line no-unused-vars */
                 payloadElement.setCustomValidity('Invalid JSON');
             }
         }

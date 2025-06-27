@@ -3,6 +3,6 @@
     xmlns="urn:metadata.tooling.soap.sforce.com"
     fqn="GenericEventPostMock"
 >
-    <apiVersion>62.0</apiVersion>
+    <apiVersion>64.0</apiVersion>
     <status>Active</status>
 </ApexClass>

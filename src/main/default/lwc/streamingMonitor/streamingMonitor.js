@@ -1,5 +1,4 @@
 /* eslint-disable @lwc/lwc/no-async-operation */
-/* eslint-disable no-console */
 import { LightningElement, track } from 'lwc';
 import {
     subscribe,

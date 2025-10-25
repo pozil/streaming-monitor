@@ -14,6 +14,8 @@ import {
     getChannelPrefix
 } from 'c/streamingUtility';
 
+import getBlankPlatformEvent from '@salesforce/apex/StreamingMonitorController.getBlankPlatformEvent';
+
 import subscribeAll from './subscribeAll.html';
 import subscribe from './subscribe.html';
 import publish from './publish.html';
@@ -130,10 +132,21 @@ export default class Actions extends LightningElement {
         this.pubPayload = undefined;
     }
 
-    handlePubEventNameChange(event) {
+    async handlePubEventNameChange(event) {
         this.pubEventName = event.detail.value;
         this.pubChannel =
             getChannelPrefix(this.pubEventType) + this.pubEventName;
+        // Load blank event for platform event
+        if (this.pubEventType === EVT_PLATFORM_EVENT) {
+            try {
+                const blankEvent = await getBlankPlatformEvent({
+                    eventName: this.pubEventName
+                });
+                this.pubPayload = JSON.stringify(blankEvent, null, 2);
+            } catch (error) {
+                console.error(error);
+            }
+        }
     }
 
     handlePubPayloadChange(event) {

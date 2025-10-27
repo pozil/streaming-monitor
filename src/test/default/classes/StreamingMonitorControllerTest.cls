@@ -121,7 +121,7 @@ public class StreamingMonitorControllerTest {
         PushTopic pushTopic = new PushTopic();
         pushTopic.Name = 'TestPT';
         pushTopic.Query = 'SELECT Id, Name FROM Account';
-        pushTopic.ApiVersion = 64.0;
+        pushTopic.ApiVersion = 65.0;
         pushTopic.NotifyForOperationCreate = true;
         pushTopic.NotifyForOperationUpdate = true;
         pushTopic.NotifyForOperationUndelete = true;
@@ -140,6 +140,54 @@ public class StreamingMonitorControllerTest {
         List<StreamingMonitorController.ComboBoxItem> channels = StreamingMonitorController.getGenericEventChannels();
         Assert.areEqual(1, channels.size());
         Assert.areEqual('TestSC', channels.get(0).value);
+    }
+
+    @isTest
+    static void getBlankPlatformEvent_works() {
+        // Using standard SObject here instead of Platform Event because we can't create Platform Events in tests
+        Map<String, Object> event = StreamingMonitorController.getBlankPlatformEvent(
+            'Contact'
+        );
+
+        Assert.isFalse(event.containsKey('createddate'));
+        Assert.areEqual(
+            StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
+                Schema.SOAPType.DATE
+            ),
+            event.get('birthdate')
+        );
+        Assert.areEqual(
+            StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
+                Schema.SOAPType.STRING
+            ),
+            event.get('name')
+        );
+        Assert.areEqual(
+            StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
+                Schema.SOAPType.BOOLEAN
+            ),
+            event.get('isdeleted')
+        );
+        Assert.areEqual(
+            StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
+                Schema.SOAPType.DATETIME
+            ),
+            event.get('lastcurequestdate')
+        );
+    }
+
+    @isTest
+    static void getBlankPlatformEvent_fails_when_eventName_is_unknown_sObject() {
+        try {
+            StreamingMonitorController.getBlankPlatformEvent('unknown');
+            Assert.fail('Exception was expected');
+        } catch (Exception e) {
+            Assert.isInstanceOfType(
+                e,
+                StreamingMonitorController.StreamingException.class
+            );
+            assertContains(e.getMessage(), 'Unknown platform event type');
+        }
     }
 
     private static void assertContains(String actual, String expectedContent) {

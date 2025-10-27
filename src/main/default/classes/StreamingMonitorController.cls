@@ -32,6 +32,22 @@ public abstract class StreamingMonitorController {
         'UriEventStream'
     };
 
+    private final static List<String> PLATFORM_EVENT_STANDARD_FIELDS = new List<String>{
+        'replayid',
+        'createddate',
+        'createdbyid',
+        'eventuuid'
+    };
+
+    @TestVisible
+    private final static Map<Schema.SOAPType, Object> DEFAULT_FIELD_VALUES = new Map<Schema.SOAPType, Object>{
+        Schema.SOAPType.STRING => '',
+        Schema.SOAPType.DATE => '2025-01-01',
+        Schema.SOAPType.DATETIME => '2025-01-01T00:00:00Z',
+        Schema.SOAPType.BOOLEAN => false,
+        Schema.SOAPType.DOUBLE => 0
+    };
+
     @AuraEnabled
     public static void publishStreamingEvent(
         String eventType,
@@ -83,6 +99,31 @@ public abstract class StreamingMonitorController {
             FROM PlatformEventUsageMetric
             ORDER BY StartDate
         ];
+    }
+
+    @AuraEnabled
+    public static Map<String, Object> getBlankPlatformEvent(String eventName) {
+        // Get object fields
+        Schema.DescribeSobjectResult[] results;
+        try {
+            results = Schema.describeSObjects(new List<String>{ eventName });
+        } catch (Exception e) {
+            throw new StreamingException(
+                'Unknown platform event type: ' + eventName
+            );
+        }
+        Map<String, Schema.SObjectField> fields = results[0].fields.getMap();
+        // Remove standard fields
+        Set<String> fieldNames = fields.keySet();
+        fieldNames.removeAll(PLATFORM_EVENT_STANDARD_FIELDS);
+        Map<String, Object> event = new Map<String, Object>();
+        // Add default values for fields
+        for (String fieldName : fieldNames) {
+            Schema.DescribeFieldResult dfr = fields.get(fieldName)
+                .getDescribe();
+            event.put(fieldName, DEFAULT_FIELD_VALUES.get(dfr.getSOAPType()));
+        }
+        return event;
     }
 
     private static void publishPlatformEvent(
@@ -307,7 +348,7 @@ public abstract class StreamingMonitorController {
         public void execute(QueueableContext context) {
             String restAPIURL =
                 URL.getOrgDomainUrl().toExternalForm() +
-                '/services/data/v64.0/sobjects/StreamingChannel/' +
+                '/services/data/v65.0/sobjects/StreamingChannel/' +
                 channelId +
                 '/push';
             HttpRequest httpRequest = new HttpRequest();

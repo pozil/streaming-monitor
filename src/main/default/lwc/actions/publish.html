@@ -1,6 +1,6 @@
 <template>
     <lightning-card title="Publish a streaming event">
-        <div class="slds-p-horizontal_large">
+        <div class="slds-var-p-horizontal_large">
             <lightning-combobox
                 label="Event type"
                 value={pubEventType}
@@ -31,7 +31,9 @@
                         disabled={isPublishDisabled}
                         field-level-help={pubPayloadHelp}
                     ></lightning-textarea>
-                    <div class="slds-align_absolute-center slds-m-top_medium">
+                    <div
+                        class="slds-align_absolute-center slds-var-m-top_medium"
+                    >
                         <lightning-button
                             variant="brand"
                             label="Publish"

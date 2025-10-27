@@ -39,6 +39,7 @@ public abstract class StreamingMonitorController {
         'eventuuid'
     };
 
+    @TestVisible
     private final static Map<Schema.SOAPType, Object> DEFAULT_FIELD_VALUES = new Map<Schema.SOAPType, Object>{
         Schema.SOAPType.STRING => '',
         Schema.SOAPType.DATE => '2025-01-01',

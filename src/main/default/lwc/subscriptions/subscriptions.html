@@ -1,27 +1,27 @@
 <template>
     <div
-        class="slds-m-top_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center"
+        class="slds-var-m-top_medium slds-grid slds-grid_align-spread slds-grid_vertical-align-center"
     >
         <div class="slds-col">
             <h2 class="slds-nav-vertical__title">Subscriptions</h2>
         </div>
-        <div class="slds-col slds-m-right_medium">
+        <div class="slds-col slds-var-m-right_medium">
             <lightning-badge label={subscriptionCount}></lightning-badge>
             <lightning-button-icon
                 icon-name="utility:delete"
                 variant="bare"
                 alternative-text="Unsubscribe all"
-                class="slds-m-left_x-small"
+                class="slds-var-m-left_x-small"
                 onclick={handleUnsubscribeAll}
             ></lightning-button-icon>
         </div>
     </div>
 
-    <div class="slds-p-horizontal_x-small slds-m-bottom_large">
+    <div class="slds-var-p-horizontal_x-small slds-var-m-bottom_large">
         <template for:each={subscriptions} for:item="subscription">
             <div
                 key={subscription.channel}
-                class="slds-grid slds-p-vertical_x-small slds-p-horizontal_xx-small subscription"
+                class="slds-grid slds-var-p-vertical_x-small slds-var-p-horizontal_xx-small subscription"
             >
                 <div class="slds-has-flexi-truncate">
                     <div class="slds-truncate">{subscription.channel}</div>

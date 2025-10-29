@@ -8,18 +8,18 @@
         class={modalClass}
     >
         <div class="slds-modal__container">
+            <!-- Close button -->
+            <lightning-button-icon
+                lwc:if={showCloseIcon}
+                onclick={handleCloseModal}
+                icon-name="utility:close"
+                alternative-text="Close"
+                class="slds-button slds-button_icon slds-modal__close"
+                size="large"
+            ></lightning-button-icon>
+
             <!-- Header -->
             <header class={headerClass}>
-                <template if:false={hideCloseIcon}>
-                    <lightning-button-icon
-                        onclick={handleCloseModal}
-                        icon-name="utility:close"
-                        alternative-text="Close"
-                        class="slds-modal__close"
-                        variant="bare-inverse"
-                        size="large"
-                    ></lightning-button-icon>
-                </template>
                 <h2
                     class="slds-text-heading_medium slds-hyphenate"
                     id="modalTitle"

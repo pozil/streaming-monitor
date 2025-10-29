@@ -45,6 +45,10 @@ export default class Modal extends LightningElement {
         this.hasFooter = true;
     }
 
+    get showCloseIcon() {
+        return !this.hideCloseIcon;
+    }
+
     get modalClass() {
         return `slds-modal slds-fade-in-open ${
             this.width ? 'slds-modal_' + this.width : ''

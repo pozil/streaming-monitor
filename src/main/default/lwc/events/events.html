@@ -45,10 +45,10 @@
     <lightning-card title="Streaming Monitor" icon-name="utility:events">
         <!-- Begin card header -->
         <div slot="actions">
-            <template if:true={hasData}>
+            <template lwc:if={hasData}>
                 <lightning-badge
                     label={eventCountLabel}
-                    class="slds-m-right_small"
+                    class="slds-var-m-right_small"
                 ></lightning-badge>
                 <c-events-header-controls
                     onclear={handleClearEvents}
@@ -60,16 +60,16 @@
         </div>
         <!-- End card header -->
 
-        <div class="slds-p-horizontal_small">
-            <template if:true={hasData}>
+        <div class="slds-var-p-horizontal_small">
+            <template lwc:if={hasData}>
                 <!-- Begin filters -->
-                <div class="slds-m-bottom_large">
+                <div class="slds-var-m-bottom_large">
                     <c-event-filters
                         class={filterClasses}
                         channels={channels}
                         onfilterchange={handleFilterChange}
                     ></c-event-filters>
-                    <c-notice if:true={hasActiveFilters}
+                    <c-notice lwc:if={hasActiveFilters}
                         >Current filters may prevent incoming events from being
                         displayed.</c-notice
                     >
@@ -77,28 +77,26 @@
                 <!-- End filters -->
 
                 <!-- Begin view modes -->
-                <template if:true={hasVisibleData}>
-                    <template if:true={isTableViewMode}>
-                        <lightning-datatable
-                            key-field="id"
-                            data={filteredEvents}
-                            columns={tableColumns}
-                            onrowaction={handleEventTableRowAction}
-                            hide-checkbox-column
-                        ></lightning-datatable>
-                    </template>
-                    <template if:true={isTimelineViewMode}>
-                        <c-event-timeline
-                            events={filteredEvents}
-                            channels={channels}
-                            onselect={handleTimelineSelection}
-                        ></c-event-timeline>
-                    </template>
+                <template lwc:if={hasVisibleData}>
+                    <lightning-datatable
+                        lwc:if={isTableViewMode}
+                        key-field="id"
+                        data={filteredEvents}
+                        columns={tableColumns}
+                        onrowaction={handleEventTableRowAction}
+                        hide-checkbox-column
+                    ></lightning-datatable>
+                    <c-event-timeline
+                        lwc:elseif={isTimelineViewMode}
+                        events={filteredEvents}
+                        channels={channels}
+                        onselect={handleTimelineSelection}
+                    ></c-event-timeline>
                 </template>
                 <!-- End view modes -->
             </template>
 
-            <template if:true={illustrationMessage}>
+            <template lwc:if={illustrationMessage}>
                 <div
                     class="slds-illustration slds-illustration_large"
                     aria-hidden="true"
@@ -108,7 +106,7 @@
                         class="slds-illustration__svg"
                         alt=""
                     />
-                    <div class="slds-text-color_weak slds-m-bottom_large">
+                    <div class="slds-text-color_weak slds-var-m-bottom_large">
                         <h3 class="slds-text-heading_medium">
                             {illustrationMessage}
                         </h3>

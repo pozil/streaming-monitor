@@ -1,6 +1,6 @@
 <template>
     <!-- Lading channels, show spinner -->
-    <template if:true={isLoadingChannels}>
+    <template lwc:if={isLoadingChannels}>
         <lightning-spinner
             alternative-text="Loading channels"
             variant="brand"
@@ -8,7 +8,7 @@
     </template>
 
     <!-- Done loading channels, display UI -->
-    <template if:false={isLoadingChannels}>
+    <template lwc:else>
         <article class="slds-card">
             <div class="main-card-body">
                 <c-sidebar
@@ -28,21 +28,18 @@
                         subscriptions={subscriptions}
                         class={monitorClasses}
                     ></c-events>
-                    <template if:true={isActionView}>
-                        <c-actions
-                            action={view}
-                            channels={channels}
-                            onsubscribeall={handleSubscribeAll}
-                            onsubscribe={handleSubscribe}
-                            onpublish={handlePublish}
-                        ></c-actions>
-                    </template>
-                    <template if:true={isOrgLimitsView}>
-                        <c-org-limits></c-org-limits>
-                    </template>
-                    <template if:true={isEventUsageMetricsView}>
-                        <c-event-usage-metrics></c-event-usage-metrics>
-                    </template>
+                    <c-actions
+                        lwc:if={isActionView}
+                        action={view}
+                        channels={channels}
+                        onsubscribeall={handleSubscribeAll}
+                        onsubscribe={handleSubscribe}
+                        onpublish={handlePublish}
+                    ></c-actions>
+                    <c-org-limits lwc:elseif={isOrgLimitsView}></c-org-limits>
+                    <c-event-usage-metrics
+                        lwc:elseif={isEventUsageMetricsView}
+                    ></c-event-usage-metrics>
                 </div>
             </div>
         </article>

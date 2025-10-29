@@ -33,7 +33,7 @@
                     disabled={isSubscribeDisabled}
                 ></lightning-combobox>
                 <lightning-input
-                    if:true={isCustomReplayIdVisible}
+                    lwc:if={isCustomReplayIdVisible}
                     label="Replay ID"
                     name="subReplayId"
                     type="number"
@@ -50,30 +50,26 @@
                     ></lightning-button>
                 </div>
                 <!-- CDC enablement warning -->
-                <template if:true={isCDCSub}>
-                    <c-notice>
-                        <p>
-                            Enable Change Data Capture events in&nbsp;
-                            <a href="/lightning/setup/CdcObjectEnablement/home"
-                                >Setup</a
-                            >&nbsp;to receive them on the
-                            <code>/data/ChangeEvents</code> channel or the
-                            single-event channels. This doesn't apply to custom
-                            channels you define.
-                        </p>
-                    </c-notice>
-                </template>
+                <c-notice lwc:if={isCDCSub}>
+                    <p>
+                        Enable Change Data Capture events in&nbsp;
+                        <a href="/lightning/setup/CdcObjectEnablement/home"
+                            >Setup</a
+                        >&nbsp;to receive them on the
+                        <code>/data/ChangeEvents</code> channel or the
+                        single-event channels. This doesn't apply to custom
+                        channels you define.
+                    </p>
+                </c-notice>
                 <!-- Event monitoring enablement warning -->
-                <template if:true={isEventMonitoringSub}>
-                    <c-notice>
-                        <p>
-                            Streaming must be enabled in&nbsp;
-                            <a href="/lightning/setup/EventManager/home"
-                                >Event Manager</a
-                            >&nbsp;in order to receive Monitoring Events.
-                        </p>
-                    </c-notice>
-                </template>
+                <c-notice lwc:elseif={isEventMonitoringSub}>
+                    <p>
+                        Streaming must be enabled in&nbsp;
+                        <a href="/lightning/setup/EventManager/home"
+                            >Event Manager</a
+                        >&nbsp;in order to receive Monitoring Events.
+                    </p>
+                </c-notice>
             </form>
         </div>
     </lightning-card>

@@ -8,9 +8,9 @@
                 placeholder="Select type"
                 onchange={handlePubEventTypeChange}
             ></lightning-combobox>
-            <template if:true={pubEventType}>
+            <template lwc:if={pubEventType}>
                 <!-- Manual publish allowed -->
-                <template if:true={isManualPublishedAllowed}>
+                <template lwc:if={isManualPublishedAllowed}>
                     <lightning-combobox
                         label="Event name"
                         value={pubEventName}
@@ -43,14 +43,12 @@
                     </div>
                 </template>
                 <!-- Manual publish not allowed -->
-                <template if:false={isManualPublishedAllowed}>
-                    <c-notice>
-                        <p>
-                            This type of event can only be published by the
-                            Platform.
-                        </p>
-                    </c-notice>
-                </template>
+                <c-notice lwc:else>
+                    <p>
+                        This type of event can only be published by the
+                        Platform.
+                    </p>
+                </c-notice>
             </template>
         </div>
     </lightning-card>

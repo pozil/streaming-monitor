@@ -48,6 +48,17 @@ public abstract class StreamingMonitorController {
         Schema.SOAPType.DOUBLE => 0
     };
 
+    @TestVisible
+    private static Boolean isEnhancedUsageMetricEnabledCache;
+
+    public static Boolean isEnhancedUsageMetricEnabled() {
+        if (isEnhancedUsageMetricEnabledCache == null) {
+            isEnhancedUsageMetricEnabledCache = Schema.SObjectType.PlatformEventUsageMetric.fields.getMap()
+                .containsKey('TimeSegment');
+        }
+        return isEnhancedUsageMetricEnabledCache;
+    }
+
     @AuraEnabled
     public static void publishStreamingEvent(
         String eventType,
@@ -94,11 +105,21 @@ public abstract class StreamingMonitorController {
 
     @AuraEnabled
     public static List<PlatformEventUsageMetric> getEventUsageMetrics() {
-        return [
-            SELECT Name, StartDate, Value
-            FROM PlatformEventUsageMetric
-            ORDER BY StartDate
-        ];
+        String query;
+        // Include TimeSegment in query if Enhanced Usage Metrics is enabled
+        if (isEnhancedUsageMetricEnabled()) {
+            query =
+                'SELECT Name, StartDate, EndDate, Value, TimeSegment ' +
+                'FROM PlatformEventUsageMetric ' +
+                'WHERE TimeSegment = \'Daily\' ' +
+                'ORDER BY StartDate';
+        } else {
+            query =
+                'SELECT Name, StartDate, Value ' +
+                'FROM PlatformEventUsageMetric ' +
+                'ORDER BY StartDate';
+        }
+        return (List<PlatformEventUsageMetric>) Database.query(query);
     }
 
     @AuraEnabled

@@ -190,8 +190,23 @@ public class StreamingMonitorControllerTest {
         }
     }
 
+    @isTest
+    static void isEnhancedUsageMetricEnabled_works() {
+        Boolean isEnabled = StreamingMonitorController.isEnhancedUsageMetricEnabled();
+        Assert.isNotNull(isEnabled);
+    }
+
+    @isTest
+    static void getEventUsageMetrics_works_when_enhanced_usage_metric_is_disabled() {
+        StreamingMonitorController.isEnhancedUsageMetricEnabledCache = false;
+
+        List<PlatformEventUsageMetric> metrics = StreamingMonitorController.getEventUsageMetrics();
+
+        Assert.areEqual(0, metrics.size());
+    }
+
     private static void assertContains(String actual, String expectedContent) {
-        System.assert(
+        Assert.isTrue(
             actual?.contains(expectedContent),
             'Expected "' + actual + '" to contain "' + expectedContent + '"'
         );

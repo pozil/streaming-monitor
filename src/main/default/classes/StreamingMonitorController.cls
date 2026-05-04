@@ -348,7 +348,7 @@ public abstract class StreamingMonitorController {
         public void execute(QueueableContext context) {
             String restAPIURL =
                 URL.getOrgDomainUrl().toExternalForm() +
-                '/services/data/v65.0/sobjects/StreamingChannel/' +
+                '/services/data/v66.0/sobjects/StreamingChannel/' +
                 channelId +
                 '/push';
             HttpRequest httpRequest = new HttpRequest();

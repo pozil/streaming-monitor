@@ -142,7 +142,7 @@ public abstract class StreamingMonitorController {
         for (String fieldName : fieldNames) {
             Schema.DescribeFieldResult dfr = fields.get(fieldName)
                 .getDescribe();
-            event.put(fieldName, DEFAULT_FIELD_VALUES.get(dfr.getSOAPType()));
+            event.put(dfr.getName(), DEFAULT_FIELD_VALUES.get(dfr.getSOAPType()));
         }
         return event;
     }

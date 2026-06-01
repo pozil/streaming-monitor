@@ -281,7 +281,13 @@ public abstract class StreamingMonitorController {
         List<EntityDefinition> customCdc = [
             SELECT Label, QualifiedApiName
             FROM EntityDefinition
-            WHERE PublisherId = '<local>'
+            WHERE
+                PublisherId = 'System'
+                AND IsApexTriggerable = TRUE
+                AND IsCustomizable = FALSE
+                AND IsSearchable = FALSE
+                AND IsQueryable = FALSE
+                AND QualifiedApiName LIKE '%ChangeEvent'
         ];
         for (EntityDefinition entity : customCdc) {
             String apiName = entity.QualifiedApiName;

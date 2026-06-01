@@ -154,25 +154,25 @@ public class StreamingMonitorControllerTest {
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.DATE
             ),
-            event.get('birthdate')
+            event.get('Birthdate')
         );
         Assert.areEqual(
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.STRING
             ),
-            event.get('name')
+            event.get('Name')
         );
         Assert.areEqual(
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.BOOLEAN
             ),
-            event.get('isdeleted')
+            event.get('IsDeleted')
         );
         Assert.areEqual(
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.DATETIME
             ),
-            event.get('lastcurequestdate')
+            event.get('LastCURequestDate')
         );
     }
 
@@ -200,9 +200,44 @@ public class StreamingMonitorControllerTest {
     static void getEventUsageMetrics_works_when_enhanced_usage_metric_is_disabled() {
         StreamingMonitorController.isEnhancedUsageMetricEnabledCache = false;
 
-        List<PlatformEventUsageMetric> metrics = StreamingMonitorController.getEventUsageMetrics();
+        List<PlatformEventUsageMetric> metrics = StreamingMonitorController.getEventUsageMetrics(
+            null,
+            null,
+            null
+        );
 
         Assert.areEqual(0, metrics.size());
+    }
+
+    @isTest
+    static void getEventUsageMetrics_works_with_date_filters() {
+        StreamingMonitorController.isEnhancedUsageMetricEnabledCache = false;
+        DateTime startDate = DateTime.newInstance(2025, 1, 1);
+        DateTime endDate = DateTime.newInstance(2025, 12, 31);
+
+        List<PlatformEventUsageMetric> metrics = StreamingMonitorController.getEventUsageMetrics(
+            null,
+            startDate,
+            endDate
+        );
+
+        Assert.areEqual(0, metrics.size());
+    }
+
+    @isTest
+    static void getEventUsageMetrics_fails_when_timeSegment_is_invalid() {
+        StreamingMonitorController.isEnhancedUsageMetricEnabledCache = true;
+
+        try {
+            StreamingMonitorController.getEventUsageMetrics(
+                'InvalidSegment',
+                null,
+                null
+            );
+            Assert.fail('Exception was expected');
+        } catch (AuraHandledException e) {
+            Assert.isNotNull(e.getMessage());
+        }
     }
 
     private static void assertContains(String actual, String expectedContent) {

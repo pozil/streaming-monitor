@@ -180,7 +180,7 @@ export function getTimeLabel(time) {
     let timeLabel = new Date(localTimestamp)
         .toISOString()
         .replace(/z|t/gi, ' ');
-    timeLabel = timeLabel.substr(0, timeLabel.length - 5);
+    timeLabel = timeLabel.substring(0, timeLabel.length - 5);
     return timeLabel;
 }
 

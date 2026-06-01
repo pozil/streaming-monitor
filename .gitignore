@@ -1,12 +1,13 @@
 # Dev tools
 .cursor
+.localdevserver
+.mcp.json*
 .sf
 .sfdx
 .vscode
-.localdevserver
-node_modules
-jsconfig.json
 coverage
+jsconfig.json
+node_modules
 
 # Sample objects
 **/objects/

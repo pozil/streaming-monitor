@@ -39,11 +39,17 @@ public abstract class StreamingMonitorController {
         'eventuuid'
     };
 
+    private final static List<String> TIME_SEGMENT_VALUES = new List<String>{
+        'Daily',
+        'Hourly',
+        'FifteenMinutes'
+    };
+
     @TestVisible
     private final static Map<Schema.SOAPType, Object> DEFAULT_FIELD_VALUES = new Map<Schema.SOAPType, Object>{
         Schema.SOAPType.STRING => '',
-        Schema.SOAPType.DATE => '2025-01-01',
-        Schema.SOAPType.DATETIME => '2025-01-01T00:00:00Z',
+        Schema.SOAPType.DATE => '2026-01-01',
+        Schema.SOAPType.DATETIME => '2026-01-01T00:00:00Z',
         Schema.SOAPType.BOOLEAN => false,
         Schema.SOAPType.DOUBLE => 0
     };
@@ -51,6 +57,7 @@ public abstract class StreamingMonitorController {
     @TestVisible
     private static Boolean isEnhancedUsageMetricEnabledCache;
 
+    @AuraEnabled
     public static Boolean isEnhancedUsageMetricEnabled() {
         if (isEnhancedUsageMetricEnabledCache == null) {
             isEnhancedUsageMetricEnabledCache = Schema.SObjectType.PlatformEventUsageMetric.fields.getMap()
@@ -104,21 +111,37 @@ public abstract class StreamingMonitorController {
     }
 
     @AuraEnabled
-    public static List<PlatformEventUsageMetric> getEventUsageMetrics() {
+    public static List<PlatformEventUsageMetric> getEventUsageMetrics(
+        String timeSegment,
+        DateTime startDate,
+        DateTime endDate
+    ) {
         String query;
-        // Include TimeSegment in query if Enhanced Usage Metrics is enabled
+        List<String> filtersConditions = new List<String>();
         if (isEnhancedUsageMetricEnabled()) {
-            query =
-                'SELECT Name, StartDate, EndDate, Value, TimeSegment ' +
-                'FROM PlatformEventUsageMetric ' +
-                'WHERE TimeSegment = \'Daily\' ' +
-                'ORDER BY StartDate';
+            if (String.isBlank(timeSegment)) {
+                timeSegment = TIME_SEGMENT_VALUES[0];
+            } else if (!TIME_SEGMENT_VALUES.contains(timeSegment)) {
+                throw new AuraHandledException(
+                    'Unsupported time segment value: ' + timeSegment
+                );
+            }
+            query = 'SELECT Name, StartDate, EndDate, Value, TimeSegment ';
+            filtersConditions.add('TimeSegment = :timeSegment');
         } else {
-            query =
-                'SELECT Name, StartDate, Value ' +
-                'FROM PlatformEventUsageMetric ' +
-                'ORDER BY StartDate';
+            query = 'SELECT Name, StartDate, Value ';
         }
+        query += 'FROM PlatformEventUsageMetric ';
+        if (startDate != null) {
+            filtersConditions.add('StartDate >= :startDate');
+        }
+        if (endDate != null) {
+            filtersConditions.add('EndDate <= :endDate');
+        }
+        if (!filtersConditions.isEmpty()) {
+            query += 'WHERE ' + String.join(filtersConditions, ' AND ');
+        }
+        query += ' ORDER BY StartDate';
         return (List<PlatformEventUsageMetric>) Database.query(query);
     }
 

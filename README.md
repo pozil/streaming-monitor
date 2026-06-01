@@ -29,6 +29,7 @@ The app leverages the [lighnting-emp-api](https://developer.salesforce.com/docs/
     <p><img src="gfx/subscribe.png" alt="Streaming monitor - Timeline screenshot"/></p>
     <p><img src="gfx/event-details.png" alt="Streaming monitor - Timeline screenshot"/></p>
     <p><img src="gfx/org-limits.png" alt="Streaming monitor - Org limits screenshot"/></p>
+    <p><img src="gfx/event-usage-metrics.png" alt="Streaming monitor - Event usage metrics screenshot"/></p>
 </details>
 <br/>
 

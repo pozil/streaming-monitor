@@ -11,7 +11,6 @@ circle:hover {
 
 .tooltip {
     position: fixed;
-    text-align: center;
     padding: 4px;
     background: black;
     color: white;

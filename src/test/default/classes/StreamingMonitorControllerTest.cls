@@ -154,25 +154,25 @@ public class StreamingMonitorControllerTest {
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.DATE
             ),
-            event.get('birthdate')
+            event.get('Birthdate')
         );
         Assert.areEqual(
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.STRING
             ),
-            event.get('name')
+            event.get('Name')
         );
         Assert.areEqual(
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.BOOLEAN
             ),
-            event.get('isdeleted')
+            event.get('IsDeleted')
         );
         Assert.areEqual(
             StreamingMonitorController.DEFAULT_FIELD_VALUES.get(
                 Schema.SOAPType.DATETIME
             ),
-            event.get('lastcurequestdate')
+            event.get('LastCURequestDate')
         );
     }
 

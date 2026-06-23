@@ -271,17 +271,7 @@ public abstract class StreamingMonitorController {
     @TestVisible
     private static List<ComboBoxItem> getChangeDataCaptureEventChannels() {
         List<ComboBoxItem> items = new List<ComboBoxItem>();
-        // Standard CDC
-        List<EntityDefinition> standardCdc = [
-            SELECT Label, QualifiedApiName
-            FROM EntityDefinition
-            WHERE PublisherId = 'CDC'
-        ];
-        for (EntityDefinition entity : standardCdc) {
-            items.add(new ComboBoxItem(entity.Label, entity.QualifiedApiName));
-        }
-        // Custom CDC
-        List<EntityDefinition> customCdc = [
+        List<EntityDefinition> cdcEntities = [
             SELECT Label, QualifiedApiName
             FROM EntityDefinition
             WHERE
@@ -292,18 +282,18 @@ public abstract class StreamingMonitorController {
                 AND IsQueryable = FALSE
                 AND QualifiedApiName LIKE '%ChangeEvent'
         ];
-        for (EntityDefinition entity : customCdc) {
+        for (EntityDefinition entity : cdcEntities) {
             String apiName = entity.QualifiedApiName;
-            if (apiName.endsWith('__c')) {
-                items.add(
-                    new ComboBoxItem(
-                        entity.Label + ' Change Event',
-                        apiName.replace('__c', '__ChangeEvent')
-                    )
-                );
+            String label = entity.Label;
+            if (apiName.endsWith('__ChangeEvent')) {
+                label =
+                    label.replace('Change Event: ', 'Custom: ') +
+                    ' Change Event';
+            } else {
+                label = 'Standard: ' + label;
             }
+            items.add(new ComboBoxItem(label, apiName));
         }
-
         items.sort();
         return items;
     }

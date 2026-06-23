@@ -11,15 +11,17 @@ on:
 jobs:
     formatting-and-lwc-tests:
         runs-on: ubuntu-latest
+        permissions:
+            id-token: write
         steps:
             # Checkout the code in the pull request
             - name: 'Checkout source code'
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             # Cache node_modules to speed up the process
             - name: Restore node_modules cache
               id: cache-npm
-              uses: actions/cache@v4
+              uses: actions/cache@v5
               with:
                   path: node_modules
                   key: npm-${{ hashFiles('**/package-lock.json') }}
@@ -46,15 +48,18 @@ jobs:
 
             # Upload LWC code coverage data
             - name: 'Upload code coverage for LWC to Codecov.io'
-              uses: codecov/codecov-action@v4
+              uses: codecov/codecov-action@v7
               with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
+                  use_oidc: true
+                  fail_ci_if_error: false
                   flags: LWC
 
     scratch-org-tests:
         runs-on: ubuntu-latest
         needs: formatting-and-lwc-tests
         if: ${{ github.actor != 'dependabot[bot]' }}
+        permissions:
+            id-token: write
         steps:
             # Install Salesforce CLI
             - name: 'Install Salesforce CLI'
@@ -64,7 +69,7 @@ jobs:
 
             # Checkout the code in the pull request
             - name: 'Checkout source code'
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
 
             # Store secret for dev hub
             - name: 'Populate auth file with DEVHUB_SFDX_URL secret'
@@ -103,9 +108,10 @@ jobs:
 
             # Upload Apex code coverage data
             - name: 'Upload code coverage for Apex to Codecov.io'
-              uses: codecov/codecov-action@v4
+              uses: codecov/codecov-action@v7
               with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
+                  use_oidc: true
+                  fail_ci_if_error: false
                   flags: Apex
 
             # Housekeeping

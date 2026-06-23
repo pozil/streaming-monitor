@@ -11,6 +11,8 @@ on:
 jobs:
     formatting-and-lwc-tests:
         runs-on: ubuntu-latest
+        permissions:
+            id-token: write
         steps:
             # Checkout the code in the pull request
             - name: 'Checkout source code'
@@ -56,6 +58,8 @@ jobs:
         runs-on: ubuntu-latest
         needs: formatting-and-lwc-tests
         if: ${{ github.actor != 'dependabot[bot]' }}
+        permissions:
+            id-token: write
         steps:
             # Install Salesforce CLI
             - name: 'Install Salesforce CLI'
